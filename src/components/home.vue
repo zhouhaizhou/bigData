@@ -1,0 +1,42 @@
+<template>
+  <div>
+    <p>
+      <div>{{count}}</div>
+      <button @click="add">+</button>
+      <button @click="reduce">-</button>
+    </p>
+  </div>
+</template>
+<script>
+import store from '../store';
+//console.log(store)
+import { mapState, mapMutations, mapGetters, mapActions } from "vuex";
+
+export default {
+    data() {
+        return {
+         // ip:this._global.ip
+        };
+    },
+    mounted(){
+      ///api/SYS/Huadong/LoadMenuService.svc/GetUser
+      // this.axios.get('/SYS/Huadong/LoadMenuService.svc/GetUser')
+      // .then(function (response) {
+      //   console.log(response);
+      // })
+      // .catch(function (error) {
+      //   console.log(error);
+      // });
+      
+    },
+    computed: {
+      ...mapState(['count'])
+    },
+    methods: {
+      ...mapMutations(['add','reduce'])
+    }
+};
+</script>
+
+<style scoped>
+</style>
