@@ -1,6 +1,4 @@
-
-var _global={
-  ip:'localhost',
-  port:'45988'
+import formatDate from './date'
+export default {
+  formatDate
 }
-export default _global

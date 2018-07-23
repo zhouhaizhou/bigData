@@ -9,7 +9,7 @@ export default new Router({
     {
       path: '/',
      // redirect: '/news',
-      component:  resolve => require(['../components/home.vue'], resolve),
+      component:  resolve => require(['../components/common/header.vue'], resolve),
     }
   ]
 })
