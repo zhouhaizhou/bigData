@@ -10,6 +10,7 @@ import store from '../../store'
 import _global from  '../../global'
 import 'element-ui/lib/theme-chalk/index.css';
 import 'animate.css';
+// import '../../../static/css/home.css'
 
 
 //Vue.config.productionTip = false

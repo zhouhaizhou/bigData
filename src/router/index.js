@@ -10,6 +10,16 @@ export default new Router({
       path: '/',
      // redirect: '/news',
       component:  resolve => require(['../components/common/header.vue'], resolve),
+      children:[{
+        path:'home',
+        name:'home',
+        component:  resolve => require(['../components/pages/home.vue'], resolve),
+      },{
+          path:'dataService',
+          name:'dataService',
+          component:  resolve => require(['../components/pages/dataService.vue'], resolve),
+        }
+    ]
     }
   ]
 })
