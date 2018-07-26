@@ -1,7 +1,7 @@
 <template>
   <div style="background-color:rgb(242,248,252,.4)">
       <div class="txt">
-          <p style="padding-top:15px;">数据产品服务</p>
+          <p style="padding-top:15px;margin-top:0;">数据产品服务</p>
           <p style="color:rgb(148,152,152);font-size:16px;margin-bottom: 15px;padding-top:0px;">DATA PRODUCTION SERVICE</p>
       </div>
       <div class="imgdisplay">
@@ -70,13 +70,13 @@ p{
 }
 .txt{
     width: 100%;
-    margin-top: 40px;
+    /* margin-top: 40px; */
 }
 .txt p{
     width: 100%;
     text-align: center;
     font-weight: bold;
-    font-size: 24px;
+    font-size: 28px;
     color: rgb(47, 68, 75);
     line-height: 30px;
 }
@@ -95,6 +95,7 @@ p{
     /* border: 1px solid #ccc; */
     float: left;
     transition: all .3s;
+    cursor: pointer;
 }
 .imgscale{
   transform: scale(1.02);
@@ -134,6 +135,7 @@ p{
     font-weight: bold;
     color: rgb(47, 68, 75);
     font-size: 15px;
+    margin-top: 10px;
 }
 .imgtxt p:last-child{
     color:rgb(148,152,152);

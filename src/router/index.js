@@ -5,21 +5,31 @@ import Router from 'vue-router'
 Vue.use(Router)
 
 export default new Router({
-  routes: [
-    {
+  routes: [{
       path: '/',
-     // redirect: '/news',
-      component:  resolve => require(['../components/common/header.vue'], resolve),
-      children:[{
-        path:'home',
-        name:'home',
-        component:  resolve => require(['../components/pages/home.vue'], resolve),
-      },{
-          path:'dataService',
-          name:'dataService',
-          component:  resolve => require(['../components/pages/dataService.vue'], resolve),
-        }
-    ]
-    }
+      redirect: '/home'
+    }, 
+    {
+      //component: resolve => require(['../components/common/header.vue'], resolve),
+      path: '/home',
+      name: 'home',
+      component: resolve => require(['../components/pages/home.vue'], resolve),
+      // children: [
+      //   {
+      //     path: '/register',
+      //     name: 'register',
+      //     component: resolve => require(['../components/pages/userRegister.vue'], resolve),
+      //   }
+      // ]
+    }, 
+    // {
+    //   path: '/dataService',
+    //   name: 'dataService',
+    //   component: resolve => require(['../components/pages/dataService.vue'], resolve)
+    //  }
+    // ,{
+    //   path:'/register',
+    //   component:resolve => require(['../components/pages/userRegister.vue'], resolve)
+    // }
   ]
 })

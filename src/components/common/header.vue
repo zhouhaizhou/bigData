@@ -3,34 +3,35 @@
     <el-row>
       <el-col :span='8' :offset='4' class="left">
         <div class="item">
-          <img src="../../../static/img/tianqi.png" alt="天气">
+          <img src="../../../static/img/tianqi.png" style="vertical-align:-1px;" alt="天气">
           <span class="temp">{{temp}}</span>
           <span class="weather">{{weather}}</span>
         </div>
         <div class="item">
-          <img src="../../../static/img/location.png" alt="位置">
-          <span ref="LocalCity">位置：</span>
+          <img src="../../../static/img/location.png" style="vertical-align:-4px;" alt="位置">
+          <span ref="LocalCity"></span>
+          <span>位置:</span>
           <span class="local">{{local}}</span>
         </div>
         <div class="item">
-          <img src="../../../static/img/time.png"  alt="时间">
-          <span>日期：</span>
+          <img src="../../../static/img/time.png" style="vertical-align:-4px;" alt="时间">
+          <span>日期:</span>
           <span class="date">{{date}}</span>
           <span class="week">{{week}}</span>
         </div>
       </el-col>
       <el-col :span='4' class="right" offset='4'>
         <div class="item">
-          <el-button type="primary" round size="mini" class="btn">注册</el-button>
+          <el-button type="primary" round size="mini" class="btn" @click="register">注册</el-button>
           <el-button round class="btn" size="mini">登录</el-button>
         </div>
       </el-col>
     </el-row>
     <el-row>
-      <el-col :offset='8' :span='4' class="left">
-        <img src="../../../static/img/title.png"  alt="标题">
+      <el-col :offset='4' :span='4' class="left">
+        <img src="../../../static/img/title.png" style="vertical-align:-25px;margin-left:-24px;" alt="标题">
       </el-col>
-      <el-col :span='4' class="right" offset='4'>
+      <el-col :span='4' class="right" offset='8'>
         <el-input type='text' v-model="inputKey" placeholder="输入关键字" suffix-icon="el-icon-search"></el-input>
       </el-col>
     </el-row>
@@ -128,18 +129,19 @@ export default {
     handleClick(ev) {
       var p=ev.name;
       this.$router.push(p);
+    },
+    register(){
+      this.$router.push('register');
     }
   }
 };
 </script>
 
 <style scoped>
-img{
-  vertical-align: middle;
-}
+
 .item {
   float: left;
-  margin-left: 10px;
+  margin-left: 30px;
 }
 .left .item:first-child {
   margin-left: 0;
@@ -151,6 +153,9 @@ img{
   width: 100%;
   line-height: 40px;
   position: relative;
+}
+.header >>> .el-tabs__header{
+  margin: 0 0 0px;
 }
 .header .el-row:first-child {
   border-bottom: 1px solid #ccc;
