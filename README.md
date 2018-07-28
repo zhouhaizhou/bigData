@@ -1,3 +1,4 @@
+
 # bigdata
 
 ## Build Setup
@@ -22,6 +23,10 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 
 #### 项目介绍
 大数据污染平台
+=======
+# BigData
+
+#### 项目介绍
 
 #### 软件架构
 软件架构说明
@@ -33,7 +38,7 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 2. xxxx
 3. xxxx
 
-#### 使用说明
+#### 使用说
 
 1. xxxx
 2. xxxx
@@ -41,7 +46,6 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 
 #### 参与贡献
 
-1. Fork 本项目
-2. 新建 Feat_xxx 分支
-3. 提交代码
-4. 新建 Pull Request
+=======
+
+
