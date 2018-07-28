@@ -2,7 +2,7 @@
   <div>
     <my-header></my-header>
     <div class="user-register">用户注册</div>
-    <div>引入图片</div>
+    <div class="sub-img-wrap">引入图片</div>
     <div class="sub-wrap">
       <div class="hr-wrap">
         <hr>
@@ -37,15 +37,17 @@
         </div>
       </div>
     </div>
-
+<my-footer></my-footer>
   </div>
 </template>
 
 <script>
 import myHeader from "../common/header.vue";
+import myFooter from "../common/foot.vue";
 export default {
   components: {
-    myHeader
+    myHeader,
+    myFooter
   },
   data() {
     return {
@@ -89,6 +91,10 @@ export default {
   height: 5vh;
   font-weight: bold;
   font-size: 1.8em;
+  text-align: center;
+}
+.sub-img-wrap{
+  text-align: center;
 }
 .sub-wrap {
   height: 11vh;
@@ -108,13 +114,14 @@ hr {
 .text-wrap {
   width: 30%;
   font-size: 1.8em;
+  text-align: center;
 }
 .text {
   line-height: 250%;
   color: #808080b3;
 }
 .users-register-wrap {
-  height: 50vh;
+  height: 54vh;
   text-align: center;
 }
 .users-register-wrap-center {
@@ -124,26 +131,26 @@ hr {
 .user {
   float: left;
   border: 1px solid #d3d3d3c9;
-  width: 42vh;
-  height: 49vh;
+  width: 22vw;
+  height: 53vh;
   cursor: pointer;
   margin-left: 2vw;
   -webkit-transform: scale(0.8);
   -moz-transform: scale(0.8);
   -o-transform: scale(0.8);
-  -webkit-transition-duration: 0.5s;
-  -moz-transition-duration: 0.5s;
-  -o-transition-duration: 0.5s;
+  -webkit-transition-duration: 0.2s;
+  -moz-transition-duration: 0.2s;
+  -o-transition-duration: 0.2s;
   opacity: 0.7;
   margin: 0 10px 5px 0;
 }
 .user:hover {
   /* transform: scale(1.1); */
   -webkit-transform: scale(
-    0.9
+    0.85
   ); /*Webkit: Scale up image to 1.2x original size*/
-  -moz-transform: scale(0.9); /*Mozilla scale version*/
-  -o-transform: scale(0.9); /*Opera scale version*/
+  -moz-transform: scale(0.85); /*Mozilla scale version*/
+  -o-transform: scale(0.85); /*Opera scale version*/
   box-shadow: 0px 0px 20px gray; /*CSS3 shadow: 30px blurred shadow all around image*/
   -webkit-box-shadow: 0px 0px 20px gray; /*Safari shadow version*/
   -moz-box-shadow: 0px 0px 20px gray; /*Mozilla shadow version*/
@@ -154,15 +161,15 @@ hr {
 }
 .subtitle-wrap {
   font-weight: bold;
-  font-size: 1.1em;
+  font-size: 1.6em;
 }
 .content-wrap {
-  height: 12vh;
+  height: 16vh;
 }
 .content {
   text-indent: 2em;
   margin: 6% 6% 0% 6%;
-  font-size: 0.7em;
+  font-size: 1.1em;
   text-align: left;
   line-height: 2;
 }
@@ -176,7 +183,7 @@ hr {
 .enter {
   width: 8vw;
   height: 5vh;
-  font-size: 1em;
+  font-size: 1.2em;
   line-height: 5vh;
   background-color: rgb(53, 152, 219);
   color: white;

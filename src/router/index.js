@@ -28,8 +28,12 @@ export default new Router({
     //   component: resolve => require(['../components/pages/dataService.vue'], resolve)
     //  }
     // ,{
-    //   path:'/register',
-    //   component:resolve => require(['../components/pages/userRegister.vue'], resolve)
-    // }
+    { path:'/register',
+      component:resolve => require(['../components/pages/userRegister.vue'], resolve),
+      // children:[{
+      //   path:'/',
+      //   component: resolve => require(['../components/common/foot.vue'], resolve),
+      // }]
+    }
   ]
 })

@@ -4,7 +4,7 @@
       <div>{{count}}</div>
       <button @click="add">+</button>
       <button @click="reduce">-</button>
-    </p>
+     </p>
   </div>
 </template>
 <script>
@@ -26,7 +26,7 @@ export default {
       // })
       // .catch(function (error) {
       //   console.log(error);
-      // });
+      // });  
       
     },
     computed: {

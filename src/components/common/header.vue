@@ -1,26 +1,26 @@
 <template>
   <div class="header">
     <el-row>
-      <el-col :span='8' :offset='4' class="left">
+      <el-col :span='10' :offset='4' class="left">
         <div class="item">
-          <img src="../../../static/img/tianqi.png" style="vertical-align:-1px;" alt="天气">
+          <img src="../../assets/img/tianqi.png" style="vertical-align:-1px;" alt="天气">
           <span class="temp">{{temp}}</span>
           <span class="weather">{{weather}}</span>
         </div>
         <div class="item">
-          <img src="../../../static/img/location.png" style="vertical-align:-4px;" alt="位置">
+          <img src="../../assets/img/location.png" style="vertical-align:-4px;" alt="位置">
           <span ref="LocalCity"></span>
           <span>位置:</span>
           <span class="local">{{local}}</span>
         </div>
         <div class="item">
-          <img src="../../../static/img/time.png" style="vertical-align:-4px;" alt="时间">
+          <img src="../../assets/img/time.png" style="vertical-align:-4px;" alt="时间">
           <span>日期:</span>
           <span class="date">{{date}}</span>
           <span class="week">{{week}}</span>
         </div>
       </el-col>
-      <el-col :span='4' class="right" offset='4'>
+      <el-col :span='4' class="right" offset='2'>
         <div class="item">
           <el-button type="primary" round size="mini" class="btn" @click="register">注册</el-button>
           <el-button round class="btn" size="mini">登录</el-button>
@@ -29,7 +29,7 @@
     </el-row>
     <el-row>
       <el-col :offset='4' :span='4' class="left">
-        <img src="../../../static/img/title.png" style="vertical-align:-25px;margin-left:-24px;" alt="标题">
+        <img src="../../assets/img/title.png" style="vertical-align:-25px;margin-left:-24px;" alt="标题">
       </el-col>
       <el-col :span='4' class="right" offset='8'>
         <el-input type='text' v-model="inputKey" placeholder="输入关键字" suffix-icon="el-icon-search"></el-input>
@@ -67,13 +67,8 @@ export default {
       date: "",
       week: "",
       inputKey: "",
-      activeName: "home"
-    };
-  },
-  computed: {
-    options() {
-      //return ['../components/common/home.vue','../components/common/dataService.vue']
-      return [
+      activeName: "home",
+      options:[
         {
           name: "home",
           path: "/home",
@@ -85,10 +80,36 @@ export default {
           path: "/dataService",
           CName:"数据服务",
           component: "../components/pages/dataService.vue"
+        },
+        {
+          name: "onlineDisplay",
+          path: "/onlineDisplay",
+          CName:"在线展示",
+          component: "../components/pages/onlineDisplay.vue"
+        },
+        {
+          name: "relateResult",
+          path: "/relateResult",
+          CName:"相关成果",
+          component: "../components/pages/relateResult.vue"
+        },
+        {
+          name: "userSupport",
+          path: "/userSupport",
+          CName:"用户支持",
+          component: "../components/pages/userSupport.vue"
+        },
+        {
+          name: "about",
+          path: "/about",
+          CName:"关于我们",
+          component: "../components/pages/about.vue"
         }
-      ];
-    }
+
+      ]
+    };
   },
+
   mounted() {
     this.headerInit();
   },
@@ -131,7 +152,7 @@ export default {
       this.$router.push(p);
     },
     register(){
-      this.$router.push('register');
+      this.$router.push('/register');
     }
   }
 };
@@ -183,10 +204,10 @@ export default {
   height: 4px;
 }
 .header >>> .el-tabs__item.is-active {
-  color: white;
+  color: white !important ;
 }
 .header >>> .el-tabs__item:hover {
-  color: white;
+  color: black;
 }
 .header >>> .el-tabs__item {
   color: white;
@@ -196,6 +217,7 @@ export default {
   height: 50px;
   line-height: 50px;
 }
+
 .navColor {
   width: 100%;
   height: 50px;
