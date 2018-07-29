@@ -19,7 +19,7 @@ export default {
         };
     },
     mounted(){
-      ///api/SYS/Huadong/LoadMenuService.svc/GetUser
+      ///api/SYS/Huadong/LoadMenuService.svc/GetUser123
       // this.axios.get('/SYS/Huadong/LoadMenuService.svc/GetUser')
       // .then(function (response) {
       //   console.log(response);
