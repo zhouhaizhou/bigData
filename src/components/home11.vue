@@ -4,7 +4,7 @@
       <div>{{count}}</div>
       <button @click="add">+</button>
       <button @click="reduce">-</button>
-    </p>
+     </p>
   </div>
 </template>
 <script>
@@ -19,14 +19,14 @@ export default {
         };
     },
     mounted(){
-      ///api/SYS/Huadong/LoadMenuService.svc/GetUser
+      ///api/SYS/Huadong/LoadMenuService.svc/GetUser周海洲
       // this.axios.get('/SYS/Huadong/LoadMenuService.svc/GetUser')
       // .then(function (response) {
       //   console.log(response);
       // })
       // .catch(function (error) {
       //   console.log(error);
-      // });
+      // });  
       
     },
     computed: {
