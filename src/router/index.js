@@ -28,7 +28,7 @@ export default new Router({
       //   path:'/',
       //   component: resolve => require(['../components/common/foot.vue'], resolve),
       // }]
-    }
+    },
     // {
     //   path: '/dataService',
     //   name: 'dataService',

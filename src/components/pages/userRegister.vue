@@ -16,34 +16,34 @@
       </div>
     </div>
     <div class="users-register-wrap">
-      
-        <!--循环-->
-        <div class="user" v-for="user in users">
-          <div class="img-wrap" ref= :style="{background:'url('+user.img+') no-repeat center center'}" @mouseover="cBI(user)" @mouseout="cBI1(user)"></div>
-          <div class="subtitle-wrap">
-            {{user.subtitle}}
-          </div>
-          <div class="content-wrap">
-            <div class="content">
-              {{user.content}}
-            </div>
-          </div>
-          <div class="enter-wrap" @click="enter()">
-            <div class="enter">
-              {{user.enter}}
-            </div>
-          </div>
 
+      <!--循环-->
+      <div class="user" v-for="user in users" @mouseover="mouseOver(user)" @mouseout="mouseOut(user)">
+        <div class="img-wrap" :style="{background:'url('+user.img+ ') no-repeat center center'}" ></div>
+        <div class="subtitle-wrap">
+          {{user.subtitle}}
         </div>
-      
+        <div class="content-wrap">
+          <div class="content">
+            {{user.content}}
+          </div>
+        </div>
+        <div class="enter-wrap" @click="enter()">
+          <div class="enter">
+            {{user.enter}}
+          </div>
+        </div>
+
+      </div>
+
     </div>
-<my-footer></my-footer>
+    <my-footer></my-footer>
   </div>
 </template>
 
 <script>
 import myHeader from "../common/header.vue";
-
+let img1="";
 import myFooter from "../common/foot.vue";
 export default {
   components: {
@@ -51,29 +51,30 @@ export default {
     myFooter
   },
   data() {
+    
     return {
       users: [
         {
-          // img: "../../../src/assets/img/dqzxsmzc-n.png", 
-          img1: require("../../assets/img/dqzxsmzc-n.png"),
+          // img: "../../../src/assets/img/dqzxsmzc-n.png",
+          // img1: require("../../assets/img/dqzxsmzc-n.png"),
           img: require("../../assets/img/dqzxsmzc-n.png"),
-          imgHover:require("../../assets/img/dqzxsmzc-d.png"),
+          imgHover: require("../../assets/img/dqzxsmzc-d.png"),
           subtitle: "大气专项用户实名注册",
           content:
             "通过网络在线方式提交申请和注册。大气专项用户可在污染天气大数据平台浏览、查询和下载指定气象数据和产品",
           enter: "立即加入"
         },
         {
-          img: require("../../assets/img/dqzxsmzc-n.png"),
-          imgHover:require("../../assets/img/dqzxsmzc-n.png"),
+          img: require("../../assets/img/jykysmzc-n.png"),
+          imgHover: require("../../assets/img/jykysmzc-d.png"),
           subtitle: "教育科研实名注册",
           content:
             "通过网络在线方式申请和注册。教育科研注册用户可在污染天气大数据平台浏览、查询和下载中国气象最新公布的《基本气象资料和产品开放清单》",
           enter: "立即进入"
         },
         {
-          img: require("../../assets/img/dqzxsmzc-n.png"),
-          imgHover:require("../../assets/img/dqzxsmzc-n.png"),
+          img: require("../../assets/img/dwsmzc-n.png"),
+          imgHover: require("../../assets/img/dwsmzc-d.png"),
           subtitle: "单位实名注册",
           content:
             "通过网络在线方式申请和注册。单位实名祖册用户可在污染天气大数据平台浏览、查询和下载指定气象数据和产品",
@@ -87,16 +88,15 @@ export default {
       var mythis = this;
       console.log(mythis);
     },
-    cBI:function(u){
-      u.img = u.imgHover
-    //   this.users[k].img=this.users[k].imgHover;
-    // //  alert("zhz")
+    mouseOver: function(u) {
+      img1=u.img;
+      u.img = u.imgHover;
     },
-    cBI1(u){
-      u.img = u.img1
+    mouseOut(u) {
+      u.img = img1;
     },
-    defalutBg:function(user){
-user.img=user.img;
+    defalutBg: function(user) {
+      user.img = user.img;
     }
   }
 };
@@ -110,14 +110,14 @@ user.img=user.img;
   font-size: 1.8em;
   text-align: center;
 }
-.sub-img-wrap{
+.sub-img-wrap {
   text-align: center;
 }
 .sub-wrap {
   height: 7vh;
-    display: flex;
-justify-content: center;
-align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .hr-wrap {
   width: 35%;
@@ -139,8 +139,8 @@ align-items: center; */
   height: 54vh;
   text-align: center;
   display: flex;
-justify-content: center;
-align-items: center;
+  justify-content: center;
+  align-items: center;
 }
 .users-register-wrap-center {
   display: inline-block;
@@ -152,7 +152,7 @@ align-items: center;
   width: 22vw;
   height: 60vh;
   cursor: pointer;
-  
+
   -webkit-transform: scale(0.8);
   -moz-transform: scale(0.8);
   -o-transform: scale(0.8);

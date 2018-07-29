@@ -13,6 +13,7 @@ module.exports = {
     var obj=paramObj.obj;
     var self=this;
     if (document.documentElement.scrollTop >= obj.offsetTop) {
+      console.log(1);
       return;
     }
     document.documentElement.scrollTo(0, Top);
