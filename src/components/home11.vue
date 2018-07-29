@@ -3,7 +3,7 @@
     <p>
       <div>{{count}}</div>
       <button @click="add">+</button>
-      <button @click="reduce">-</button>
+      <button @click="increment">-</button>
      </p>
   </div>
 </template>
@@ -33,7 +33,9 @@ export default {
       ...mapState(['count'])
     },
     methods: {
-      ...mapMutations(['add','reduce'])
+      ...mapMutations(['add','reduce']),
+      ...mapActions(['increment']),
+
     }
 };
 </script>
