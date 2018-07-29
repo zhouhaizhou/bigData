@@ -3,18 +3,18 @@
     <el-row>
       <el-col :span='10' :offset='4' class="left">
         <div class="item">
-          <img src="../../../src/assets/img/tianqi.png" style="vertical-align:-1px;" alt="天气">
+          <img src="../../assets/img/tianqi.png" style="vertical-align:-1px;" alt="天气">
           <span class="temp">{{temp}}</span>
           <span class="weather">{{weather}}</span>
         </div>
         <div class="item">
-          <img src="../../../src/assets/img/location.png" style="vertical-align:-4px;" alt="位置">
+          <img src="../../assets/img/location.png" style="vertical-align:-4px;" alt="位置">
           <span ref="LocalCity"></span>
           <span>位置:</span>
           <span class="local">{{local}}</span>
         </div>
         <div class="item">
-          <img src="../../../src/assets/img/time.png" style="vertical-align:-4px;" alt="时间">
+          <img src="../../assets/img/time.png" style="vertical-align:-4px;" alt="时间">
           <span>日期:</span>
           <span class="date">{{date}}</span>
           <span class="week">{{week}}</span>
@@ -29,7 +29,7 @@
     </el-row>
     <el-row>
       <el-col :offset='4' :span='4' class="left">
-        <img src="../../../src/assets/img/title.png" style="vertical-align:-25px;margin-left:-24px;" alt="标题">
+        <img src="../../assets/img/title.png" style="vertical-align:-25px;margin-left:-24px;" alt="标题">
       </el-col>
       <el-col :span='4' class="right" offset='8'>
         <el-input type='text' v-model="inputKey" placeholder="输入关键字" suffix-icon="el-icon-search"></el-input>
@@ -153,7 +153,7 @@ export default {
       this.$router.push(p);
     },
     register(){
-      this.$router.push('register');
+      this.$router.push('/register');
     }
   }
 };

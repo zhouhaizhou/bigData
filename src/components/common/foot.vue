@@ -27,7 +27,7 @@
         </div>
       </div>
     </div>
-    <div class="bak"><img src="../../../src/assets/img/gongan.png">
+    <div class="bak"><img src="../../assets/img/gongan.png">
       <span class="bak-text">备案信息：沪ICP备18015098号-1</span>
     </div>
   </div>

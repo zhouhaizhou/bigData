@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div ref="datahot" id="datahot">
     <div class="txt">
       <p style="padding-top:15px;margin-top:0;">数据热点</p>
       <p style="color:rgb(148,152,152);font-size:16px;margin-bottom: 15px;padding-top:0px;">DATA HOTSPOTS</p>
@@ -16,10 +16,10 @@
               <span>·</span>
               <span class="item">{{dataItem.txt}}</span>
             </el-col>
-            <el-col :span="(index==0?0:(index==1?0:5))" :offset="1">
+            <el-col :span="(index==0?0:(index==1?1:6))" :offset="1">
               <span class="item">{{dataItem.stat}}</span>
             </el-col>
-            <el-col :span="(index==0?0:(index==1?7:7))" :offset="1">
+            <el-col :span="(index==0?0:(index==1?6:6))" :offset="1">
               <span class="item">{{dataItem.time}}</span>
             </el-col>
           </el-row>
@@ -116,6 +116,8 @@ export default {
       ]
     };
   },
+  mounted(){
+  },
   methods: {}
 };
 </script>
@@ -148,6 +150,10 @@ export default {
   border: 1px solid #ccc;
   border-top: 5px solid #aaa;
   width: 31.5%;
+  cursor: pointer;
+}
+.frame:hover{
+  border-top:5px solid #3598DB;
 }
 .frame:hover{
   border-top:5px solid #3598DB;

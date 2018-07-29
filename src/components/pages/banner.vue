@@ -2,7 +2,7 @@
   <div>
     <div class="bg">
       <!-- <my-polygon></my-polygon> -->
-      <div class="module">
+      <div class="module" id="module">
         <div class="_module" :class="{select:modul.hoverModule,unselect:!modul.hoverModule}" ref="_module" v-for="modul in modules" :style="{top:modul.top+'vh',left:modul.left+'vw'}" @mouseover="mouseover(modul)" @mouseout="mouseout(modul)">
           <p v-html="modul.txt"></p>
         </div>
@@ -17,10 +17,10 @@
         </div>
         <div class="icon">
           <div>
-            <img src="../../../src/assets/img/tubiao.png" alt="">
+            <img src="../../assets/img/tubiao.png" alt="" @click="goAnchor">
           </div>
           <div style="margin-top: 15px;">
-            <img src="../../../src/assets/img/jiantou.png" alt="">
+            <img src="../../assets/img/jiantou.png" alt="" @click="goAnchor">
           </div>
         </div>
       </div>
@@ -29,36 +29,32 @@
 </template>
 
 <script>
-import myPolygon from "./polygon.vue";
 export default {
-  components: {
-    myPolygon
-  },
   data() {
     return {
       modules: [
         {
           txt: "地面气象</br>资料",
-          top: 9,
-          left: -6.3,
+          top: 8.5,
+          left: -6.32,
           hoverModule: false
         },
         {
           txt: "辐射资料",
-          top: 0.4,
+          top: 0,
           left: 0.75,
           hoverModule: false
         },
         {
           txt: "大气成分<br/>资料",
-          top: 17.1,
-          left: 0.8,
+          top: 17,
+          left: 0.7,
           hoverModule: false
         },
         {
           txt: "高空气象</br>资料",
-          top: 25.5,
-          left: -6.3,
+          top: 25.3,
+          left: -6.32,
           hoverModule: false
         },
         {
@@ -69,35 +65,37 @@ export default {
         },
         {
           txt: "卫星探测</br>资料",
-          top: 0.4,
-          left: 14.8,
+          top: 0,
+          left: 14.85,
           hoverModule: false
         },
         {
           txt: "数值预报</br>产品",
-          top: 17.0,
-          left: 14.8,
+          top: 17,
+          left: 14.85,
           hoverModule: false
         },
         {
           txt: "雷达探测</br>资料",
-          top: 8.6,
-          left: 21.85,
+          top: 8.5,
+          left: 21.9,
           hoverModule: false
         },
         {
           txt: "综合观测</br>数据",
-          top: 25.2,
-          left: 21.85,
+          top: 25.3,
+          left: 21.95,
           hoverModule: false
         }
       ]
     };
   },
+
   mounted() {
+    let zong =require('../../assets/img/zongti.png');
     this.$refs._module[4].style.background =
-      "url('../../../src/assets/img/zongti.png') no-repeat center center";
-      this.$refs._module[4].style.backgroundSize ="cover";
+      "url("+zong+") no-repeat center center";
+    this.$refs._module[4].style.backgroundSize="cover";
     let width = this.$refs.cname.offsetWidth;
     let left = this.$refs.cname.offsetLeft;
     let top = this.$refs.cname.offsetTop;
@@ -111,6 +109,9 @@ export default {
     },
     mouseover(modul) {
       modul.hoverModule = true;
+    },
+    goAnchor(){
+      this.$emit('goAnchor');
     }
   }
 };
@@ -121,7 +122,7 @@ export default {
   position: relative;
   width: 100%;
   height: 84vh;
-  background: url("../../../src/assets/img/bg.png") no-repeat center center;
+  background: url('../../assets/img/bg.png') no-repeat center center;
    background-size: cover;/*图片跟随div变化 */
 }
 .title {
@@ -156,11 +157,11 @@ export default {
   cursor: pointer;
 }
 .unselect {
-  background: url("../../../src/assets/img/xuanze-n.png") no-repeat center center;
+  background: url("../../assets/img/xuanze-n.png") no-repeat center center;
   background-size: cover;/*图片跟随div变化 */
 }
 .select {
-  background: url("../../../src/assets/img/xuanze-d.png") no-repeat center center;
+  background: url("../../assets/img/xuanze-d.png") no-repeat center center;
   background-size: cover;/*图片跟随div变化 */
 }
 

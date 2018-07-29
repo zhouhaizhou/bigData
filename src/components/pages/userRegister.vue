@@ -37,16 +37,18 @@
         </div>
       
     </div>
-
+<my-footer></my-footer>
   </div>
 </template>
 
 <script>
 import myHeader from "../common/header.vue";
 
+import myFooter from "../common/foot.vue";
 export default {
   components: {
-    myHeader
+    myHeader,
+    myFooter
   },
   data() {
     return {
@@ -127,16 +129,14 @@ align-items: center; */
 .text-wrap {
   width: 30%;
   font-size: 1.8em;
-   display: flex;
-justify-content: center;
-align-items: center;
+  text-align: center;
 }
 .text {
   line-height: 250%;
   color: #808080b3;
 }
 .users-register-wrap {
-  height: 50vh;
+  height: 54vh;
   text-align: center;
   display: flex;
 justify-content: center;

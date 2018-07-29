@@ -27,25 +27,25 @@ export default {
             {
                 CName:'数据清单',
                 EName:'Data List',
-                img:require('../../../src/assets/img/dataProduct1.png'),
+                img:require('../../assets/img/dataProduct1.png'),
                 hoverImg:false
             },
             {
                 CName:'数据接口',
                 EName:'Data Interface',
-                img:require('../../../src/assets/img/dataProduct2.png'),
+                img:require('../../assets/img/dataProduct2.png'),
                 hoverImg:false
             },
             {
                 CName:'检索订制',
                 EName:'Retrieval and Order',
-                img:'../../../src/assets/img/dataProduct3.png',
+                img:require('../../assets/img/dataProduct3.png'),
                 hoverImg:false
             },
             {
                 CName:'图像展示',
                 EName:'Image Display',
-                img:'../../../src/assets/img/dataProduct4.png',
+                img:require('../../assets/img/dataProduct4.png'),
                 hoverImg:false
             }
         ],
