@@ -16,33 +16,34 @@
       </div>
     </div>
     <div class="users-register-wrap">
-      <div class="users-register-wrap-center">
-        <!--循环-->
-        <div class="user" v-for="user in users">
-          <div class="img-wrap">{{user.img}}</div>
-          <div class="subtitle-wrap">
-            {{user.subtitle}}
-          </div>
-          <div class="content-wrap">
-            <div class="content">
-              {{user.content}}
-            </div>
-          </div>
-          <div class="enter-wrap" @click="enter()">
-            <div class="enter">
-              {{user.enter}}
-            </div>
-          </div>
 
+      <!--循环-->
+      <div class="user" v-for="user in users" @mouseover="mouseOver(user)" @mouseout="mouseOut(user)">
+        <div class="img-wrap" :style="{background:'url('+user.img+ ') no-repeat center center'}" ></div>
+        <div class="subtitle-wrap">
+          {{user.subtitle}}
         </div>
+        <div class="content-wrap">
+          <div class="content">
+            {{user.content}}
+          </div>
+        </div>
+        <div class="enter-wrap" @click="enter()">
+          <div class="enter">
+            {{user.enter}}
+          </div>
+        </div>
+
       </div>
+
     </div>
-<my-footer></my-footer>
+    <my-footer></my-footer>
   </div>
 </template>
 
 <script>
 import myHeader from "../common/header.vue";
+let img1="";
 import myFooter from "../common/foot.vue";
 export default {
   components: {
@@ -50,24 +51,30 @@ export default {
     myFooter
   },
   data() {
+    
     return {
       users: [
         {
-          img: "引用图片路径",
+          // img: "../../../src/assets/img/dqzxsmzc-n.png",
+          // img1: require("../../assets/img/dqzxsmzc-n.png"),
+          img: require("../../assets/img/dqzxsmzc-n.png"),
+          imgHover: require("../../assets/img/dqzxsmzc-d.png"),
           subtitle: "大气专项用户实名注册",
           content:
             "通过网络在线方式提交申请和注册。大气专项用户可在污染天气大数据平台浏览、查询和下载指定气象数据和产品",
           enter: "立即加入"
         },
         {
-          img: "引用图片路径",
+          img: require("../../assets/img/jykysmzc-n.png"),
+          imgHover: require("../../assets/img/jykysmzc-d.png"),
           subtitle: "教育科研实名注册",
           content:
             "通过网络在线方式申请和注册。教育科研注册用户可在污染天气大数据平台浏览、查询和下载中国气象最新公布的《基本气象资料和产品开放清单》",
           enter: "立即进入"
         },
         {
-          img: "引用图片路径",
+          img: require("../../assets/img/dwsmzc-n.png"),
+          imgHover: require("../../assets/img/dwsmzc-d.png"),
           subtitle: "单位实名注册",
           content:
             "通过网络在线方式申请和注册。单位实名祖册用户可在污染天气大数据平台浏览、查询和下载指定气象数据和产品",
@@ -80,6 +87,16 @@ export default {
     enter: function() {
       var mythis = this;
       console.log(mythis);
+    },
+    mouseOver: function(u) {
+      img1=u.img;
+      u.img = u.imgHover;
+    },
+    mouseOut(u) {
+      u.img = img1;
+    },
+    defalutBg: function(user) {
+      user.img = user.img;
     }
   }
 };
@@ -93,24 +110,22 @@ export default {
   font-size: 1.8em;
   text-align: center;
 }
-.sub-img-wrap{
+.sub-img-wrap {
   text-align: center;
 }
 .sub-wrap {
-  height: 11vh;
+  height: 7vh;
   display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .hr-wrap {
   width: 35%;
+  /* display: flex;
+justify-content: center;
+align-items: center; */
 }
-hr {
-  position: relative;
-  top: 35%;
-  background-color: #03030329;
-  color: red;
-  border: none;
-  height: 1px;
-}
+
 .text-wrap {
   width: 30%;
   font-size: 1.8em;
@@ -123,6 +138,9 @@ hr {
 .users-register-wrap {
   height: 54vh;
   text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .users-register-wrap-center {
   display: inline-block;
@@ -132,9 +150,9 @@ hr {
   float: left;
   border: 1px solid #d3d3d3c9;
   width: 22vw;
-  height: 53vh;
+  height: 60vh;
   cursor: pointer;
-  margin-left: 2vw;
+
   -webkit-transform: scale(0.8);
   -moz-transform: scale(0.8);
   -o-transform: scale(0.8);
@@ -142,7 +160,6 @@ hr {
   -moz-transition-duration: 0.2s;
   -o-transition-duration: 0.2s;
   opacity: 0.7;
-  margin: 0 10px 5px 0;
 }
 .user:hover {
   /* transform: scale(1.1); */
@@ -157,14 +174,14 @@ hr {
   opacity: 1;
 }
 .img-wrap {
-  height: 20vh;
+  height: 22vh;
 }
 .subtitle-wrap {
   font-weight: bold;
   font-size: 1.6em;
 }
 .content-wrap {
-  height: 16vh;
+  height: 20vh;
 }
 .content {
   text-indent: 2em;

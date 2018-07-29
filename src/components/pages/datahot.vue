@@ -155,6 +155,9 @@ export default {
 .frame:hover{
   border-top:5px solid #3598DB;
 }
+.frame:hover{
+  border-top:5px solid #3598DB;
+}
 .frame .itemTxt{
   overflow: hidden;
   text-overflow: ellipsis;

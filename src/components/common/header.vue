@@ -120,6 +120,7 @@ export default {
         this.getLocal(),
         (this.date = this._global.formatDate(new Date(), "yyyy-MM-dd")),
         this.getWeek();
+        console.log(this);
     },
     getLocal() {
       var self = this;
@@ -204,7 +205,7 @@ export default {
   height: 4px;
 }
 .header >>> .el-tabs__item.is-active {
-  color: white !important ;
+  color: white !important;
 }
 .header >>> .el-tabs__item:hover {
   color: black;

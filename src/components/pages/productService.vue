@@ -51,7 +51,13 @@ export default {
         ],
     } 
   },
+  mounted(){
+      this.get();
+  },
   methods:{
+      get(){
+
+      },
     enterImg(option){
       // var obj=env.currentTarget.children[1].add('imgtxtbg');
       option.hoverImg=true;
