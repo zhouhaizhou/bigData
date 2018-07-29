@@ -39,4 +39,7 @@ export default {
 </script>
 
 <style scoped>
+button{
+  background-color: aqua;
+}
 </style>
