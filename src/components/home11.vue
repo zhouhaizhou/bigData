@@ -40,6 +40,6 @@ export default {
 
 <style scoped>
 button{
-  background-color: aqua;
+  background-color:red;
 }
 </style>
