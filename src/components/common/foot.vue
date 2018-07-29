@@ -27,7 +27,7 @@
         </div>
       </div>
     </div>
-    <div class="bak"><img src="../../../static/img/gongan.png">
+    <div class="bak"><img src="../../../src/assets/img/gongan.png">
       <span class="bak-text">备案信息：沪ICP备18015098号-1</span>
     </div>
   </div>
@@ -138,7 +138,7 @@ export default {
   align-items: center;
 }
 .units-wrap {
-  width: 24vw;
+  width: 26vw;
   margin-top: 2vh;
 }
 .units-title {
@@ -153,7 +153,7 @@ export default {
   color: #a4a4a6;
 }
 .address-wrap {
-  width: 22vw;
+  width: 18vw;
   margin-top: 2vh;
 }
 .address-title {

@@ -6,10 +6,10 @@
       </div>
       <div class="imgdisplay">
           <div class="imgsingle" :class="{imgscale:option.hoverImg}" v-for="option in options" @mouseover="enterImg(option)" @mouseout="leaveImg(option)">
-            <!-- <div class="imgframe"> -->
+            <div class="imgframe" :style="{background:'url('+option.img+') no-repeat center center',backgroundSize:'cover'}">
               <!-- <img :src="option.img"  alt=""> -->
-              <img :src="option.img"  alt="">
-            <!-- </div> -->
+              <!-- <img :src="option.img"  alt=""> -->
+            </div>
             <div class="imgtxt" :class="{imgtxtbg:option.hoverImg,imgtxtborder:!option.hoverImg}">
                 <p :class="{txtcolor:option.hoverImg}">{{option.CName}}</p>
                 <p :class="{txtcolor:option.hoverImg}">{{option.EName}}</p>
@@ -27,31 +27,37 @@ export default {
             {
                 CName:'数据清单',
                 EName:'Data List',
-                img:'../../../static/img/dataProduct1.png',
+                img:require('../../../src/assets/img/dataProduct1.png'),
                 hoverImg:false
             },
             {
                 CName:'数据接口',
                 EName:'Data Interface',
-                img:'../../../static/img/dataProduct2.png',
+                img:require('../../../src/assets/img/dataProduct2.png'),
                 hoverImg:false
             },
             {
                 CName:'检索订制',
                 EName:'Retrieval and Order',
-                img:'../../../static/img/dataProduct3.png',
+                img:'../../../src/assets/img/dataProduct3.png',
                 hoverImg:false
             },
             {
                 CName:'图像展示',
                 EName:'Image Display',
-                img:'../../../static/img/dataProduct4.png',
+                img:'../../../src/assets/img/dataProduct4.png',
                 hoverImg:false
             }
         ],
     } 
   },
+  mounted(){
+      this.get();
+  },
   methods:{
+      get(){
+
+      },
     enterImg(option){
       // var obj=env.currentTarget.children[1].add('imgtxtbg');
       option.hoverImg=true;
@@ -111,10 +117,11 @@ p{
   color: white !important;
 }
 .imgframe{
-    /* height: 180px; */
-    /* width: 180px; */
-    /* border-bottom: 1px solid #ccc; */
-    /* border:1px solid #ccc; */
+    background-repeat: none;
+    background-position: center center;
+   background-size:cover;
+   width:18vw;
+   height: 32vh;
 }
 .imgtxt{
   background-color: white;

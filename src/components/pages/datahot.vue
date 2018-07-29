@@ -149,6 +149,9 @@ export default {
   border-top: 5px solid #aaa;
   width: 31.5%;
 }
+.frame:hover{
+  border-top:5px solid #3598DB;
+}
 .frame .itemTxt{
   overflow: hidden;
   text-overflow: ellipsis;
@@ -156,6 +159,8 @@ export default {
 }
 .frame .item{
   padding-left: 5px;
+  color: #969696;
+    font-size: 0.8vw;
 }
 .line {
   border-bottom: 1px solid #ccc;
