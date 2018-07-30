@@ -3,7 +3,7 @@
     <p>
       <div>{{count}}</div>
       <button @click="add">+</button>
-      <button @click="reduce">-</button>
+      <button @click="increment">-</button>
      </p>
   </div>
 </template>
@@ -19,7 +19,7 @@ export default {
         };
     },
     mounted(){
-      ///api/SYS/Huadong/LoadMenuService.svc/GetUser周海洲
+      ///api/SYS/Huadong/LoadMenuService.svc/GetUser123
       // this.axios.get('/SYS/Huadong/LoadMenuService.svc/GetUser')
       // .then(function (response) {
       //   console.log(response);
@@ -33,10 +33,15 @@ export default {
       ...mapState(['count'])
     },
     methods: {
-      ...mapMutations(['add','reduce'])
+      ...mapMutations(['add','reduce']),
+      ...mapActions(['increment']),
+
     }
 };
 </script>
 
 <style scoped>
+button{
+  background-color:red;
+}
 </style>

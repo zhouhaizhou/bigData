@@ -53,6 +53,7 @@ export default {
     myFooter
   },
   data() {
+    
     return {
       users: [
         {

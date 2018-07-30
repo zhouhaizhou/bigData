@@ -14,6 +14,7 @@ export default new Router({
       path: '/home',
       name: 'home',
       component: resolve => require(['../components/pages/home.vue'], resolve),
+      //component: resolve => require(['../components/home11.vue'], resolve),
       // children: [
       //   {
       //     path: '/register',

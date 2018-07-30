@@ -1,3 +1,4 @@
+
 # bigdata
 
 > A Vue.js project
@@ -19,3 +20,29 @@ npm run build --report
 ```
 
 For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+# BigData
+
+#### 项目介绍
+
+#### 软件架构
+软件架构说明
+
+
+#### 安装教程
+
+1. xxxx
+2. xxxx
+3. xxxx
+
+#### 使用说
+
+1. xxxx
+2. xxxx
+3. xxxx
+
+#### 参与贡献
+
+=======
+
+
+=======
