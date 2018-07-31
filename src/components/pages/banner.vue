@@ -8,12 +8,8 @@
         </div>
       </div>
       <div class="title">
-        <div class="cname">
-          <span ref="cname">污染天气大数据</span>
-        </div>
-        <div class="line" ref="line"></div>
-        <div class="ename">
-          <span>METEOROLOGICAL BIG DATA</span>
+        <div class="title-img-wrap">
+          <div class="title-img" src=""></div>
         </div>
         <div class="icon">
           <div>
@@ -133,6 +129,18 @@ export default {
   font-size: 16px;
   text-align: center;
   position: relative;
+}
+.title-img-wrap{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.title-img{
+  background: url('../../assets/img/title-img.png') no-repeat center center;
+  width: 20vw;
+    height: 12vh;
+
+
 }
 .title span {
   margin: 0;

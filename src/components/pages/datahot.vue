@@ -1,8 +1,8 @@
 <template>
   <div ref="datahot" id="datahot">
     <div class="txt">
-      <p style="padding-top:15px;margin-top:0;">数据热点</p>
-      <p style="color:rgb(148,152,152);font-size:16px;margin-bottom: 15px;padding-top:0px;">DATA HOTSPOTS</p>
+      <p style="margin: 0px;padding-top: 3vh;">数据热点</p>
+      <p style="color:rgb(148,152,152);font-size:16px;margin: 0px;padding-top: 0.5vh;padding-bottom: 1vh;">DATA HOTSPOTS</p>
     </div>
     <div class="banner" ref="banner">
       <el-row style="width:100%;">

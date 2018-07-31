@@ -8,7 +8,7 @@ module.exports={
     if (document.documentElement.scrollTop >= obj.offsetTop) {
       return;
     }
-    document.documentElement.scrollTo(0, Top);
+    document.documentElement.scrollTop=Top;
     var timer = setInterval(function() {
       clearInterval(timer);
       let distance=(obj.offsetTop-document.documentElement.scrollTop)/10  //步长

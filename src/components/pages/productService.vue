@@ -1,8 +1,8 @@
 <template>
-  <div style="background-color:rgb(242,248,252,.4)">
+  <div style="background-color: #F3F8FC;">
       <div class="txt">
-          <p style="padding-top:15px;margin-top:0;">数据产品服务</p>
-          <p style="color:rgb(148,152,152);font-size:16px;margin-bottom: 15px;padding-top:0px;">DATA PRODUCTION SERVICE</p>
+          <p style="padding-top: 6vh;margin: 0px;">数据产品服务</p>
+          <p style="color:rgb(148,152,152);font-size:16px;margin: 0px;padding-top: 1vh;padding-bottom: 1vh;">DATA PRODUCTION SERVICE</p>
       </div>
       <div class="imgdisplay">
           <div class="imgsingle" :class="{imgscale:option.hoverImg}" v-for="option in options" @mouseover="enterImg(option)" @mouseout="leaveImg(option)">
@@ -141,12 +141,12 @@ p{
     padding-bottom: 0;
     font-weight: bold;
     color: rgb(47, 68, 75);
-    font-size: 15px;
+    font-size: 2.5vh;
     margin-top: 10px;
 }
 .imgtxt p:last-child{
     color:rgb(148,152,152);
     font-weight: normal;
-    font-size: 12px;
+    font-size: 2vh;
 }
 </style>

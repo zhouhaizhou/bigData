@@ -118,10 +118,12 @@ exports.getMultiEntry = function (globPath) {
     }
     // console.log("pathsrc"+pathsrc)
       pathname = pathsrc + '/' + basename; // 正确输出js和html的路径
-      entries[pathname] = entry;
+      entries[pathname] =['babel-polyfill',entry] ;
       // console.log(pathname+'-----------'+entry);
   });
+  //entries['babel-polyfill']='babel-polyfill';
   //  console.log("entries"+JSON.stringify(entries));
   // console.log("===========================================");
+  console.log(entries);
   return entries;
 }
