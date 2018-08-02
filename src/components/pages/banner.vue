@@ -137,10 +137,8 @@ export default {
 }
 .title-img{
   background: url('../../assets/img/title-img.png') no-repeat center center;
-  width: 20vw;
-    height: 12vh;
-
-
+  width: 28vw;
+  height: 15vh;
 }
 .title span {
   margin: 0;

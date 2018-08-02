@@ -120,6 +120,7 @@ export default {
   },
   mounted() {
     this.headerInit();
+    this.navColor=this.$router.currentRoute.name;
   },
   methods: {
     headerInit() {
