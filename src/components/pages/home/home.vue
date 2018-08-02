@@ -1,8 +1,10 @@
 <template>
   <div>
+    <my-header></my-header>
     <banner v-on:goAnchor="goAnchor"></banner>
     <product-service ref="pro"></product-service>
     <datahot></datahot>
+    <my-footer></my-footer>
   </div>
 </template>
 

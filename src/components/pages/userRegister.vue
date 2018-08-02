@@ -2,7 +2,9 @@
   <div>
     <my-header></my-header>
     <div class="user-register">用户注册</div>
-    <div class="sub-img-wrap">引入图片</div>
+    <div class="sub-img-wrap" style="">
+      <div class="sub-img"></div>
+    </div>
     <div class="sub-wrap">
       <div class="hr-wrap">
         <hr>
@@ -19,7 +21,7 @@
 
       <!--循环-->
       <div class="user" v-for="user in users" @mouseover="mouseOver(user)" @mouseout="mouseOut(user)">
-        <div class="img-wrap" :style="{background:'url('+user.img+ ') no-repeat center center'}" ></div>
+        <div class="img-wrap" :style="{background:'url('+user.img+ ') no-repeat center center'}"></div>
         <div class="subtitle-wrap">
           {{user.subtitle}}
         </div>
@@ -43,7 +45,7 @@
 
 <script>
 import myHeader from "../common/header.vue";
-let img1="";
+let img1 = "";
 import myFooter from "../common/foot.vue";
 export default {
   components: {
@@ -89,7 +91,7 @@ export default {
       console.log(mythis);
     },
     mouseOver: function(u) {
-      img1=u.img;
+      img1 = u.img;
       u.img = u.imgHover;
     },
     mouseOut(u) {
@@ -111,7 +113,16 @@ export default {
   text-align: center;
 }
 .sub-img-wrap {
-  text-align: center;
+  width: 99vw;
+  height: 1vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.sub-img {
+  background: url("../../assets/img/sub-img.png") no-repeat center center;
+  width: 99vw;
+  height: 1vh;
 }
 .sub-wrap {
   height: 7vh;

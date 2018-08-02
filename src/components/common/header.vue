@@ -53,14 +53,13 @@ import { mapState,mapActions } from "vuex";
 export default {
   data() {
     return {
-      page: "",
+      navColor: "home",
       temp: "",
       weather: "",
       local: "",
       date: "",
       week: "",
       inputKey: "",
-      activeName: "home",
       options: [
         {
           name: "home",
@@ -102,9 +101,8 @@ export default {
     };
   },
   computed: {
-    ...mapState(["topbarMenu","permissionList","sidebarMenu"]),
     nav() {
-      if (this.page === "home") {
+      if (this.navColor === "home") {
         return "navColorhome";
       } else {
         return "navColor";
@@ -113,7 +111,7 @@ export default {
   },
   mounted() {
     this.headerInit();
-    this.page=this.$router.currentRoute.name;
+    this.navColor=this.$router.currentRoute.name;
   },
   methods: {
     ...mapActions(['FETCH_PERMISSION']),
@@ -152,11 +150,8 @@ export default {
       this.week = weekday[myddy];
     },
     handleClick(ev) {
-      this.page = ev.name;
+      this.navColor = ev.name;
       var p = ev.name;
-      //FETCH_PERMISSION({type:'siderBar'});
-      console.log('路由'+JSON.stringify(this.permissionList));
-      console.log('左侧'+JSON.stringify(this.sidebarMenu));
       this.$router.push(p);
     },
     register() {
@@ -229,6 +224,19 @@ export default {
   width: 100%;
   height: 50px;
   background: linear-gradient( to right, rgb(195, 220, 240) -6%, rgb(1, 152, 217) 29%, rgb(195, 220, 240) 126% );
+  position: absolute;
+  top: 110px;
+  left: 0;
+}
+.navColorhome {
+  width: 100%;
+  height: 50px;
+  background: linear-gradient(
+    to right,
+    rgb(195, 220, 240) 3%,
+    rgb(1, 152, 217) 49%,
+    rgb(195, 220, 240) 111%
+  );
   position: absolute;
   top: 110px;
   left: 0;

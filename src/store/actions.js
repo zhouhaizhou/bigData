@@ -15,7 +15,7 @@ export default  {
       return;
     }
     document.documentElement.scrollTop=Top;
-    var timer = setInterval(function () {
+    var timer = setInterval(function() {
       clearInterval(timer);
       let distance = (obj.offsetTop - document.documentElement.scrollTop) / 10 //步长
       self.dispatch('scrollAnchor', {
