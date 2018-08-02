@@ -1,41 +1,50 @@
 <template>
-  <div class="center">
-    <div class="item-tr-wrap" v-for="item in items">
-      <div class="item-wrap">
-        <div class="sub-title-wrap">
-          <div class="nav-marker"></div>
-          <div class="sub-title">{{item.name}}</div>
-        </div>
-        <div class="lists-wrap">
-          <div class="list-wrap" v-for="(list,index) in item.lists">
-            <div class="list-img" :style="{backgroundImage:'url('+list.imgurl+')',backgroundRepeat:'no-repeat',backgroundPosition:'center center',backgroundSize:'cover'}"></div>
-            <div class="list-title">{{list.title}}</div>
-            <div class="list-marker-wrap">
-              <div class="view-wrap">
-                <div class="view-icon" src=""></div>
-                <div class="view-count">{{list.viewCount}}</div>
-              </div>
-              <div class="comment-wrap">
-                <div class="comment-icon" src=""></div>
-                <div class="comment-count">{{list.commentCount}}</div>
-              </div>
-              <div class="likes-wrap">
-                <div class="likes-icon" src=""></div>
-                <div class="likes-count">{{list.likesCount}}</div>
+  <div>
+    <my-header></my-header>
+    <div class="center">
+      <div class="item-tr-wrap" v-for="item in items">
+        <div class="item-wrap">
+          <div class="sub-title-wrap">
+            <div class="nav-marker"></div>
+            <div class="sub-title">{{item.name}}</div>
+          </div>
+          <div class="lists-wrap">
+            <div class="list-wrap" v-for="(list,index) in item.lists">
+              <div class="list-img" :style="{backgroundImage:'url('+list.imgurl+')',backgroundRepeat:'no-repeat',backgroundPosition:'center center',backgroundSize:'cover'}"></div>
+              
+              <div class="list-title">{{list.title}}</div>
+              <div class="list-marker-wrap">
+                <div class="view-wrap">
+                  <div class="view-icon" src=""></div>
+                  <div class="view-count">{{list.viewCount}}</div>
+                </div>
+                <div class="comment-wrap">
+                  <div class="comment-icon" src=""></div>
+                  <div class="comment-count">{{list.commentCount}}</div>
+                </div>
+                <div class="likes-wrap">
+                  <div class="likes-icon" src=""></div>
+                  <div class="likes-count">{{list.likesCount}}</div>
+                </div>
               </div>
             </div>
           </div>
         </div>
-
       </div>
 
     </div>
-
+    <my-footer></my-footer>
   </div>
 </template>
 
 <script>
+import myHeader from "../common/header";
+import myFooter from "../common/foot";
 export default {
+  components: {
+    myHeader,
+    myFooter
+  },
   data() {
     return {
       items: [
@@ -124,7 +133,6 @@ export default {
               commentCount: "9",
               likesCount: "379"
             }
-           
           ]
         }
       ]
@@ -145,11 +153,14 @@ export default {
 <style scoped>
 .center {
   background-color: #f3f8fc;
+  margin-left: 20vw;
+  width: 80vw;
 }
 .item-tr-wrap {
   clear: both;
   padding-top: 4vh;
   margin-left: 1vw;
+  height: 45vh;
 }
 .item-wrap {
   /* height: 40vh; */
@@ -187,13 +198,18 @@ export default {
   background-color: #fffffd;
   margin-top: 3vh;
   display: inline-block;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.list-wrap:hover{
+  transform: scale(1.08);
 }
 .list-img {
   /* width: 14.5vw; */
   height: 24vh;
   margin: 4%;
-  
 }
+
 .list-title {
   margin-left: 4%;
   text-align: left;
