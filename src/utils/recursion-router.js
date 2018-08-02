@@ -87,7 +87,7 @@ export function joinRouter(MainContainer, routers, path) {
     if (item.children.length > 0 && item.meta.type!='top') {
       joinRouter(item.children, routers,path);
     } else {
-      if (item.path == path) {
+      if (item.path == path && (item.meta.entityName==routers[0].meta.parentEntityName)) {
         item.children.push(...routers);
       }
     }

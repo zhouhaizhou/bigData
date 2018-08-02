@@ -36,7 +36,7 @@ export default  {
       routers = recursionRouter(permissionList, dynamicRouter)   //这里其实做了一步过滤
     }else{
      // permissionList = fetchPermission("siderBar");
-      routers=siderBarRouters;
+      routers=siderBarRouters(path);
       DynamicR=state.permissionList;
     }
     /*  根据权限筛选出我们设置好的路由并加入到path=''的children */

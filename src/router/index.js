@@ -26,7 +26,8 @@ export const DynamicRoutes = [
       //redirect:'/home',
       children: [],
       meta:{
-        type:'/'
+        type:'/',
+        entityName:'/'
       }
   }
 ]

@@ -33,7 +33,7 @@ export default {
     },
     methods: {
         gotoRoute(name) {
-            this.$router.push({name:"surfMeteo"});
+            this.$router.push({name:name});
         }
     }
 }
