@@ -1,16 +1,14 @@
 <template>
   <div>
-    <my-header></my-header>
     <banner v-on:goAnchor="goAnchor"></banner>
     <product-service ref="pro"></product-service>
     <datahot></datahot>
-    <my-footer></my-footer>
   </div>
 </template>
 
 <script>
-import myHeader from "../common/header.vue";
-import myFooter from "../common/foot.vue";
+import myHeader from "../../common/header.vue";
+import myFooter from "../../common/foot.vue";
 import productService from "./productService.vue";
 import datahot from "./datahot.vue";
 import banner from "./banner";

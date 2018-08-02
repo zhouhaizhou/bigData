@@ -37,30 +37,23 @@
     </el-row>
     <el-row>
       <el-col :span="20" :offset="4">
-        <el-tabs v-model="$route.name" @tab-click="handleClick" >
-          <el-tab-pane :label="option.CName" :name="option.name" v-for="option in options" :key='option.name'></el-tab-pane>
-          <!-- <el-tab-pane label="数据服务" name="dataService" :name="options.route"></el-tab-pane>
-          <el-tab-pane label="在线展示" name="onlineDisplay" :name="options.route"></el-tab-pane>
-          <el-tab-pane label="相关成果" name="relateResult" :name="options.route"></el-tab-pane>
-          <el-tab-pane label="用户支持" name="userSupport" :name="options.route"></el-tab-pane>
-          <el-tab-pane label="关于我们" name="about" :name="options.route"></el-tab-pane> -->
+        <el-tabs v-model="$route.name" @tab-click="handleClick($event)">
+          <el-tab-pane :label="option.meta.name" :name="option.name" v-for="(option,index) in topbarMenu" :key='index'></el-tab-pane>
         </el-tabs>
-        
       </el-col>
-      <keep-alive>
-          <router-view></router-view>
-        </keep-alive>
     </el-row>
-    <el-row class="navColor">
+    <el-row :class="nav">
       <el-col :span="24"></el-col>
     </el-row>
   </div>
 </template>
 
 <script>
+import { mapState,mapActions } from "vuex";
 export default {
   data() {
     return {
+      page: "",
       temp: "",
       weather: "",
       local: "",
@@ -68,59 +61,69 @@ export default {
       week: "",
       inputKey: "",
       activeName: "home",
-      options:[
+      options: [
         {
           name: "home",
           path: "/home",
-          CName:"首页",
+          CName: "首页",
           component: "../components/pages/header.vue"
         },
         {
           name: "dataService",
           path: "/dataService",
-          CName:"数据服务",
+          CName: "数据服务",
           component: "../components/pages/dataService.vue"
         },
         {
           name: "onlineDisplay",
           path: "/onlineDisplay",
-          CName:"在线展示",
+          CName: "在线展示",
           component: "../components/pages/onlineDisplay.vue"
         },
         {
           name: "relateResult",
           path: "/relateResult",
-          CName:"相关成果",
+          CName: "相关成果",
           component: "../components/pages/relateResult.vue"
         },
         {
           name: "userSupport",
           path: "/userSupport",
-          CName:"用户支持",
+          CName: "用户支持",
           component: "../components/pages/userSupport.vue"
         },
         {
           name: "about",
           path: "/about",
-          CName:"关于我们",
+          CName: "关于我们",
           component: "../components/pages/about.vue"
         }
-
       ]
     };
   },
-
+  computed: {
+    ...mapState(["topbarMenu","permissionList","sidebarMenu"]),
+    nav() {
+      if (this.page === "home") {
+        return "navColorhome";
+      } else {
+        return "navColor";
+      }
+    }
+  },
   mounted() {
     this.headerInit();
+    this.page=this.$router.currentRoute.name;
   },
   methods: {
+    ...mapActions(['FETCH_PERMISSION']),
     headerInit() {
       this.temp = "16/23°";
       (this.weather = "多云转晴"),
         this.getLocal(),
         (this.date = this._global.formatDate(new Date(), "yyyy-MM-dd")),
         this.getWeek();
-        console.log(this);
+      //console.log(this);
     },
     getLocal() {
       var self = this;
@@ -149,18 +152,21 @@ export default {
       this.week = weekday[myddy];
     },
     handleClick(ev) {
-      var p=ev.name;
+      this.page = ev.name;
+      var p = ev.name;
+      //FETCH_PERMISSION({type:'siderBar'});
+      console.log('路由'+JSON.stringify(this.permissionList));
+      console.log('左侧'+JSON.stringify(this.sidebarMenu));
       this.$router.push(p);
     },
-    register(){
-      this.$router.push('/register');
+    register() {
+      this.$router.push("/register");
     }
   }
 };
 </script>
 
 <style scoped>
-
 .item {
   float: left;
   margin-left: 30px;
@@ -176,7 +182,7 @@ export default {
   line-height: 40px;
   position: relative;
 }
-.header >>> .el-tabs__header{
+.header >>> .el-tabs__header {
   margin: 0 0 0px;
 }
 .header .el-row:first-child {
@@ -220,6 +226,14 @@ export default {
 }
 
 .navColor {
+  width: 100%;
+  height: 50px;
+  background: linear-gradient( to right, rgb(195, 220, 240) -6%, rgb(1, 152, 217) 29%, rgb(195, 220, 240) 126% );
+  position: absolute;
+  top: 110px;
+  left: 0;
+}
+.navColorhome {
   width: 100%;
   height: 50px;
   background: linear-gradient(

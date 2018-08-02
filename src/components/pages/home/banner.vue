@@ -17,10 +17,10 @@
         </div>
         <div class="icon">
           <div>
-            <img src="../../assets/img/tubiao.png" alt="" @click="goAnchor">
+            <img src="../../../assets/img/tubiao.png" alt="" @click="goAnchor">
           </div>
           <div style="margin-top: 15px;">
-            <img src="../../assets/img/jiantou.png" alt="" @click="goAnchor">
+            <img src="../../../assets/img/jiantou.png" alt="" @click="goAnchor">
           </div>
         </div>
       </div>
@@ -92,7 +92,7 @@ export default {
   },
 
   mounted() {
-    let zong =require('../../assets/img/zongti.png');
+    let zong =require('../../../assets/img/zongti.png');
     this.$refs._module[4].style.background =
       "url("+zong+") no-repeat center center";
     this.$refs._module[4].style.backgroundSize="cover";
@@ -122,7 +122,7 @@ export default {
   position: relative;
   width: 100%;
   height: 84vh;
-  background: url('../../assets/img/bg.png') no-repeat center center;
+  background: url('../../../assets/img/bg.png') no-repeat center center;
    background-size: cover;/*图片跟随div变化 */
 }
 .title {
@@ -157,11 +157,11 @@ export default {
   cursor: pointer;
 }
 .unselect {
-  background: url("../../assets/img/xuanze-n.png") no-repeat center center;
+  background: url("../../../assets/img/xuanze-n.png") no-repeat center center;
   background-size: cover;/*图片跟随div变化 */
 }
 .select {
-  background: url("../../assets/img/xuanze-d.png") no-repeat center center;
+  background: url("../../../assets/img/xuanze-d.png") no-repeat center center;
   background-size: cover;/*图片跟随div变化 */
 }
 
