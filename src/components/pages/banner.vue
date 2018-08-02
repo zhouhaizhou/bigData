@@ -92,12 +92,12 @@ export default {
     this.$refs._module[4].style.background =
       "url("+zong+") no-repeat center center";
     this.$refs._module[4].style.backgroundSize="cover";
-    let width = this.$refs.cname.offsetWidth;
-    let left = this.$refs.cname.offsetLeft;
-    let top = this.$refs.cname.offsetTop;
-    this.$refs.line.style.left = left + "px";
-    this.$refs.line.style.width = width + "px";
-    this.$refs.line.style.top = top + 55 + "px";
+    // let width = this.$refs.cname.offsetWidth;
+    // let left = this.$refs.cname.offsetLeft;
+    // let top = this.$refs.cname.offsetTop;
+    // this.$refs.line.style.left = left + "px";
+    // this.$refs.line.style.width = width + "px";
+    // this.$refs.line.style.top = top + 55 + "px";
   },
   methods: {
     mouseout(modul) {

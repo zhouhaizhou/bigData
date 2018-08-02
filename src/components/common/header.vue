@@ -37,7 +37,7 @@
     </el-row>
     <el-row>
       <el-col :span="20" :offset="4">
-        <el-tabs v-model="$route.name" @tab-click="handleClick" >
+        <el-tabs v-model="$route.name" @tab-click="handleClick($event)">
           <el-tab-pane :label="option.CName" :name="option.name" v-for="option in options" :key='option.name'></el-tab-pane>
           <!-- <el-tab-pane label="数据服务" name="dataService" :name="options.route"></el-tab-pane>
           <el-tab-pane label="在线展示" name="onlineDisplay" :name="options.route"></el-tab-pane>
@@ -45,13 +45,14 @@
           <el-tab-pane label="用户支持" name="userSupport" :name="options.route"></el-tab-pane>
           <el-tab-pane label="关于我们" name="about" :name="options.route"></el-tab-pane> -->
         </el-tabs>
-        
+
       </el-col>
       <keep-alive>
-          <router-view></router-view>
-        </keep-alive>
+        <router-view></router-view>
+      </keep-alive>
     </el-row>
-    <el-row class="navColor">
+
+    <el-row :class="nav">
       <el-col :span="24"></el-col>
     </el-row>
   </div>
@@ -61,55 +62,62 @@
 export default {
   data() {
     return {
+      navColor: "home",
       temp: "",
       weather: "",
       local: "",
       date: "",
       week: "",
       inputKey: "",
-      activeName: "home",
-      options:[
+      options: [
         {
           name: "home",
           path: "/home",
-          CName:"首页",
+          CName: "首页",
           component: "../components/pages/header.vue"
         },
         {
           name: "dataService",
           path: "/dataService",
-          CName:"数据服务",
+          CName: "数据服务",
           component: "../components/pages/dataService.vue"
         },
         {
           name: "onlineDisplay",
           path: "/onlineDisplay",
-          CName:"在线展示",
+          CName: "在线展示",
           component: "../components/pages/onlineDisplay.vue"
         },
         {
           name: "relateResult",
           path: "/relateResult",
-          CName:"相关成果",
+          CName: "相关成果",
           component: "../components/pages/relateResult.vue"
         },
         {
           name: "userSupport",
           path: "/userSupport",
-          CName:"用户支持",
+          CName: "用户支持",
           component: "../components/pages/userSupport.vue"
         },
         {
           name: "about",
           path: "/about",
-          CName:"关于我们",
+          CName: "关于我们",
           component: "../components/pages/about.vue"
         }
-
       ]
     };
   },
-
+  computed: {
+    nav() {
+      if (this.navColor === "home") {
+        return "navColorhome";
+      } else {
+        return "navColor";
+      }
+    }
+  },
   mounted() {
     this.headerInit();
   },
@@ -120,7 +128,7 @@ export default {
         this.getLocal(),
         (this.date = this._global.formatDate(new Date(), "yyyy-MM-dd")),
         this.getWeek();
-        console.log(this);
+      console.log(this);
     },
     getLocal() {
       var self = this;
@@ -149,18 +157,18 @@ export default {
       this.week = weekday[myddy];
     },
     handleClick(ev) {
-      var p=ev.name;
+      this.navColor = ev.name;
+      var p = ev.name;
       this.$router.push(p);
     },
-    register(){
-      this.$router.push('/register');
+    register() {
+      this.$router.push("/register");
     }
   }
 };
 </script>
 
 <style scoped>
-
 .item {
   float: left;
   margin-left: 30px;
@@ -176,7 +184,7 @@ export default {
   line-height: 40px;
   position: relative;
 }
-.header >>> .el-tabs__header{
+.header >>> .el-tabs__header {
   margin: 0 0 0px;
 }
 .header .el-row:first-child {
@@ -220,6 +228,19 @@ export default {
 }
 
 .navColor {
+  width: 100%;
+  height: 50px;
+  background: linear-gradient(
+    to right,
+    rgb(195, 220, 240) 3%,
+    rgb(1, 152, 217) 49%,
+    rgb(195, 220, 240) 111%
+  );
+  position: absolute;
+  top: 110px;
+  left: 0;
+}
+.navColorhome {
   width: 100%;
   height: 50px;
   background: linear-gradient(

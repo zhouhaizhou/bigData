@@ -32,6 +32,7 @@ export default new Router({
     },
     {
       path:'/dataService',
+      name:'dataService',
       component:resolve => require(['../components/pages/dataService.vue'],resolve)
     }
   ]
