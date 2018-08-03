@@ -23,41 +23,5 @@ export default  {
         obj: obj
       });
     }, 15);
-  },
-  FETCH_PERMISSION({commit,state},paramObj) {
-    let type=paramObj.type;
-    let path=paramObj.path;
-    let routers=null;
-    let DynamicR=DynamicRoutes;
-    let permissionList=null;
-    let routerTo=paramObj.router;
-    if(type=='top'){
-      permissionList =  fetchPermission("");
-      routers = recursionRouter(permissionList, dynamicRouter)   //这里其实做了一步过滤
-    }else{
-     // permissionList = fetchPermission("siderBar");
-      routers=siderBarRouters(path);
-      DynamicR=state.permissionList;
-    }
-    /*  根据权限筛选出我们设置好的路由并加入到path=''的children */
-   // let MainContainer = DynamicR.find(v => v.path === path)
-   // let MainContainer =getContainer(DynamicR,path,null);
-    let children=joinRouter(DynamicR,routers,path);
-    /* 生成顶部导航菜单 */
-    if(type=='top'){
-      commit('SET_TOPMENU', children[0].children);
-      
-    }else{
-      commit('SET_SIDERMENU', routers);
-      
-    }
-    setDefaultRoute(routers)
-    /*  初始路由 */
-   let initialRoutes = router.options.routers;
-
-    /*  动态添加路由 */
-    router.addRoutes(DynamicRoutes);
-    /* 完整的路由表 */
-    commit('SET_PERMISSION', [ ...DynamicRoutes])
   }
 }

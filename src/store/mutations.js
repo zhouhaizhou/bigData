@@ -19,5 +19,8 @@ module.exports = {
   },
   setCrumbList(state, list) {
     state.crumbList = list
+  },
+  SETLOCALCITY(state, cityName) {
+    state.localCity = cityName;
   }
 }

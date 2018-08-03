@@ -5,7 +5,8 @@ module.exports={
     topbarMenu:[],
     currentMenu: '' ,/** 当前active导航菜单 */
     UserToken:null,
-    crumbList: []
+    crumbList: [],
+    localCity:''
 }   
 // var sidebarMenu=[
 //   {

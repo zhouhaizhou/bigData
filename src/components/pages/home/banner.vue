@@ -3,8 +3,8 @@
     <div class="bg">
       <!-- <my-polygon></my-polygon> -->
       <div class="module" id="module">
-        <div class="_module" :class="{select:modul.hoverModule,unselect:!modul.hoverModule}" ref="_module" v-for="modul in modules" :style="{top:modul.top+'vh',left:modul.left+'vw'}" @mouseover="mouseover(modul)" @mouseout="mouseout(modul)">
-          <p v-html="modul.txt"></p>
+        <div class="_module" :class="{select:modul.hoverModule,unselect:!modul.hoverModule}" ref="_module" v-for="(modul,index) in modules" :style="{top:modul.top+'vh',left:modul.left+'vw'}" @mouseover="mouseover(modul)" @mouseout="mouseout(modul)">
+          <p v-html="modul.txt" :class="{fushe:index===1}"></p>
         </div>
       </div>
       <div class="title">
@@ -120,6 +120,9 @@ export default {
   height: 84vh;
   background: url('../../../assets/img/bg.png') no-repeat center center;
    background-size: cover;/*图片跟随div变化 */
+}
+.fushe{
+  padding-top: 36% !important;
 }
 .title {
   float: left;

@@ -11,7 +11,7 @@
           <img src="../../assets/img/location.png" style="vertical-align:-4px;" alt="位置">
           <span ref="LocalCity"></span>
           <span>位置:</span>
-          <span class="local">{{local}}</span>
+          <span class="local">{{localCity}}</span>
         </div>
         <div class="item">
           <img src="../../assets/img/time.png" style="vertical-align:-4px;" alt="时间">
@@ -38,7 +38,7 @@
     <el-row>
       <el-col :span="20" :offset="4">
         <el-tabs v-model="$route.name" @tab-click="handleClick($event)">
-          <el-tab-pane :label="option.meta.name" :name="option.name" v-for="(option,index) in topbarMenu" :key='index'></el-tab-pane>
+          <el-tab-pane :label="option.CName" :name="option.name" v-for="(option,index) in options" :key='index'></el-tab-pane>
         </el-tabs>
       </el-col>
     </el-row>
@@ -49,14 +49,13 @@
 </template>
 
 <script>
-import { mapState,mapActions } from "vuex";
+import { mapState, mapActions,mapMutations} from "vuex";
 export default {
   data() {
     return {
       navColor: "home",
       temp: "",
       weather: "",
-      local: "",
       date: "",
       week: "",
       inputKey: "",
@@ -64,43 +63,38 @@ export default {
         {
           name: "home",
           path: "/home",
-          CName: "首页",
-          component: "../components/pages/header.vue"
+          CName: "首页"
         },
         {
           name: "dataService",
           path: "/dataService",
-          CName: "数据服务",
-          component: "../components/pages/dataService.vue"
+          CName: "数据服务"
         },
         {
-          name: "onlineDisplay",
-          path: "/onlineDisplay",
-          CName: "在线展示",
-          component: "../components/pages/onlineDisplay.vue"
+          name: "display",
+          path: "/display",
+          CName: "在线展示"
         },
         {
           name: "relateResult",
           path: "/relateResult",
-          CName: "相关成果",
-          component: "../components/pages/relateResult.vue"
+          CName: "相关成果"
         },
         {
           name: "userSupport",
           path: "/userSupport",
-          CName: "用户支持",
-          component: "../components/pages/userSupport.vue"
+          CName: "用户支持"
         },
         {
           name: "about",
           path: "/about",
-          CName: "关于我们",
-          component: "../components/pages/about.vue"
+          CName: "关于我们"
         }
       ]
     };
   },
   computed: {
+    ...mapState(["localCity"]),
     nav() {
       if (this.navColor === "home") {
         return "navColorhome";
@@ -111,10 +105,11 @@ export default {
   },
   mounted() {
     this.headerInit();
-    this.navColor=this.$router.currentRoute.name;
+    this.navColor = this.$router.currentRoute.name;
   },
   methods: {
-    ...mapActions(['FETCH_PERMISSION']),
+    ...mapActions(["FETCH_PERMISSION"]),
+    ...mapMutations(['SETLOCALCITY']),
     headerInit() {
       this.temp = "16/23°";
       (this.weather = "多云转晴"),
@@ -124,16 +119,20 @@ export default {
       //console.log(this);
     },
     getLocal() {
-      var self = this;
-      var LocalCity = this.$refs.LocalCity;
-      var map = new BMap.Map(LocalCity);
-      function myFun(result) {
-        var cityName = result.name;
-        map.setCenter(cityName);
-        self.local = cityName;
+      if (this.localCity == "") {
+        var self = this;
+        var Local = this.$refs.LocalCity;
+        var map = new BMap.Map(Local);
+        function myFun(result) {
+          var cityName = result.name;
+          map.setCenter(cityName);
+          let para={"city":cityName};
+          self.SETLOCALCITY(cityName);
+          //self.localCity = cityName;
+        }
+        var myCity = new BMap.LocalCity();
+        myCity.get(myFun);
       }
-      var myCity = new BMap.LocalCity();
-      myCity.get(myFun);
     },
     getWeek() {
       var mydate = new Date();
@@ -223,7 +222,13 @@ export default {
 .navColor {
   width: 100%;
   height: 50px;
-  background: linear-gradient( to right, rgb(195, 220, 240) -6%, rgb(1, 152, 217) 29%, rgb(195, 220, 240) 126% );
+  /* background: linear-gradient(
+    to right,
+    rgb(195, 220, 240) -6%,
+    rgb(1, 152, 217) 29%,
+    rgb(195, 220, 240) 126%
+  ); */
+  background: url('../../assets/img/title2.png') no-repeat center center;
   position: absolute;
   top: 110px;
   left: 0;
@@ -231,17 +236,12 @@ export default {
 .navColorhome {
   width: 100%;
   height: 50px;
-  background: linear-gradient(
-    to right,
-    rgb(195, 220, 240) 3%,
-    rgb(1, 152, 217) 49%,
-    rgb(195, 220, 240) 111%
-  );
+  background: url('../../assets/img/title1.png') no-repeat center center;
   position: absolute;
   top: 110px;
   left: 0;
 }
-.navColorhome {
+/* .navColorhome {
   width: 100%;
   height: 50px;
   background: linear-gradient(
@@ -253,5 +253,5 @@ export default {
   position: absolute;
   top: 110px;
   left: 0;
-}
+} */
 </style>
