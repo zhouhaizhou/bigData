@@ -38,8 +38,8 @@
 </template>
 
 <script>
-import myHeader from "../common/header";
-import myFooter from "../common/foot";
+import myHeader from "../../common/header";
+import myFooter from "../../common/foot";
 export default {
   components: {
     myHeader,
@@ -52,56 +52,56 @@ export default {
           name: "地面气象资料",
           lists: [
             {
-              imgurl: require("../../assets/img/dataService/dmqx11.png"),
+              imgurl: require("../../../assets/img/dataService/dmqx11.png"),
               title: "中国地面气象站逐小时资料",
               viewCount: "3688",
               commentCount: "9",
               likesCount: "379"
             },
             {
-              imgurl: require("../../assets/img/dataService/dmqx12.png"),
+              imgurl: require("../../../assets/img/dataService/dmqx12.png"),
               title: "中国地面气象资料日值数据集",
               viewCount: "3688",
               commentCount: "9",
               likesCount: "379"
             },
             {
-              imgurl: require("../../assets/img/dataService/dmqx13.png"),
+              imgurl: require("../../../assets/img/dataService/dmqx13.png"),
               title: "中国地面气象资料月值数据集",
               viewCount: "3688",
               commentCount: "9",
               likesCount: "379"
             },
             {
-              imgurl: require("../../assets/img/dataService/dmqx14.png"),
+              imgurl: require("../../../assets/img/dataService/dmqx14.png"),
               title: "中国地面气象资料年值数据集",
               viewCount: "3688",
               commentCount: "9",
               likesCount: "379"
             },
             {
-              imgurl: require("../../assets/img/dataService/dmqx21.png"),
+              imgurl: require("../../../assets/img/dataService/dmqx21.png"),
               title: "CIMISS中国地面逐小时资料",
               viewCount: "3688",
               commentCount: "9",
               likesCount: "379"
             },
             {
-              imgurl: require("../../assets/img/dataService/dmqx22.png"),
+              imgurl: require("../../../assets/img/dataService/dmqx22.png"),
               title: "CIMISS中国地面日值资料",
               viewCount: "3688",
               commentCount: "9",
               likesCount: "379"
             },
             {
-              imgurl: require("../../assets/img/dataService/dmqx23.png"),
+              imgurl: require("../../../assets/img/dataService/dmqx23.png"),
               title: "CIMISS中国地面月值资料",
               viewCount: "3688",
               commentCount: "9",
               likesCount: "379"
             },
             {
-              imgurl: require("../../assets/img/dataService/dmqx24.png"),
+              imgurl: require("../../../assets/img/dataService/dmqx24.png"),
               title: "CIMISS中国地面年值资料",
               viewCount: "3688",
               commentCount: "9",
@@ -113,21 +113,21 @@ export default {
           name: "辐射资料",
           lists: [
             {
-              imgurl: require("../../assets/img/dataService/fs11.png"),
+              imgurl: require("../../../assets/img/dataService/fs11.png"),
               title: "中国辐射日值数据库",
               viewCount: "3688",
               commentCount: "9",
               likesCount: "379"
             },
             {
-              imgurl: require("../../assets/img/dataService/fs12.png"),
+              imgurl: require("../../../assets/img/dataService/fs12.png"),
               title: "中国辐射月值数据库",
               viewCount: "3688",
               commentCount: "9",
               likesCount: "379"
             },
             {
-              imgurl: require("../../assets/img/dataService/fs13.png"),
+              imgurl: require("../../../assets/img/dataService/fs13.png"),
               title: "中国辐射年值数据库",
               viewCount: "3688",
               commentCount: "9",
@@ -226,7 +226,7 @@ export default {
   width: 5vw;
 }
 .view-icon {
-  background: url("../../assets/img/dataService/view.png") no-repeat center
+  background: url("../../../assets/img/dataService/view.png") no-repeat center
     center;
   width: 1.5vw;
   height: 2vh;
@@ -239,7 +239,7 @@ export default {
   width: 3vw;
 }
 .comment-icon {
-  background: url("../../assets/img/dataService/comment.png") no-repeat center
+  background: url("../../../assets/img/dataService/comment.png") no-repeat center
     center;
   width: 1.5vw;
   height: 2vh;
@@ -252,7 +252,7 @@ export default {
   width: 5vw;
 }
 .likes-icon {
-  background: url("../../assets/img/dataService/likes.png") no-repeat center
+  background: url("../../../assets/img/dataService/likes.png") no-repeat center
     center;
   width: 1.5vw;
   height: 2vh;

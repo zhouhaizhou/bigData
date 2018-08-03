@@ -9,8 +9,8 @@
 </template>
 
 <script>
-import myHeader from "../common/header.vue";
-import myFooter from "../common/foot.vue";
+import myHeader from "../../common/header.vue";
+import myFooter from "../../common/foot.vue";
 import productService from "./productService.vue";
 import datahot from "./datahot.vue";
 import banner from "./banner";

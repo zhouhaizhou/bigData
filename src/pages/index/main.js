@@ -3,11 +3,11 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
-import ElementUI, { Col } from 'element-ui';
+import ElementUI from 'element-ui';
 import App from './App'
 import router from '../../router'
 import store from '../../store'
-import _global from  '../../global'
+import _global from '../../global'
 import 'element-ui/lib/theme-chalk/index.css';
 import 'animate.css';
 // import '../../../static/css/home.css'
