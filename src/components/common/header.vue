@@ -208,7 +208,7 @@ export default {
   color: white !important;
 }
 .header >>> .el-tabs__item:hover {
-  color: black;
+  /* color: black; */
 }
 .header >>> .el-tabs__item {
   color: white;
@@ -217,6 +217,7 @@ export default {
   text-align: center;
   height: 50px;
   line-height: 50px;
+  font-size: 18px;
 }
 
 .navColor {
