@@ -229,6 +229,7 @@ export default {
     rgb(195, 220, 240) 126%
   ); */
   background: url('../../assets/img/title2.png') no-repeat center center;
+  background-size: cover;
   position: absolute;
   top: 110px;
   left: 0;
@@ -237,6 +238,7 @@ export default {
   width: 100%;
   height: 50px;
   background: url('../../assets/img/title1.png') no-repeat center center;
+  background-size: cover;
   position: absolute;
   top: 110px;
   left: 0;

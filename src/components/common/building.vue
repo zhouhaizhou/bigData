@@ -1,7 +1,9 @@
 <template>
   <div>
     <my-header></my-header>
-    <img src="../../assets/img/timg.jpg" alt="">
+    <div style="text-align:center">
+      <img src="../../assets/img/timg.jpg" alt="">
+    </div>
     <my-footer></my-footer>
   </div>
 </template>

@@ -13,11 +13,11 @@
         </div>
         <div class="icon">
           <div>
-            <img src="../../../assets/img/tubiao.png" alt="" @click="goAnchor">
+            <img src="../../../assets/img/动效.gif" alt="" @click="goAnchor">
           </div>
-          <div style="margin-top: 15px;">
+          <!-- <div style="margin-top: 15px;">
             <img src="../../../assets/img/jiantou.png" alt="" @click="goAnchor">
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
@@ -127,7 +127,7 @@ export default {
 .title {
   float: left;
   width: 100%;
-  margin-top: 56vh;
+  margin-top: 54vh;
   color: white;
   font-size: 16px;
   text-align: center;
@@ -160,7 +160,7 @@ export default {
   position: absolute;
 }
 .icon{
-  margin-top: 25px;
+  margin-top: 10px;
 }
 .icon img{
   cursor: pointer;
@@ -178,7 +178,7 @@ export default {
   position: absolute;
   width: 25.5vw;
   height: 400px;
-  top: 90px;
+  top: 85px;
   left: 0;
   right: 0;
   margin: 0 auto;

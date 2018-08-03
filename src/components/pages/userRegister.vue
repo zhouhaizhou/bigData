@@ -152,6 +152,7 @@ align-items: center; */
   display: flex;
   justify-content: center;
   align-items: center;
+  padding-bottom: 2vh;
 }
 .users-register-wrap-center {
   display: inline-block;

@@ -9,7 +9,7 @@
             <div class="sub-title">{{item.name}}</div>
           </div>
           <div class="lists-wrap">
-            <div class="list-wrap" v-for="(list,index) in item.lists">
+            <div class="list-wrap" v-for="(list,index) in item.lists" @mouseout="mouseout" @mouseover="mouseover">
               <div class="list-img" :style="{backgroundImage:'url('+list.imgurl+')',backgroundRepeat:'no-repeat',backgroundPosition:'center center',backgroundSize:'cover'}"></div>
               
               <div class="list-title">{{list.title}}</div>
@@ -145,6 +145,12 @@ export default {
     clear: function() {
       var para1 = this.$refs.splitLine[this.$refs.splitLine.length - 1];
       para1.parentNode.removeChild(para1);
+    },
+    mouseout(env){
+      env.currentTarget.classList.remove('hover');
+    },
+     mouseover(env){
+      env.currentTarget.classList.add('hover');
     }
   }
 };
@@ -154,7 +160,7 @@ export default {
 .center {
   background-color: #f3f8fc;
   margin-left: 20vw;
-  width: 80vw;
+  /* width: 80vw; */
 }
 .item-tr-wrap {
   clear: both;
@@ -201,7 +207,7 @@ export default {
   cursor: pointer;
   transition: all 0.3s;
 }
-.list-wrap:hover{
+.hover{
   transform: scale(1.08);
 }
 .list-img {

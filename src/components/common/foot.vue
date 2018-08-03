@@ -117,6 +117,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  padding-top: .8vh;
 }
 .link-text {
   color: #4783d2;
