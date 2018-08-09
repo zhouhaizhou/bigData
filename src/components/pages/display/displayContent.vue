@@ -1,8 +1,6 @@
 <template>
   <div>
-    <div style="text-align:center">
-      <img src="../../assets/img/timg.jpg" alt="">
-    </div>
+<router-view></router-view>
   </div>
 </template>
 
@@ -18,7 +16,5 @@ export default {
 </script>
 
 <style scoped>
-img{
-  margin:0 auto;
-}
+
 </style>

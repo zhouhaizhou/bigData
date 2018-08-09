@@ -127,7 +127,7 @@ export default {
 .title {
   float: left;
   width: 100%;
-  margin-top: 54vh;
+  margin-top: 56vh;
   color: white;
   font-size: 16px;
   text-align: center;
@@ -160,7 +160,7 @@ export default {
   position: absolute;
 }
 .icon{
-  margin-top: 10px;
+  margin-top: 25px;
 }
 .icon img{
   cursor: pointer;
@@ -178,7 +178,7 @@ export default {
   position: absolute;
   width: 25.5vw;
   height: 400px;
-  top: 85px;
+  top: 90px;
   left: 0;
   right: 0;
   margin: 0 auto;

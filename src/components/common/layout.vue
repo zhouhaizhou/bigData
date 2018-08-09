@@ -17,11 +17,11 @@
       </el-container>
     </el-container> -->
     <el-container class="container">
-      <el-header ref="header" :style="{height:this.height+'px'}">
+      <el-header ref="header" :style="{height:this.height+'px'}" class="fixedheader">
         <my-header ref="myheader"></my-header>
       </el-header>
-      <el-main>
-        <my-main></my-main>
+      <el-main class="mainposition">
+        <router-view></router-view>
       </el-main>
       <el-footer>
         <my-footer></my-footer>
@@ -33,25 +33,31 @@
 <script>
 import myHeader from "./header";
 import myFooter from "./foot";
-import myMain from "./mainrouter";
-import mySlideBar from "./slideBar";
+import { mapState, mapMutations } from "vuex";
+
 export default {
   components: {
     myHeader,
-    myFooter,
-    myMain,
-    mySlideBar
+    myFooter
+  },
+  computed: {
+    ...mapState(["navHeight"])
   },
   data() {
     return {
-      height: 0
+      height: 0,
+      isFixed: true
     };
   },
   mounted() {
     this.height = this.$refs.myheader.$el.scrollHeight;
-    //this.$refs.header.style.height=height+'px';
+    document.querySelector(".mainposition").style.top = this.height + "px";
+    document.querySelector(".el-footer").style.top = this.height + "px";
+    this.SETNAVHEIGHT(this.height);
   },
-  methods: {}
+  methods: {
+    ...mapMutations(["SETNAVHEIGHT"])
+  }
 };
 </script>
 
@@ -60,5 +66,20 @@ export default {
 .container >>> .el-main,
 .container >>> .el-footer {
   padding: 0;
+}
+.fixedheader {
+  background-color: white;
+  position: fixed;
+  top: 0;
+  z-index: 10;
+  width: 100vw;
+}
+.mainposition {
+  position: relative;
+  top: 0;
+  background-color: rgb(242, 248, 252);
+}
+.container >>> .el-footer {
+  position: relative;
 }
 </style>

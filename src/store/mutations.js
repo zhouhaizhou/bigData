@@ -22,5 +22,8 @@ module.exports = {
   },
   SETLOCALCITY(state, cityName) {
     state.localCity = cityName;
+  },
+   SETNAVHEIGHT(state,val){
+    state.navHeight=val;
   }
 }

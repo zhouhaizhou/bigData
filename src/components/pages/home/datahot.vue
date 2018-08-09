@@ -6,12 +6,12 @@
     </div>
     <div class="banner" ref="banner">
       <el-row style="width:100%;">
-        <el-col :span="7" :offset="data.offset" class="frame" v-for="(data,index) in datahot" :key="data.item">
+        <el-col :span="7" :offset="data.offset" class="frame" v-for="(data,index) in datahot" :key="index">
           <el-row style="line-height:40px;width:100%">
             <el-col class="line" :span="15" :offset="1">{{data.title}}</el-col>
             <el-col class="line" :span="8" :pull="2" style="text-align:right;">MORE>></el-col>
           </el-row>
-          <el-row style="line-height:30px;width:100%" v-for="(dataItem) in data.item" :key="dataItem.txt">
+          <el-row style="line-height:30px;width:100%" v-for="(dataItem,index2) in data.item" :key="index2">
             <el-col class="itemTxt" :span="(index==0?20:(index==1?13:8))" :offset="1">
               <span>·</span>
               <span class="item">{{dataItem.txt}}</span>

@@ -1,0 +1,57 @@
+[{
+  "path": "dataDownLoad",
+  "name": "dataDownLoad",
+  "meta": {
+    "name": "数据下载",
+    "entityName": "dataDownLoad",
+    "parentEntityName": "dataService"
+  },
+  "component": "pages/dataService/dataServiceContent",
+  "children": [{
+      "path": "surfMeteo",
+      "component": "pages/dataService/dataService",
+      "name": "surfMeteo",
+      "meta": {
+        "name": "地面气象资料",
+        "entityName": "surfMeteo"
+      }
+    },
+    {
+      "path": "radi",
+      "component": "pages/dataService/dataService",
+      "name": "radi",
+      "meta": {
+        "name": "辐射资料",
+        "entityName": "radi"
+      }
+    }
+  ]
+},{
+  "path": "dataInterface",
+  "name": "dataInterface",
+  "meta": {
+    "name": "数据接口",
+    "entityName": "dataInterface",
+    "parentEntityName": "dataService"
+  },
+  "component": "pages/dataService/dataServiceContent",
+  "children": [{
+      "path": "weixingtc",
+      "component": "common/building",
+      "name": "weixingtc",
+      "meta": {
+        "name": "卫星探测",
+        "entityName": "weixingtc"
+      }
+    },
+    {
+      "path": "zonghegc",
+      "component": "common/building",
+      "name": "zonghegc",
+      "meta": {
+        "name": "综合观测",
+        "entityName": "zonghegc"
+      }
+    }
+  ]
+}]
