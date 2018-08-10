@@ -97,7 +97,7 @@ p{
 }
 .imgsingle{
     /* width: 200px; */
-    border-radius: 5px;
+    /* border-radius: 5px; */
     /* border: 1px solid #ccc; */
     float: left;
     transition: all .3s;
@@ -105,6 +105,7 @@ p{
 }
 .imgscale{
   transform: scale(1.02);
+  /* box-shadow: 0px 0px 28px -6px; */
 }
 .imgtxtborder{
   border: 1px solid #ccc;
@@ -122,6 +123,7 @@ p{
    background-size:cover;
    width:18vw;
    height: 32vh;
+   border-radius: 5px;
 }
 .imgtxt{
   background-color: white;

@@ -71,16 +71,22 @@ var cloneObj = function (obj) {
  *
  * 递归为所有有子路由的路由设置第一个children.path为默认路由
  */
-export function setDefaultRoute(routes) {
+export function setDefaultRoute(routes, parentName,defaultRoute) {
   routes.forEach((v, i) => {
     if (v.children && v.children.length > 0) {
-      v.redirect = {
-        name: v.children[0].name
+      if (v.name == parentName) {
+        if (v.children[0].children != undefined) {
+          setDefaultRoute(v.children, v.children[0].name,defaultRoute);
+        } else {
+          defaultRoute.name=v.children[0].name;
+         // return v.children[0].name;
+        }
       }
-      setDefaultRoute(v.children)
+      setDefaultRoute(v.children, parentName,defaultRoute);
     }
   })
 }
+
 export function joinRouter(MainContainer, routers, path) {
   for (let i = 0; i < MainContainer.length; i++) {
     let item = MainContainer[i]

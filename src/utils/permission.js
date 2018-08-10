@@ -31,25 +31,4 @@ var topPermissioin = [{
       entityName: 'about'
     }
   ];
-var sidePermission =  [{
-    "name": "数据服务",
-    "entityName": "dataService",
-    "children": [{
-        "name": "数据清单",
-        "entityName": "dataList"
-      },
-      {
-        "name": "数据下载",
-        "entityName": "dataDownload",
-        "children": [{
-            "name": "地面气象资料",
-            "entityName": "surfMeteo"
-          },
-          {
-            "name": "辐射资料",
-            "entityName": "radiData"
-          }
-        ]
-      }
-    ]
-  }]
+

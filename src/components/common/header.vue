@@ -37,8 +37,8 @@
     </el-row>
     <el-row>
       <el-col :span="20" :offset="4">
-        <el-tabs v-model="$route.name" @tab-click="handleClick($event)">
-          <el-tab-pane :label="option.CName" :name="option.name" v-for="(option,index) in options" :key='index'></el-tab-pane>
+        <el-tabs v-model="page" @tab-click="handleClick($event)">
+          <el-tab-pane :label="option.meta.name" :name="option.name" v-for="(option,index) in topbarMenu" :key='index'></el-tab-pane>
         </el-tabs>
       </el-col>
     </el-row>
@@ -50,12 +50,14 @@
 
 <script>
 import { mapState, mapActions,mapMutations} from "vuex";
+import {setDefaultRoute} from '../../utils/recursion-router.js'
 export default {
   data() {
     return {
-      navColor: "home",
+      page: "",
       temp: "",
       weather: "",
+      local: "",
       date: "",
       week: "",
       inputKey: "",
@@ -94,9 +96,9 @@ export default {
     };
   },
   computed: {
-    ...mapState(["localCity"]),
+     ...mapState(["topbarMenu","permissionList","sidebarMenu","localCity"]),
     nav() {
-      if (this.navColor === "home") {
+      if (this.page === "home") {
         return "navColorhome";
       } else {
         return "navColor";
@@ -105,7 +107,8 @@ export default {
   },
   mounted() {
     this.headerInit();
-    this.navColor = this.$router.currentRoute.name;
+    this.page=this.$router.currentRoute.name;
+    this.activeName=this.$router.currentRoute.name;
   },
   methods: {
     ...mapActions(["FETCH_PERMISSION"]),
@@ -149,9 +152,10 @@ export default {
       this.week = weekday[myddy];
     },
     handleClick(ev) {
-      this.navColor = ev.name;
-      var p = ev.name;
-      this.$router.push(p);
+      this.page = ev.name;
+      //var p = ev.name;
+	    this.$router.push({name:this.page});
+      //this.$router.push(p);
     },
     register() {
       this.$router.push("/register");
