@@ -90,7 +90,7 @@ export default {
           path: "/about",
           CName: "关于我们"
         }
-      ]
+      ],
     };
   },
   computed: {
