@@ -10,11 +10,8 @@ import store from '../../store'
 import _global from '../../global'
 import 'element-ui/lib/theme-chalk/index.css';
 import 'animate.css';
-// import '../../../static/css/home.css'
-// import 'babel-polyfill'
-
-//Vue.config.productionTip = false
-
+var root = process.env.API_ROOT;
+axios.defaults.baseURL=root;
  Vue.use(ElementUI);
  Vue.prototype._global =_global;
  Vue.prototype.axios =axios;
@@ -28,7 +25,7 @@ router.beforeEach((to, from, next) => {
       flag = true;
       to.meta.firstLoad = false;
     }
-    if (!store.state.permissionList) { //¸Õ½øÈëÒ³Ãæ¶¥²¿²Ëµ¥Ò²Ã»ÓÐ£¬ÐèÒªÇëÇó¶¥²¿²Ëµ¥
+    if (!store.state.permissionList) { //ï¿½Õ½ï¿½ï¿½ï¿½Ò³ï¿½æ¶¥ï¿½ï¿½ï¿½Ëµï¿½Ò²Ã»ï¿½Ð£ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ó¶¥²ï¿½ï¿½Ëµï¿½
       store.dispatch('FETCH_PERMISSION', {
         type: "top",
         path: '/',
@@ -39,7 +36,7 @@ router.beforeEach((to, from, next) => {
           path: to.path
         })
       })
-    } else { //¶¥²¿²Ëµ¥ÒÑ¾­»ñµÃ£¬ÇëÇó×ó²à²Ëµ¥
+    } else { 
       if (to.path !== '/') {
         store.dispatch('FETCH_PERMISSION', {
           type: "siderBar",

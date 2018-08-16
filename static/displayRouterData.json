@@ -1,29 +1,29 @@
-{
-  "path": "dataDownLoad",
-  "name": "dataDownLoad",
+[{
+  "path": "realData",
+  "name": "realData",
   "meta": {
-    "name": "数据下载",
-    "entityName": "dataDownLoad",
-    "parentEntityName": "dataService"
+    "name": "实况资料展示",
+    "entityName": "realData",
+    "parentEntityName": "display"
   },
-  "component": "pages/dataService/dataServiceContent",
+  "component": "pages/display/displayContent",
   "children": [{
-      "path": "surfMeteo",
-      "component": "pages/dataService/dataService",
-      "name": "surfMeteo",
+      "path": "rain",
+      "component": "pages/display/display",
+      "name": "rain",
       "meta": {
-        "name": "地面气象资料",
-        "entityName": "surfMeteo"
+        "name": "降水",
+        "entityName": "rain"
       }
     },
     {
-      "path": "radi",
-      "component": "pages/dataService/dataService",
-      "name": "radi",
+      "path": "temperature",
+      "component": "common/building",
+      "name": "temperature",
       "meta": {
         "name": "辐射资料",
-        "entityName": "radi"
+        "entityName": "temperature"
       }
     }
   ]
-}
+}]

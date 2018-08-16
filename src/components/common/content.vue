@@ -34,7 +34,7 @@ export default {
     let navH =
       document.querySelector(".navColor").offsetTop +
       document.querySelector(".navColor").offsetHeight;
-    document.querySelector(".side").style.top = navH + 70 + "px";
+     document.querySelector(".side").style.top = navH +15+ "px";
   },
   methods: {}
 };
@@ -45,16 +45,17 @@ export default {
   position: fixed;
   width: 15vw;
   z-index: 2;
-  left: 3vw;
+  left: 2.5vw;
   border: 1px solid #ccc;
   border-right: none;
   border-bottom: none;
 }
 .main {
-  width: 77.9vw;
+  width: 79.5vw;
   /* background-color: aqua; */
   position: relative;
-  left: 21vw;
+  left: 19vw;
+  /* top: 2vh; */
   /* height: 99vh; */
 }
 </style>
