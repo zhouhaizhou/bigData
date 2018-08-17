@@ -20,8 +20,12 @@
           <span class="week">{{week}}</span>
         </div>
       </el-col>
-      <el-col :span='4' class="right" offset='2'>
+      <el-col :span='6' class="right" offset='2'>
         <div class="item">
+          <span style="margin-right: 25px">
+            <img src="../../assets/img/xiazai.png" style="vertical-align: sub;" alt="">
+            <span>我的下载清单</span>
+          </span>
           <el-button type="primary" round size="mini" class="btn" @click="register">注册</el-button>
           <el-button round class="btn" size="mini">登录</el-button>
         </div>
@@ -49,8 +53,8 @@
 </template>
 
 <script>
-import { mapState, mapActions,mapMutations} from "vuex";
-import {setDefaultRoute} from '../../utils/recursion-router.js'
+import { mapState, mapActions, mapMutations } from "vuex";
+import { setDefaultRoute } from "../../utils/recursion-router.js";
 export default {
   data() {
     return {
@@ -96,7 +100,7 @@ export default {
     };
   },
   computed: {
-     ...mapState(["topbarMenu","permissionList","sidebarMenu","localCity"]),
+    ...mapState(["topbarMenu", "permissionList", "sidebarMenu", "localCity"]),
     nav() {
       if (this.page === "home") {
         return "navColorhome";
@@ -107,12 +111,12 @@ export default {
   },
   mounted() {
     this.headerInit();
-    this.page=this.$router.currentRoute.name;
-    this.activeName=this.$router.currentRoute.name;
+    this.page = this.$router.currentRoute.name;
+    this.activeName = this.$router.currentRoute.name;
   },
   methods: {
     ...mapActions(["FETCH_PERMISSION"]),
-    ...mapMutations(['SETLOCALCITY']),
+    ...mapMutations(["SETLOCALCITY"]),
     headerInit() {
       this.temp = "16/23°";
       (this.weather = "多云转晴"),
@@ -129,7 +133,7 @@ export default {
         function myFun(result) {
           var cityName = result.name;
           map.setCenter(cityName);
-          let para={"city":cityName};
+          let para = { city: cityName };
           self.SETLOCALCITY(cityName);
           //self.localCity = cityName;
         }
@@ -154,7 +158,7 @@ export default {
     handleClick(ev) {
       this.page = ev.name;
       //var p = ev.name;
-	    this.$router.push({name:this.page});
+      this.$router.push({ name: this.page });
       //this.$router.push(p);
     },
     register() {
@@ -233,7 +237,7 @@ export default {
     rgb(1, 152, 217) 29%,
     rgb(195, 220, 240) 126%
   ); */
-  background: url('../../assets/img/title2.png') no-repeat center center;
+  background: url("../../assets/img/title2.png") no-repeat center center;
   background-size: cover;
   position: absolute;
   top: 110px;
@@ -242,7 +246,7 @@ export default {
 .navColorhome {
   width: 100%;
   height: 50px;
-  background: url('../../assets/img/title1.png') no-repeat center center;
+  background: url("../../assets/img/title1.png") no-repeat center center;
   background-size: cover;
   position: absolute;
   top: 110px;

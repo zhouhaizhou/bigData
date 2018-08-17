@@ -1,6 +1,6 @@
 <template>
   <div class="wrap">
-    <sel-con :condition="condition" :timeInterval="timeInterval"></sel-con>
+    <sel-con  :condition="condition" :isFirst="isFirst" :timeInterval="timeInterval" v-on:selectedCon="selectedCon"></sel-con>
     <div class="main">
       <div class="icon">
         <div class="print" @click="print"></div>
@@ -11,7 +11,7 @@
           <div class="img" @click="showImg" :style="style"></div>
         </transition>
       </div>
-      <right class="right" :times="condition.times" :selectIndex="condition.times.length-1" v-on:selShowImg="selShowImg"></right>
+      <right class="right" :times="times" :selectIndex="condition.times.length-1" v-on:selShowImg="selShowImg"></right>
     </div>
     <dialog-img v-on:handleClose="handleClose" :height="height" :dialogVisible="dialogVisible" :imgPath="imgPath" :width="width"></dialog-img>
   </div>
@@ -34,36 +34,51 @@ export default {
       width: "",
       height: "",
       style: {},
-      condition: {}
+      condition: {},
+      times:[],
+      timeInterval: null,
+      isFirst: true //是否第一次请求后台数据
     };
   },
   mounted() {
-    this.getData();
-    this.calImgWidth();
+    this.getData("", "", "", "", "");
+    
   },
   methods: {
-    getData() {
+    getData(Station, type, startTime, endTime, interTime) {
       let self = this;
+      if(startTime!=""){
+        startTime=this._global.formatDate(startTime,"yyyy-MM-dd hh:mm:ss");
+      }
+     if(endTime!=""){
+        endTime=this._global.formatDate(endTime,"yyyy-MM-dd hh:mm:ss");
+      }
       this.axios
         //.get("/v2/book/1220562"
         .get("GetImageProducts.svc/GetImageProducts", {
           params: {
             EntityName: "CimissRain",
-            Station: "",
-            type: "",
-            bTime: "",
-            eTime: "",
-            interTime: ""
+            Station: Station,
+            type: type,
+            bTime: startTime,
+            eTime: endTime,
+            interTime: interTime
           }
         })
         .then(response => {
-          console.log(response.data);
           let data = eval("(" + response.data + ")");
-          this.condition = data;
-          this.timeInterval = this.condition.intervalOpt[0]["key"];
+          self.times=data.times;
+          
+          if (self.isFirst) {
+            self.isFirst=false;
+            self.condition = data;
+            self.timeInterval = self.condition.intervalOpt[0]["key"];
+            self.calImgWidth();
+          }
         })
         .catch(response => {
           console.log(response);
+          this.calImgWidth();
         });
     },
     calImgWidth() {
@@ -111,8 +126,15 @@ export default {
     },
     selShowImg(url) {
       this.style = {
-        background: "url(" + url + ") no-repeat center center"
+        background: "url(" + url + ") no-repeat top center"
       };
+    },
+    selectedCon(con) {
+      let area = con.area;
+      let type = con.type;
+      let startTime = con.startTime;
+      let endTime = con.endTime;
+      this.getData(area, type, startTime, endTime, "");
     }
   }
 };

@@ -9,6 +9,7 @@
     <el-row>
       <el-col :span="24">
         <span>类型：</span>
+        <div style="display:none;">{{selectCon}}</div>
         <el-button v-model="typeActive" @click="typeClickActive(index)" :class="{active:index===typeActive}" size="medium" v-for="(item,index) in condition.type" :key="index+'_type'">{{item}}</el-button>
       </el-col>
     </el-row>
@@ -33,12 +34,20 @@
 export default {
   data() {
     return {
-      timeInterval: null,
       areaActive: 0,
       typeActive: 0
     };
   },
-  props:["condition","timeInterval"],
+  props:["condition","timeInterval","isFirst"],
+  computed:{
+    selectCon(){
+      let area=this.condition.area[this.areaActive];
+      let type=this.condition.type[this.typeActive];
+      let startTime=this.condition.startTime;
+      let endTime=this.condition.endTime;
+      this.$emit("selectedCon",{area:area,type:type,startTime:startTime,endTime:endTime})
+    }
+  },
   mounted() {},
   methods: {
     areaClickActive(index) {
