@@ -47,10 +47,10 @@ export default {
   methods: {
     getData(Station, type, startTime, endTime, interTime) {
       let self = this;
-      if(startTime!=""){
+      if( typeof startTime==='object'){
         startTime=this._global.formatDate(startTime,"yyyy-MM-dd hh:mm:ss");
       }
-     if(endTime!=""){
+     if(typeof startTime==='object'){
         endTime=this._global.formatDate(endTime,"yyyy-MM-dd hh:mm:ss");
       }
       this.axios
@@ -73,7 +73,7 @@ export default {
             self.isFirst=false;
             self.condition = data;
             self.timeInterval = self.condition.intervalOpt[0]["key"];
-            self.calImgWidth();
+          //  self.calImgWidth();
           }
         })
         .catch(response => {
