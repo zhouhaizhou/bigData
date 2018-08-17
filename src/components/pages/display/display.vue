@@ -73,7 +73,7 @@ export default {
             self.isFirst=false;
             self.condition = data;
             self.timeInterval = self.condition.intervalOpt[0]["key"];
-          //  self.calImgWidth();
+            self.calImgWidth();
           }
         })
         .catch(response => {

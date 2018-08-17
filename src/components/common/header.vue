@@ -216,7 +216,7 @@ export default {
   color: white !important;
 }
 .header >>> .el-tabs__item:hover {
-  /* color: black; */
+ text-shadow: 1px 3px 5px #00ff78;
 }
 .header >>> .el-tabs__item {
   color: white;
