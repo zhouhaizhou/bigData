@@ -8,10 +8,11 @@
       </div>
       <div class="imgCon">
         <transition>
-          <div class="img" @click="showImg" :style="style"></div>
+          <div class="img" :style="style"></div>
+          <!-- <div class="img" @click="showImg" :style="style"></div> -->
         </transition>
       </div>
-      <right class="right" :times="times" :selectIndex="condition.times.length-1" v-on:selShowImg="selShowImg"></right>
+      <right class="right" :times="times"  v-on:selShowImg="selShowImg"></right>
     </div>
     <dialog-img v-on:handleClose="handleClose" :height="height" :dialogVisible="dialogVisible" :imgPath="imgPath" :width="width"></dialog-img>
   </div>
@@ -21,6 +22,7 @@
 import selCon from "./selCon.vue";
 import right from "./right";
 import dialogImg from "./dialogImg";
+import {mapMutations} from 'vuex'
 export default {
   components: {
     selCon,
@@ -37,14 +39,14 @@ export default {
       condition: {},
       times:[],
       timeInterval: null,
-      isFirst: true //是否第一次请求后台数据
+      isFirst: true, //是否第一次请求后台数据
     };
   },
   mounted() {
     this.getData("", "", "", "", "");
-    
   },
   methods: {
+    ...mapMutations(["SETSELECTEDTIME"]),
     getData(Station, type, startTime, endTime, interTime) {
       let self = this;
       if( typeof startTime==='object'){
@@ -54,7 +56,6 @@ export default {
         endTime=this._global.formatDate(endTime,"yyyy-MM-dd hh:mm:ss");
       }
       this.axios
-        //.get("/v2/book/1220562"
         .get("GetImageProducts.svc/GetImageProducts", {
           params: {
             EntityName: "CimissRain",
@@ -68,7 +69,7 @@ export default {
         .then(response => {
           let data = eval("(" + response.data + ")");
           self.times=data.times;
-          
+          self.SETSELECTEDTIME(self.times.length-1)
           if (self.isFirst) {
             self.isFirst=false;
             self.condition = data;
@@ -128,6 +129,7 @@ export default {
       this.style = {
         background: "url(" + url + ") no-repeat top center"
       };
+      this.isRlastIndex=false;
     },
     selectedCon(con) {
       let area = con.area;

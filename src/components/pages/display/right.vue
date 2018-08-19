@@ -6,39 +6,53 @@
     </div>
     <el-row>
       <el-col :span="24" class="control">
-        <div style="float:left;width:4vw;padding-top: 1px;">
+        <div style="float:left;width:55%;margin-left:5%;">
           <el-select v-model="playSpeed">
             <el-option v-for="(s,index) in speed" :label="s.label" :value="s.value" :key="index">
             </el-option>
           </el-select>
         </div>
-        <span class="pre same" @click="pre"></span>
-        <span class="same" :class="{play:playStatus===1,pause:playStatus===0}" @click="clickPlay"></span>
-        <span class="next same" @click="next"></span>
+        <div style="width: 96%;height: 100%;">
+          <span class="pre same" @click="pre"></span>
+          <span class="same" :class="{play:playStatus===1,pause:playStatus===0}" @click="clickPlay"></span>
+          <span class="next same" @click="next"></span>
+        </div>
       </el-col>
+
     </el-row>
   </div>
 </template>
 
 <script>
+import {mapState} from 'vuex'
 export default {
-  props:["times"],
+  props: ["times"],
+  computed:{
+    ...mapState(['selectedTime'])
+  },
   data() {
     return {
       playStatus: 0, //0表示暂停，1表示播放
-      speed: [{"label":"1X","value":"800"},{"label":"2X","value":"500"},{"label":"3X","value":"200"}],
+      speed: [
+        { label: "1X", value: "800" },
+        { label: "2X", value: "500" },
+        { label: "3X", value: "200" }
+      ],
       playSpeed: "800",
-      timer:null,
-      selectIndex:""
+      timer: null,
+      selectIndex: -1,
     };
   },
   mounted() {
-   this.selectIndex=this.times.length-1;
+    //this.selectIndex=this.times.length-1;
   },
   watch: {
+    selectedTime(val){
+      this.selectIndex=this.selectedTime;
+    },
     selectIndex(val) {
       let temp = this.times[val].url;
-      temp=temp.split('?')[0];
+      temp = temp.split("?")[0];
       let path = require("../../../../webProduct/" + temp);
       this.$emit("selShowImg", path);
     }
@@ -68,10 +82,10 @@ export default {
         this.play();
       }
     },
-    play(){
-      this.timer = setInterval(()=>{
+    play() {
+      this.timer = setInterval(() => {
         this.next();
-      },this.playSpeed)
+      }, this.playSpeed);
     }
   }
 };
@@ -127,20 +141,23 @@ export default {
 .control {
   border: 1px solid #ccc;
   border-radius: 10px;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
+  /* display: flex;
+  justify-content: space-around; */
+      display: flex;
+    align-items: center;
 }
 .same {
   width: 2.5vw;
   height: 5vh;
-  display: inline-block;
+  /* display: table-cell; */
+  float: left;
   cursor: pointer;
   transition: all 0.5s;
 }
 .pre {
   background: url("../../../assets/img/display/tui-n.png") no-repeat center
     center;
+  margin-left: 5%;
 }
 .pre:hover {
   background: url("../../../assets/img/display/tui-d.png") no-repeat center
@@ -149,10 +166,12 @@ export default {
 .pause {
   background: url("../../../assets/img/display/zanting-n.png") no-repeat center
     center;
+  margin-top: 1px;
 }
 .pause:hover {
   background: url("../../../assets/img/display/zanting-d.png") no-repeat center
     center;
+  /* margin-top: 0; */
 }
 .play {
   background: url("../../../assets/img/display/bofang-n.png") no-repeat center
@@ -172,11 +191,13 @@ export default {
 }
 .control >>> .el-input__icon {
   width: 15px;
+  line-height: 20px;
 }
 .control >>> .el-input--suffix .el-input__inner {
   padding-right: 15px;
   padding-left: 15px;
   border-radius: 30px;
   color: rgb(9, 157, 220);
+  height: 4.3vh;
 }
 </style>

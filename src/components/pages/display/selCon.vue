@@ -16,10 +16,10 @@
     <el-row>
       <el-col :span="24">
         <span>时间：</span>
-        <el-date-picker prefix-icon="1" v-model="condition.startTime" clear-icon="close" type="datetime" align="left">
+        <el-date-picker prefix-icon="1" value-format="yyyy-MM-dd HH:mm:ss" v-model="condition.startTime" clear-icon="close" type="datetime" align="left">
         </el-date-picker>
         <i class="icon"></i>
-        <el-date-picker prefix-icon="1" v-model="condition.endTime" clear-icon="close" type="datetime" align="left">
+        <el-date-picker value-format="yyyy-MM-dd HH:mm:ss" prefix-icon="1" v-model="condition.endTime" clear-icon="close" type="datetime" align="left">
         </el-date-picker>
         <span style="margin-left: 10px;margin-right: 10px;vertical-align: middle;">间隔</span>
         <el-select v-model="timeInterval">
