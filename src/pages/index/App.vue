@@ -13,5 +13,13 @@ export default {
 </script>
 
 <style>
-
+@media print {
+  body {-webkit-print-color-adjust: exact;}
+}
+.el-icon-close:before{
+  font-size: 30px;
+}
+.el-message-box__content{
+  margin-top: 15px;
+}
 </style>

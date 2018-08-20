@@ -13,11 +13,12 @@
         </div>
         <div class="icon">
           <div>
-            <img src="../../../assets/img/动效.gif" alt="" @click="goAnchor">
+            <img :src="staticIcon" alt="" style="margin-left: -2px;"  @click="goAnchor" @mouseover="mouseoverIcon" @mouseout="mouseoutIcon">
+            <!-- <img src="../../../assets/img/箭头动效1.gif" alt="" @click="goAnchor" > -->
           </div>
-          <!-- <div style="margin-top: 15px;">
-            <img src="../../../assets/img/jiantou.png" alt="" @click="goAnchor">
-          </div> -->
+          <div style="margin-top: -15px;">
+            <img src="../../../assets/img/箭头动效1.gif" alt="" @click="goAnchor">
+          </div>
         </div>
       </div>
     </div>
@@ -28,6 +29,8 @@
 export default {
   data() {
     return {
+      dxiao:true,
+      staticIcon:require('../../../assets/img/tubiao.png'),
       modules: [
         {
           txt: "地面气象</br>资料",
@@ -108,6 +111,12 @@ export default {
     },
     goAnchor(){
       this.$emit('goAnchor');
+    },
+    mouseoverIcon(){
+      this.staticIcon=require('../../../assets/img/动效2.png')
+    },
+    mouseoutIcon(){
+      this.staticIcon=require('../../../assets/img/tubiao.png')
     }
   }
 };
@@ -123,6 +132,9 @@ export default {
 }
 .fushe{
   padding-top: 36% !important;
+}
+.invisible{
+  display: none;
 }
 .title {
   float: left;
@@ -161,6 +173,7 @@ export default {
 }
 .icon{
   margin-top: 25px;
+  position: relative;
 }
 .icon img{
   cursor: pointer;

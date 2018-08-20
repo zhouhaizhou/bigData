@@ -25,5 +25,11 @@ module.exports = {
   },
    SETNAVHEIGHT(state,val){
     state.navHeight=val;
+  },
+  SETSELECTEDTIME(state,val){
+    state.selectedTime=val;
+  },
+  SETPLAYINTERVAL(state,val){
+    state.playInterval=val;
   }
 }

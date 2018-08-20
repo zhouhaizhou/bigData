@@ -13,8 +13,7 @@
       "name": "surfMeteo",
       "meta": {
         "name": "地面气象资料",
-        "entityName": "surfMeteo",
-        "parentEntityName":"dataDownLoad"
+        "entityName": "surfMeteo"
       }
     },
     {
@@ -23,8 +22,7 @@
       "name": "radi",
       "meta": {
         "name": "辐射资料",
-        "entityName": "radi",
-        "parentEntityName":"dataDownLoad"
+        "entityName": "radi"
       }
     }
   ]
@@ -43,8 +41,7 @@
       "name": "weixingtc",
       "meta": {
         "name": "卫星探测",
-        "entityName": "weixingtc",
-        "parentEntityName":"dataInterface"
+        "entityName": "weixingtc"
       }
     },
     {
@@ -53,8 +50,7 @@
       "name": "zonghegc",
       "meta": {
         "name": "综合观测",
-        "entityName": "zonghegc",
-        "parentEntityName":"dataInterface"
+        "entityName": "zonghegc"
       }
     }
   ]

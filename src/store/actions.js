@@ -26,6 +26,7 @@ export default  {
   FETCH_PERMISSION({commit,state}, paramObj) {
     let type = paramObj.type;
     let path = paramObj.path;
+    path=((path.charAt(path.length-1)=="/")&&path.length>1)?path.substring(0,path.length-1):path;
     let routers = null;
     let DynamicR = DynamicRoutes;
     let permissionList = null;
@@ -54,7 +55,7 @@ export default  {
       commit('SET_PERMISSION', [...DynamicR])
     } else { //从后台读取左边权限  第一次点击一级菜单才会触发
       DynamicR = state.permissionList;
-      siderBarRouters(path).then(function (res) {
+      siderBarRouters(path.split('/')[1]).then(function (res) {
         routers = res;
         children = joinRouter(DynamicR, routers, path);
         state.cacheSiderBar[path] = routers;
