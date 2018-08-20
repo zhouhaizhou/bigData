@@ -132,6 +132,7 @@ export default {
 }
 .title {
   background-color: rgb(90 171 216);
+  color: white;
 }
 .timewrap {
   height: 656px;
