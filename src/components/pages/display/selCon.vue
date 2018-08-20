@@ -22,7 +22,7 @@
         <el-date-picker value-format="yyyy-MM-dd HH:mm:ss" prefix-icon="1" v-model="condition.endTime" clear-icon="close" type="datetime" align="left">
         </el-date-picker>
         <span style="margin-left: 10px;margin-right: 10px;vertical-align: middle;">间隔</span>
-        <el-select v-model="timeInterval">
+        <el-select v-model="selPlayInterval">
           <el-option v-for="(item,index) in condition.intervalOpt" :key="index" :label="item.val" :value="item.key"></el-option>
         </el-select>
       </el-col>
@@ -35,20 +35,33 @@ export default {
   data() {
     return {
       areaActive: 0,
-      typeActive: 0
+      typeActive: 0,
+      selPlayInterval:null
     };
   },
-  props:["condition","timeInterval","isFirst"],
-  computed:{
-    selectCon(){
-      let area=this.condition.area[this.areaActive];
-      let type=this.condition.type[this.typeActive];
-      let startTime=this.condition.startTime;
-      let endTime=this.condition.endTime;
-      this.$emit("selectedCon",{area:area,type:type,startTime:startTime,endTime:endTime})
+  props: ["condition", "playInterval", "isFirst"],
+  computed: {
+    selectCon() {
+      let area = this.condition.area[this.areaActive];
+      let type = this.condition.type[this.typeActive];
+      let startTime = this.condition.startTime;
+      let endTime = this.condition.endTime;
+      this.$emit("selectedCon", {
+        area: area,
+        type: type,
+        startTime: startTime,
+        endTime: endTime
+      });
     }
   },
-  mounted() {},
+  watch: {
+    playInterval() {
+      this.selPlayInterval = this.playInterval;
+    },
+    selPlayInterval(val){
+      this.$emit('selPlayInterval',val);
+    }
+  },
   methods: {
     areaClickActive(index) {
       this.areaActive = index;

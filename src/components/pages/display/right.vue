@@ -15,10 +15,9 @@
         <div style="width: 96%;height: 100%;">
           <span class="pre same" @click="pre"></span>
           <span class="same" :class="{play:playStatus===1,pause:playStatus===0}" @click="clickPlay"></span>
-          <span class="next same" @click="next"></span>
+          <span class="next same" @click="next(1,'next')"></span>
         </div>
       </el-col>
-
     </el-row>
   </div>
 </template>
@@ -26,7 +25,7 @@
 <script>
 import {mapState} from 'vuex'
 export default {
-  props: ["times"],
+  props:['times','selPlayInterval'],
   computed:{
     ...mapState(['selectedTime'])
   },
@@ -66,26 +65,36 @@ export default {
         this.selectIndex = this.times.length;
       }
       this.selectIndex--;
+      this.pause();
     },
-    next() {
-      if (this.selectIndex === this.times.length - 1) {
+    next(interval,status) {
+      if (this.selectIndex >= this.times.length - 1) {
         this.selectIndex = -1;
       }
-      this.selectIndex++;
+      this.selectIndex=this.selectIndex+parseInt(interval);
+      if(status==='next'){
+        this.pause();
+      }
     },
     clickPlay() {
       if (this.playStatus === 1) {
-        this.playStatus = 0;
-        clearInterval(this.timer);
+        // this.playStatus = 0;
+        // clearInterval(this.timer);
+        this.pause();
       } else {
         this.playStatus = 1;
         this.play();
       }
     },
     play() {
+      let self=this;
       this.timer = setInterval(() => {
-        this.next();
+        this.next(self.selPlayInterval,'play');
       }, this.playSpeed);
+    },
+    pause(){
+      this.playStatus = 0;
+      clearInterval(this.timer);
     }
   }
 };
@@ -125,7 +134,7 @@ export default {
   background-color: rgb(90 171 216);
 }
 .timewrap {
-  height: 75.2vh;
+  height: 656px;
   overflow: auto;
 }
 .time {
@@ -147,7 +156,7 @@ export default {
     align-items: center;
 }
 .same {
-  width: 2.5vw;
+  width: 48px;
   height: 5vh;
   /* display: table-cell; */
   float: left;

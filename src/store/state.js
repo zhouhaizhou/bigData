@@ -9,7 +9,8 @@ module.exports = {
   localCity: '',
   cacheSiderBar: {}, //缓存每一个大模块下面的侧面栏
   navHeight: 12,
-  selectedTime:null   //在线展示页面右边选择的时间索引
+  selectedTime:null,   //在线展示页面右边选择的时间索引
+  playInterval:null
 }
 // var sidebarMenu=[
 //   {

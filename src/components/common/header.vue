@@ -22,7 +22,7 @@
       </el-col>
       <el-col :span='6' class="right" offset='2'>
         <div class="item">
-          <span style="margin-right: 25px">
+          <span style="margin-right: 25px;cursor:pointer;" @click="goCart">
             <img src="../../assets/img/xiazai.png" style="vertical-align: sub;" alt="">
             <span>我的下载清单</span>
           </span>
@@ -41,9 +41,15 @@
     </el-row>
     <el-row>
       <el-col :span="20" :offset="4">
-        <el-tabs v-model="page" @tab-click="handleClick($event)">
-          <el-tab-pane :label="option.meta.name" :name="option.name" v-for="(option,index) in topbarMenu" :key='index'></el-tab-pane>
+        <el-tabs v-model="page" @tab-click="handleClick($event)"  @mouseover.native="mouseover"  @mouseout.native="mouseout">
+          <el-tab-pane :label="option.meta.name" :name="option.name" v-for="(option,index) in topbarMenu" :key='index'>
+          </el-tab-pane>
         </el-tabs>
+      </el-col>
+    </el-row>
+    <el-row>
+      <el-col>
+        <div class="el-tabs__hover-bar"></div>
       </el-col>
     </el-row>
     <el-row :class="nav">
@@ -125,6 +131,34 @@ export default {
         this.getWeek();
       //console.log(this);
     },
+    mouseover(evt){
+      let lNum=20;
+      let wNum=40;
+      document.querySelector('.el-tabs__hover-bar').style.display="block";
+      let margetLeft=document.querySelector('.el-tabs').offsetLeft;
+      let activeObj=document.querySelector('.el-tabs__active-bar');
+      let activeW=activeObj.clientWidth;
+      let obj=evt.target;
+      let width=obj.clientWidth;
+      let left=obj.offsetLeft+margetLeft;
+      let targetObj=document.querySelector('.el-tabs__hover-bar');
+      if(obj.id.indexOf('home')>0){
+        lNum=0
+      }else{
+        lNum=20;
+      }
+      if(obj.id.indexOf('about')>0||obj.id.indexOf('home')>0){
+        wNum=20;
+      } else{
+        wNum=40;
+      }
+      targetObj.style.left=left+lNum+'px';
+      targetObj.style.width=width-wNum+'px';
+    },
+    mouseout(evt){
+      let obj=evt.target;
+      document.querySelector('.el-tabs__hover-bar').style.display="none";
+    },
     getLocal() {
       if (this.localCity == "") {
         var self = this;
@@ -163,6 +197,9 @@ export default {
     },
     register() {
       this.$router.push("/register");
+    },
+    goCart(){
+      this.$router.push("/cart");
     }
   }
 };
@@ -215,15 +252,15 @@ export default {
 .header >>> .el-tabs__item.is-active {
   color: white !important;
 }
-.header >>> .el-tabs__item:hover {
- text-shadow: 1px 3px 5px #00ff78;
-}
+/* .header >>> .el-tabs__item:hover {
+  text-shadow: 1px 3px 5px #00ff78;
+} */
 .header >>> .el-tabs__item {
   color: white;
   font-weight: bold;
   width: 35%;
   text-align: center;
-  height: 50px;
+  height: 51px;
   line-height: 50px;
   font-size: 18px;
 }
@@ -231,12 +268,6 @@ export default {
 .navColor {
   width: 100%;
   height: 50px;
-  /* background: linear-gradient(
-    to right,
-    rgb(195, 220, 240) -6%,
-    rgb(1, 152, 217) 29%,
-    rgb(195, 220, 240) 126%
-  ); */
   background: url("../../assets/img/title2.png") no-repeat center center;
   background-size: cover;
   position: absolute;
@@ -252,17 +283,14 @@ export default {
   top: 110px;
   left: 0;
 }
-/* .navColorhome {
-  width: 100%;
-  height: 50px;
-  background: linear-gradient(
-    to right,
-    rgb(68, 120, 155) 5%,
-    rgb(1, 152, 217) 85%,
-    rgb(195, 220, 240) 98%
-  );
+.el-tabs__hover-bar {
+  background-color: white;
+  height: 4px;
   position: absolute;
-  top: 110px;
+  bottom: 0;
   left: 0;
-} */
+  transition: all 0.5s;
+  list-style: none;
+  z-index: 1;
+}
 </style>

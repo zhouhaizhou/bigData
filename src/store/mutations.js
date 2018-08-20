@@ -28,5 +28,8 @@ module.exports = {
   },
   SETSELECTEDTIME(state,val){
     state.selectedTime=val;
+  },
+  SETPLAYINTERVAL(state,val){
+    state.playInterval=val;
   }
 }

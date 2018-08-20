@@ -1,18 +1,17 @@
 <template>
   <div class="wrap">
-    <sel-con  :condition="condition" :isFirst="isFirst" :timeInterval="timeInterval" v-on:selectedCon="selectedCon"></sel-con>
+    <sel-con  :condition="condition" :isFirst="isFirst" v-on:selPlayInterval="selPlayIntervalFun" :playInterval="playInterval" v-on:selectedCon="selectedCon"></sel-con>
     <div class="main">
       <div class="icon">
         <div class="print" @click="print"></div>
         <div class="download" @click="download"></div>
       </div>
-      <div class="imgCon">
-        <transition>
-          <div class="img" :style="style"></div>
+      <div  class="img">
+          <!-- <div class="img" :style="style"></div> -->
+          <img :src="style" height="753px"  alt="">
           <!-- <div class="img" @click="showImg" :style="style"></div> -->
-        </transition>
       </div>
-      <right class="right" :times="times"  v-on:selShowImg="selShowImg"></right>
+      <right class="right" :times="times" :selPlayInterval="selPlayInterval" v-on:selShowImg="selShowImg"></right>
     </div>
     <dialog-img v-on:handleClose="handleClose" :height="height" :dialogVisible="dialogVisible" :imgPath="imgPath" :width="width"></dialog-img>
   </div>
@@ -35,11 +34,12 @@ export default {
       imgPath: "",
       width: "",
       height: "",
-      style: {},
+      style: null,
       condition: {},
       times:[],
-      timeInterval: null,
+      playInterval: null,
       isFirst: true, //是否第一次请求后台数据
+      selPlayInterval:null
     };
   },
   mounted() {
@@ -49,12 +49,7 @@ export default {
     ...mapMutations(["SETSELECTEDTIME"]),
     getData(Station, type, startTime, endTime, interTime) {
       let self = this;
-      if( typeof startTime==='object'){
-        startTime=this._global.formatDate(startTime,"yyyy-MM-dd hh:mm:ss");
-      }
-     if(typeof startTime==='object'){
-        endTime=this._global.formatDate(endTime,"yyyy-MM-dd hh:mm:ss");
-      }
+      this.SETSELECTEDTIME(-1);
       this.axios
         .get("GetImageProducts.svc/GetImageProducts", {
           params: {
@@ -73,7 +68,7 @@ export default {
           if (self.isFirst) {
             self.isFirst=false;
             self.condition = data;
-            self.timeInterval = self.condition.intervalOpt[0]["key"];
+            self.playInterval = self.condition.intervalOpt[0]["key"];
             self.calImgWidth();
           }
         })
@@ -126,10 +121,10 @@ export default {
       this.dialogVisible = false;
     },
     selShowImg(url) {
-      this.style = {
-        background: "url(" + url + ") no-repeat top center"
-      };
-      this.isRlastIndex=false;
+      // this.style = {
+      //   background: "url(" + url + ") no-repeat top center"
+      // };
+      this.style=url;
     },
     selectedCon(con) {
       let area = con.area;
@@ -137,6 +132,9 @@ export default {
       let startTime = con.startTime;
       let endTime = con.endTime;
       this.getData(area, type, startTime, endTime, "");
+    },
+    selPlayIntervalFun(val){
+      this.selPlayInterval=val;
     }
   }
 };
@@ -154,10 +152,11 @@ export default {
 
 .img {
   width: 52vw;
-  height: 85.5vh;
+  /* height: 85.5vh; */
   float: left;
   margin-left: 2vw;
   background-size: contain !important;
+  text-align: center;
 }
 .right {
   float: right;

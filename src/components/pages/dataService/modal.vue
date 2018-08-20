@@ -25,13 +25,13 @@
                   <div class="update-name float-left font-style1">更新频率：</div>
                   <div class="update-value font-style2">{{modalData[0].dataContent[0].upDateRate}}</div>
                 </div>
-                <div class="share-wrap padding-bottom">
-                  <div class="share-name float-left font-style1">共享级别：</div>
-                  <div class="share-value font-style2">{{modalData[0].dataContent[0].shareClass}}</div>
-                </div>
                 <div class="data-soure-wrap padding-bottom">
                   <div class="data-soure-name float-left font-style1">数据源：</div>
                   <div class="data-soure-value font-style2">{{modalData[0].dataContent[0].dataSource}}</div>
+                </div>
+                <div class="share-wrap padding-bottom">
+                  <div class="share-name float-left font-style1">共享级别：</div>
+                  <div class="share-value font-style2">{{modalData[0].dataContent[0].shareClass}}</div>
                 </div>
 
               </div>
@@ -59,7 +59,9 @@
             </div>
           </div>
           <div class="foot-wrap">
-            <div class="file-download-font">资料下载</div>
+            <div class="file-download-font">
+              <span>资料下载</span>
+            </div>
             <div class="date-all-wrap">
               <div class="date-wrap">
                 <div class="date-pic" src="../../../assets/img/modal/date.png"></div>
@@ -100,7 +102,7 @@
 
               <div class="province-sites float-left">
 
-                <div class="site-title">
+                <!-- <div class="site-title">
                   <div class="all-select-wrap"><input type="radio">
                     <div class="all-select-name">全选</div>
                   </div>
@@ -108,8 +110,8 @@
 
                 <div class="sites-wrap">
                   <my-modal-city-sites></my-modal-city-sites>
-                </div>
-
+                </div> -->
+                <my-modal-city-sites></my-modal-city-sites>
               </div>
 
             </div>
@@ -119,14 +121,20 @@
                   <div class="element-select-pic"></div>
                   <div class="element-select-name font-style12">要素选择</div>
                 </div>
-                <div class="all-select-wrap element-all-select-wrap-postion"><input type="radio">
+                <!-- <div class="all-select-wrap element-all-select-wrap-postion"><input type="radio">
                   <div class="all-select-name">全选</div>
+                </div> -->
+                <div class="all-select-wrap element-all-select-wrap-postion">
+                  <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
                 </div>
               </div>
 
               <div class="element-content">
-                <div class="element-radio-font-wrap" v-for="ele in modalData[0].dataDownLoad[0].element">
-                  <div class="radio-wrap"><input type="radio"></div>{{ele}}</div>
+                <!-- <div class="element-radio-font-wrap" v-for="ele in modalData[0].dataDownLoad[0].element">
+                  <div class="radio-wrap"><input type="radio"></div>{{ele}}</div> -->
+                <el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">
+                  <el-checkbox v-for="city in modalData[0].dataDownLoad[0].element" :label="city" :key="city">{{city}}</el-checkbox>
+                </el-checkbox-group>
               </div>
             </div>
             <div class="files-wrap">
@@ -170,7 +178,7 @@
             <i class="el-icon-close"></i>
           </div>
           <div class="download-lists-wrap">
-            <div class="download-lists"></div>
+            <div class="download-lists" @click="goCart()"></div>
           </div>
         </div>
       </div>
@@ -180,6 +188,7 @@
 
 <script>
 import myModalCitySites from "./modalCitySites";
+
 export default {
   components: {
     myModalCitySites
@@ -194,12 +203,30 @@ export default {
     "endTimes"
   ],
   data() {
-    return {};
+    return {
+      checkAll: false,
+      checkedCities: ["气压"],
+      // cities: modalData[0].dataDownLoad[0].element,
+      isIndeterminate: true
+    };
   },
   methods: {
+    goCart(){
+      this.$router.push("/cart");
+    },
     Hidden() {
       //通过$emit引用组件传过来的hidden()事件
       this.$emit("hidden");
+    },
+     handleCheckAllChange(val) {
+      this.checkedCities = val ? this.modalData[0].dataDownLoad[0].element : [];
+      this.isIndeterminate = false;
+    },
+    handleCheckedCitiesChange(value) {
+      let checkedCount = value.length;
+      this.checkAll = checkedCount === this.cities.length;
+      this.isIndeterminate =
+        checkedCount > 0 && checkedCount < this.cities.length;
     }
   }
 };
@@ -230,32 +257,32 @@ export default {
 }
 .top-wrap {
   border-bottom: solid 0.05em #80808045;
-  height: 5vh;
+  height: 3.5vh;
 }
 .top-font {
   font-size: 1.1em;
   font-weight: bold;
 }
 .middle-wrap {
-  margin-top: 2vh;
+  margin-top: 1vh;
   border: #80808038 solid 0.5px;
-  padding-top: 4%;
+  padding-top: 3%;
   padding-left: 6%;
   padding-right: 5%;
-  padding-bottom: 4%;
+  padding-bottom: 0%;
   height: 20vh;
 }
 .middle {
 }
 .middle-name-wrap {
   width: 5%;
-  height: 3.7vh;
+  height: 2.7vh;
   position: absolute;
-  top: 9.3vh;
+  top: 7vh;
   left: 30%;
   background-color: white;
   color: #4fb9ed;
-  font-size: 1.25em;
+  font-size: 1.1em;
   font-weight: bold;
   text-align: center;
   line-height: 1.5;
@@ -264,13 +291,15 @@ export default {
   width: 70%;
   height: 100%;
   float: left;
-  font-size: 0.8em;
+  font-size: 1em;
 }
 
 .data-content {
   font-weight: bold;
 }
 .data-start-time-wrap {
+  /* width: 50%;
+    float: left; */
 }
 .data-start-time-name {
 }
@@ -283,6 +312,8 @@ export default {
 .data-end-time-wrap-value {
 }
 .update-wrap {
+  /* width: 50%;
+    float: left; */
 }
 .update-name {
 }
@@ -347,51 +378,52 @@ export default {
 .share-name {
 }
 .foot-wrap {
-  margin-top: 3vh;
+  margin-top: 2vh;
   /* border: solid red; */
   border: #80808038 solid 0.5px;
-  height: 64%;
+  height: 72%;
   font-size: 0.5em;
 }
 .file-download-font {
   width: 5%;
-  height: 3.7vh;
+  height: 2.7vh;
   position: absolute;
-  top: 39vh;
+  top: 31vh;
   left: 30%;
   background-color: white;
   color: #4fb9ed;
-  font-size: 2.5em !important;
+  font-size: 2.2em;
   font-weight: bold;
   text-align: center;
   line-height: 1.5;
 }
 .date-all-wrap {
-  height: 6vh;
+  height: 8.1%;
   padding-left: 5%;
   padding-right: 4%;
-  padding-top: 3%;
+  padding-top: 2%;
 }
 .date-wrap {
-  padding-bottom: 1vh;
+  padding-bottom: 0.6%;
 }
 .date-pic {
   background: url("../../../assets/img/modal/date.png") no-repeat center center;
   width: 5%;
   height: 2vh;
   float: left;
-  background-size: 45%;
+  background-size: 49%;
 }
 .date-name {
-  font-size: 1.8em;
+  font-size: 1.9em;
 }
 .date-value {
 }
 .provinces-position-wrap {
   float: left;
-    height: 36%;
-    padding-left: 5%;
-    padding-right: 4%;
+  height: 38%;
+  padding-left: 5%;
+  padding-right: 4%;
+  padding-top: 0.5%;
 }
 .provinces-title-wraps {
   width: 44%;
@@ -416,6 +448,7 @@ export default {
   float: left;
 }
 .position-title {
+  padding-left: 20%;
 }
 .all-select-wrap {
   float: right;
@@ -429,13 +462,13 @@ export default {
 .all-select-name {
 }
 .provinces-wrap {
-    height: 75%;
-    float: left;
-    width: 100%;
-    background-color: #f9fbfb;
-    border: solid #8080802b 0.5px;
-    overflow: hidden;
-    padding-bottom: 1vh;
+  height: 77%;
+  float: left;
+  width: 100%;
+  background-color: #f9fbfb;
+  border: solid #8080802b 0.5px;
+  overflow: hidden;
+  padding-bottom: 1vh;
 }
 .province-wrap {
   width: 97%;
@@ -444,19 +477,19 @@ export default {
   padding-top: 2%;
 }
 .province {
-     width: 14%;
-    padding-left: 2.5%;
-    padding-top: 1%;
-    padding-right: 2.5%;
-    float: left;
-    color: #5476b7;
-    transform: scale(0.9,0.9);
-    font-weight: bold;
+  width: 14%;
+  padding-left: 2.5%;
+  padding-top: 2.1%;
+  padding-right: 2.5%;
+  float: left;
+  color: #5476b7;
+  /* transform: scale(0.9,0.9); */
+  font-weight: bold;
 }
 
 .arrow-wrap {
   width: 12%;
-  height: 100%;
+  height: 98%;
 }
 .arrow {
   width: 100%;
@@ -466,13 +499,13 @@ export default {
 }
 .province-sites {
   width: 44%;
-  height: 95%;
+  height: 99%;
 }
 .site-title {
   height: 17%;
 }
 .sites-wrap {
-  height: 85%;
+  height: 74%;
   float: left;
   width: 100%;
   background-color: #f9fbfb;
@@ -487,21 +520,23 @@ export default {
 }
 .elements-select-wrap {
   float: left;
-  height: 29%;
+  height: 30%;
   padding-left: 5%;
   padding-right: 4%;
 }
 .element-select-title {
-      width: 100%;
-    height: 15%;
-    float: left;
-    margin-top: 0.5%;
-    margin-bottom: 0.5%;
+  width: 100%;
+  height: 15%;
+  float: left;
+  /* margin-top: 0.5%; */
+  margin-bottom: 0.5%;
 }
 .element-select-wrap {
-  float: left;
   width: 18%;
   height: 100%;
+  /* display: flex;
+    align-items: center; */
+  float: left;
 }
 .element-select-pic {
   float: left;
@@ -514,33 +549,44 @@ export default {
 .element-select-name {
   float: left;
   line-height: 1.5;
+  padding-top: 2%;
 }
 .element-all-select-wrap-postion {
 }
 .element-content {
-  height: 82%;
+  height: 80%;
   width: 100%;
   float: left;
   border: solid #8080802b 0.5px;
+  padding-top: 0.8%;
+  padding-left: 2%;
+}
+.element-content >>> .el-checkbox + .el-checkbox {
+  margin-left: 0px;
+}
+.element-content>>> .el-checkbox {
+  margin-right: 8%;
   padding-top: 0.5%;
 }
 .element-radio-font-wrap {
-  width: 25%;
+  width: 24%;
   float: left;
-  transform: scale(0.9,0.9);
+  /* transform: scale(0.9,0.9); */
+  font-size: 1.8em !important;
+  padding-top: 0.3%;
 }
 .files-wrap {
-    float: left;
-    height: 8%;
-    padding-left: 5%;
-    padding-right: 4%;
-    padding-top: 1.5%;
+  float: left;
+  height: 8%;
+  padding-left: 5%;
+  padding-right: 4%;
+  padding-top: 1.5%;
 }
 .pic-file-wrap {
   width: 100%;
   height: 35%;
   display: flex;
-    align-items: center;
+  align-items: center;
 }
 .file-pic {
   background: url("../../../assets/img/modal/file.png") no-repeat center center;
@@ -556,6 +602,7 @@ export default {
   width: 100%;
   height: 65%;
   padding-top: 1.5%;
+  font-size: 1.8em !important;
 }
 
 .famat-name {
@@ -581,7 +628,7 @@ export default {
 .time-interval-value {
   width: 15%;
 }
-.famat-time-wrap >>> .el-input__inner{
+.famat-time-wrap >>> .el-input__inner {
   height: 22px;
 }
 .famat-time-wrap >>> .el-input__icon {
@@ -603,21 +650,21 @@ export default {
   /* height: 30px; */
 }
 .btns-wrap {
-    height: 7%;
-    padding-left: 5%;
-    padding-right: 4%;
- 
-    padding-top: 1%;
- 
-    display: flex;
-    -webkit-box-pack: center;
-    
-    justify-content: center;
-    -webkit-box-align: center;
-    
-    align-items: center;
+  height: 9%;
+  padding-left: 5%;
+  padding-right: 4%;
+
+  padding-top: 1%;
+
+  display: flex;
+  -webkit-box-pack: center;
+
+  justify-content: center;
+  -webkit-box-align: center;
+
+  align-items: center;
 }
-.btns-wrap >>> .el-button{
+.btns-wrap >>> .el-button {
   padding: 5px 20px;
 }
 .now-download-wrap {
@@ -639,6 +686,9 @@ export default {
 }
 .close-wrap >>> .el-icon-close {
   font-weight: bold;
+}
+.close-wrap >>> .el-icon-close::before {
+  font-size: 25px;
 }
 .download-lists-wrap {
   width: 100%;
@@ -670,11 +720,12 @@ export default {
   float: left;
 }
 .padding-bottom {
-  padding-top: 0.7vh;
-  padding-bottom: 0.7vh;
+  padding-top: 0.4vh;
+  /* padding-bottom: 0.7vh; */
 }
 .border-bottom {
   border-bottom: solid 0.05em #80808045;
+  padding-bottom: 7%;
 }
 .font-style1 {
   color: #3d6b84;
@@ -694,6 +745,7 @@ export default {
 }
 .icon-font-style {
   width: 65%;
+  font-size: 1.1em !important;
 }
 #date {
   line-height: 22px;
@@ -718,6 +770,7 @@ export default {
   margin-left: 2%;
   margin-right: 2%;
   line-height: 2;
+  font-size: 1.6em;
 }
 
 .start-time >>> .el-date-editor.el-input {

@@ -13,7 +13,7 @@
               </div>
               <div class="lists-wrap">
                 <div class="list-wrap" v-for="(list,index2) in img.lists" @mouseout="mouseout" @mouseover="mouseover">
-                  <div class="list-img" :style="{backgroundImage:'url('+list.imgurl+')',backgroundRepeat:'no-repeat',backgroundPosition:'center center',backgroundSize:'cover'}" @mouseover="showContent(list)" @click="showModal(list)">
+                  <div class="list-img" :style="{backgroundImage:'url('+list.imgurl+')',backgroundRepeat:'no-repeat',backgroundPosition:'center center',backgroundSize:'cover'}" @mouseover="showContent(list)" @click="showModal(img,list,index,index2)">
                     <div class="info-wrap">
                       <div class="info-font">{{imgInfoes[index].lists[index2].imgInfo}}</div>
                     </div>
@@ -281,6 +281,7 @@ export default {
         }
       ],
 
+//将请求到的生成modal弹框的数据通过属性标签传给子组件，子组件通过props接收数据
       modalData: null,
       famatOptions: null,
       famatValue: null,
@@ -319,13 +320,13 @@ export default {
     mouseover(env) {
       // env.currentTarget.classList.add("hover");
     },
-    getAllData(navName) {
+    getAllData(navName) {//初始加载和路由监听事件时，执行此方法
       var self = this;
       //获取当前路由的父名称
-      let pName = self.$route.meta.parentEntityName;
+      let pName = self.$route.meta.parentEntityName;//当点击左侧子路由时，获取父路由名称给后台
       // console.log(list);
       self.axios
-        .get("./static/modalData.json")
+        .get("./static/dataService.json")
         .then(function(response) {
           //获取当前点击
 
@@ -339,14 +340,23 @@ export default {
           self.timeTypeValue = data.timeTypeValue;
           self.startTimes = data.startTimes;
           self.endTimes = data.endTimes;
+
+          //请求完所有数据后，跳转到指定的位置，（即，锚点定位）
         })
         .catch(function(response) {
           console.log(response); //发生错误时执行的代码
         });
     },
-    showModal(list) {
+    showModal(img,list,index,index2) {
       var self = this;
-
+      //获取当前路由的父名称
+      let pName = self.$route.meta.parentEntityName;
+      //获取当前图片属于哪个子路由
+      // let ptitle=img.nameAbbr;
+      //获取当前点击的是哪个图片
+      // let thisIndex=index2;//先用数组中的索引  如果后台指定了每个图片的唯一标识（例如，数据下载-地面气象资料下的小时图片），就获取图片标识传给后台进行请求
+      console.log(index);
+      console.log(index2);
       // console.log(list);
       self
         .axios({
