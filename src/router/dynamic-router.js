@@ -6,13 +6,15 @@
  function siderBarRouters(path) {
    return new Promise((resolve, reject) => {
      // axios.defaults.baseURL="";
-   //  url="GetModules";
-     axios({
-         method: 'get',
-         baseURL: '',
-         url: './static/' + path + 'RouterData.json'
+     //  url="GetModules";
+     axios.get("GetImageProducts.svc/GetModules", {
+         params: {
+           token: "readearth",
+           moduleName: path
+         }
        }).then(function (response) {
          let data = response.data
+         data=JSON.parse(data);
          proRoutersObj(data);
          resolve(data);
        })

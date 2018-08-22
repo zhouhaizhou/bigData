@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="side">
-      <el-menu :unique-opened=true :collapse="isSidebarNavCollapse" background-color="#fff" text-color="#eee" active-text-color="#4dbcff" :default-active="currentMenu">
+      <el-menu :unique-opened=true :collapse="isSidebarNavCollapse" background-color="#fff" text-color="black" active-text-color="rgb(0, 162, 243)" :default-active="currentMenu">
         <DynamicMenu :menuList="sidebarMenu"></DynamicMenu>
       </el-menu>
     </div>
