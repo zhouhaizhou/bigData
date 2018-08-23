@@ -40,11 +40,11 @@ export default  {
       if (path.split('/').length > 2) {
         return;
       } else {
-        commit('SET_SIDERMENU', state.cacheSiderBar[path]);
+         commit('SET_SIDERMENU', state.cacheSiderBar[path]);
         setDefaultRoute(DynamicR, path.split('/')[1], defaultRouter);
         router.push(defaultRouter);
-        return;
-      }
+         //return;
+       }
     }
     if (type == 'top') { //第一次获取一级菜单
       permissionList = fetchPermission("");
@@ -57,7 +57,7 @@ export default  {
       DynamicR = state.permissionList;
       siderBarRouters(path.split('/')[1]).then(function (res) {
         routers = res;
-        children = joinRouter(DynamicR, routers, path);
+        children = joinRouter(DynamicR, routers, "/"+path.split('/')[1]);
         state.cacheSiderBar[path] = routers;
         commit('SET_SIDERMENU', state.cacheSiderBar[path]);
         router.addRoutes(DynamicR);

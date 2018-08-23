@@ -80,7 +80,7 @@ export default {
   background-color: white;
 }
 .menu-container0 >>> li.is-active{
-background-color: rgb(90 171 216) !important;
+background-color: #409EFF !important;
 color: white !important;
 }
 .menu-container0 >>> li.el-menu-item .is-active {

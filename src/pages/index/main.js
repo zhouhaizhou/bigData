@@ -25,7 +25,7 @@ router.beforeEach((to, from, next) => {
       flag = true;
       to.meta.firstLoad = false;
     }
-    if (!store.state.permissionList) { //�ս���ҳ�涥���˵�Ҳû�У���Ҫ���󶥲��˵�
+    if (!store.state.permissionList) { 
       store.dispatch('FETCH_PERMISSION', {
         type: "top",
         path: '/',

@@ -8,7 +8,7 @@
       </div>
       <div  class="img">
           <!-- <div class="img" :style="style"></div> -->
-          <img :src="style" height="753px"  alt="">
+          <img :src="style" style="height:80vh"  class="loadImg" alt="">
           <!-- <div class="img" @click="showImg" :style="style"></div> -->
       </div>
       <right class="right" :times="times" :selPlayInterval="selPlayInterval" v-on:selShowImg="selShowImg"></right>
@@ -27,6 +27,19 @@ export default {
     selCon,
     right,
     dialogImg
+  },
+  watch:{
+    $route:{
+      handler(val){
+        this.condition={},  //路由发生变化说明进入另一个页面，对应这些变量要初始化
+        this.time=[],
+        this.isFirst=true;
+        this.selPlayInterval=null;
+        this.playInterval=null;
+        this.getData("", "", "", "", "");
+      }
+    },
+    deep:true
   },
   data() {
     return {
@@ -49,11 +62,12 @@ export default {
     ...mapMutations(["SETSELECTEDTIME"]),
     getData(Station, type, startTime, endTime, interTime) {
       let self = this;
+      let entityName=this.$route.name;
       this.SETSELECTEDTIME(-1);
       this.axios
         .get("GetImageProducts.svc/GetImageProducts", {
           params: {
-            EntityName: "CimissRain",
+            EntityName: entityName,
             Station: Station,
             type: type,
             bTime: startTime,
@@ -85,8 +99,7 @@ export default {
       document.querySelector(".img").style.width = imgW + "px";
     },
     creatImg() {
-      let imagePath = document.querySelector(".img").style.backgroundImage;
-      imagePath = imagePath.replace('url("', "").replace('")', "");
+      let imagePath = document.querySelector(".loadImg").src;
       var img = document.createElement("img");
       img.src = imagePath;
       return img;
@@ -102,8 +115,7 @@ export default {
       return false;
     },
     download() {
-      let img = document.querySelector(".img").style.backgroundImage;
-      img = img.replace('url("', "").replace('")', "");
+      let img = document.querySelector(".loadImg").src;
       let a = document.createElement("a");
       a.download = img;
       a.href = img;
