@@ -71,6 +71,7 @@ export default {
       date: "",
       week: "",
       inputKey: "",
+      from:null,
       options: [
         {
           name: "home",
@@ -190,10 +191,10 @@ export default {
       this.week = weekday[myddy];
     },
     handleClick(ev) {
-      this.page = ev.name;
-      //var p = ev.name;
+      if(ev.$parent.value==this.page){
+        return;
+      }
       this.$router.push({ name: this.page });
-      //this.$router.push(p);
     },
     register() {
       this.$router.push("/register");

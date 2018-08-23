@@ -340,7 +340,7 @@ export default {
 .comments-wrap {
 }
 .comment-pic {
-  background: url("../../../assets/img/dataService/comment.png") no-repeat
+  background: url("../../../assets/img/dataDownLoad/comment.png") no-repeat
     center center;
 }
 .comment-name {
@@ -350,7 +350,7 @@ export default {
 .likes-wrap {
 }
 .likes-pic {
-  background: url("../../../assets/img/dataService/likes.png") no-repeat center
+  background: url("../../../assets/img/dataDownLoad/likes.png") no-repeat center
     center;
 }
 .likes-name {
@@ -360,7 +360,7 @@ export default {
 .views-wrap {
 }
 .views-pic {
-  background: url("../../../assets/img/dataService/view.png") no-repeat center
+  background: url("../../../assets/img/dataDownLoad/view.png") no-repeat center
     center;
 }
 .views-name {
