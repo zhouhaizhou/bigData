@@ -34,6 +34,16 @@ const cityOptions = [
   "[58361]闵行",
   "[58367]徐家汇",
   "[58361]闵行",
+  "[58367]徐家汇",
+  "[58361]闵行",
+  "[58367]徐家汇",
+  "[58361]闵行",
+  "[58367]徐家汇",
+  "[58361]闵行",
+  "[58367]徐家汇",
+  "[58361]闵行",
+  "[58367]徐家汇",
+  "[58361]闵行",
   "[58367]徐家汇"
 ];
 export default {
@@ -92,7 +102,33 @@ export default {
   padding: 3% 5% 4% 5%;
   float: left;
   border: solid #8080802b 0.5px;
+      overflow: overlay;
 }
+/*定义滚动条高宽及背景
+ 高宽分别对应横竖滚动条的尺寸*/
+.sites-wrap::-webkit-scrollbar
+{
+    width:5px;
+    
+    background-color:#F5F5F5;
+}
+/*定义滚动条轨道
+ 内阴影+圆角*/
+.sites-wrap::-webkit-scrollbar-track
+{
+    -webkit-box-shadow:inset 0 0 6px rgba(0,0,0,0.3);
+    border-radius:5px;
+    background-color:#F5F5F5;
+}
+/*定义滑块
+ 内阴影+圆角*/
+.sites-wrap::-webkit-scrollbar-thumb
+{
+        background-color: #099AD7;
+    /* background-image: -webkit-gradient(linear, 40% 0%, 75% 84%, from(rgb(77, 156, 65)), color-stop(0.6, rgb(84, 222, 93)), to(rgb(25, 145, 29))); */
+    border-radius: 5px;
+}
+
 .sites-wrap >>> .el-checkbox + .el-checkbox {
   margin-left: 0px;
 }

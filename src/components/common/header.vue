@@ -135,11 +135,17 @@ export default {
     mouseover(evt){
       let lNum=20;
       let wNum=40;
-      document.querySelector('.el-tabs__hover-bar').style.display="block";
+      let obj=evt.target;
+      if(obj.id.indexOf(this.page)<0){
+        document.querySelector('.el-tabs__active-bar').style.opacity="0";
+        document.querySelector('.el-tabs__hover-bar').style.opacity="1";
+      }else{
+        document.querySelector('.el-tabs__hover-bar').style.opacity="0";
+        document.querySelector('.el-tabs__active-bar').style.opacity="1";;
+      }
       let margetLeft=document.querySelector('.el-tabs').offsetLeft;
       let activeObj=document.querySelector('.el-tabs__active-bar');
       let activeW=activeObj.clientWidth;
-      let obj=evt.target;
       let width=obj.clientWidth;
       let left=obj.offsetLeft+margetLeft;
       let targetObj=document.querySelector('.el-tabs__hover-bar');
@@ -158,7 +164,8 @@ export default {
     },
     mouseout(evt){
       let obj=evt.target;
-      document.querySelector('.el-tabs__hover-bar').style.display="none";
+      document.querySelector('.el-tabs__active-bar').style.opacity="1";
+      document.querySelector('.el-tabs__hover-bar').style.opacity="0";
     },
     getLocal() {
       if (this.localCity == "") {
@@ -249,6 +256,7 @@ export default {
 .header >>> .el-tabs__active-bar {
   background-color: white;
   height: 4px;
+  transition: all .5s;
 }
 .header >>> .el-tabs__item.is-active {
   color: white !important;
@@ -288,7 +296,7 @@ export default {
   background-color: white;
   height: 4px;
   position: absolute;
-  bottom: 0;
+  bottom: -1px;
   left: 0;
   transition: all 0.5s;
   list-style: none;

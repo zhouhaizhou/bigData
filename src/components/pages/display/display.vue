@@ -81,6 +81,9 @@ export default {
           self.SETSELECTEDTIME(self.times.length-1)
           if (self.isFirst) {
             self.isFirst=false;
+            if(data.endTime=='WRF'){
+              data.endTime="";
+            }
             self.condition = data;
             self.playInterval = self.condition.intervalOpt[0]["key"];
             self.calImgWidth();

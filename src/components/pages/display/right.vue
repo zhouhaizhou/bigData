@@ -40,10 +40,12 @@ export default {
       playSpeed: "800",
       timer: null,
       selectIndex: -1,
+      webProduct:null
     };
   },
   mounted() {
     //this.selectIndex=this.times.length-1;
+    this.webProduct = process.env.PRODUCT_PATH;
   },
   watch: {
     selectedTime(val){
@@ -51,8 +53,7 @@ export default {
     },
     selectIndex(val) {
       let temp = this.times[val].url;
-      temp = temp.split("?")[0];
-      let path = require("../../../../webProduct/" + temp);
+      let path = this.webProduct + temp;
       this.$emit("selShowImg", path);
     }
   },
@@ -145,7 +146,7 @@ export default {
 }
 .time:hover,
 .active {
-  color: rgb(9, 157, 220);
+  color: #3f9ddd;
   background-color: rgb(231, 238, 244);
 }
 .control {

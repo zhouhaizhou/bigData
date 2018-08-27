@@ -70,17 +70,19 @@ export default {
   width: 100% !important;
 }
 .menu-container0 .is-opened span {
-  color: rgb(0, 162, 243);
+  color:#27a3f2;
 }
 .menu-container0 .is-opened .is-active span{
    color:white !important;
 }
-
+.menu-container0 >>> .is-opened .el-menu{
+  background-color: #e4f4fd;
+}
 .menu-container0 >>> .el-menu-item-group__title {
   background-color: white;
 }
-.menu-container0 >>> li.is-active{
-background-color: #409EFF !important;
+.menu-container0 >>> li.el-menu-item.is-active{
+background-color: #5babd8 !important;
 color: white !important;
 }
 .menu-container0 >>> li.el-menu-item .is-active {
@@ -93,7 +95,7 @@ color: white !important;
    vertical-align: baseline;
 }
 .menu-container0 >>> .el-menu-item:hover {
-  background-color: rgb(226, 242, 252);
+  background-color: #e4f4fd !important;
 }
 .menu-container0 >>> .is-opened .el-icon-arrow-down:before {
   color: rgb(0, 162, 243) !important;

@@ -80,39 +80,8 @@
               </div>
             </div>
             <div class="provinces-position-wrap">
-              <div class="provinces-title-wraps float-left">
-                <div class="provinces-title-wrap">
-                  <div class="positon-title-wrap">
-                    <div class="position-pic"></div>
-                    <div class="position-title font-style12">台站选择</div>
-                  </div>
-                  <div class="all-select-wrap"><input type="radio">
-                    <div class="all-select-name">全选</div>
-                  </div>
-                </div>
-                <div class="provinces-wrap">
-                  <div class="province-wrap">
-                    <div v-for="province in modalData[0].dataDownLoad[0].sites" class="province">{{province.provinceName}}</div>
-                  </div>
-                </div>
-              </div>
-              <div class="arrow-wrap float-left">
-                <div class="arrow"></div>
-              </div>
 
-              <div class="province-sites float-left">
-
-                <!-- <div class="site-title">
-                  <div class="all-select-wrap"><input type="radio">
-                    <div class="all-select-name">全选</div>
-                  </div>
-                </div>
-
-                <div class="sites-wrap">
-                  <my-modal-city-sites></my-modal-city-sites>
-                </div> -->
-                <my-modal-city-sites></my-modal-city-sites>
-              </div>
+              <my-modal-provinces-pan :style="{height:'100%'}" :moduleEnName="moduleEnName"></my-modal-provinces-pan>
 
             </div>
             <div class="elements-select-wrap">
@@ -121,9 +90,7 @@
                   <div class="element-select-pic"></div>
                   <div class="element-select-name font-style12">要素选择</div>
                 </div>
-                <!-- <div class="all-select-wrap element-all-select-wrap-postion"><input type="radio">
-                  <div class="all-select-name">全选</div>
-                </div> -->
+
                 <div class="all-select-wrap element-all-select-wrap-postion">
                   <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
                 </div>
@@ -188,10 +155,12 @@
 
 <script>
 import myModalCitySites from "./modalCitySites";
+import myModalProvincesPan from "./modalProvincesPan";
 
 export default {
   components: {
-    myModalCitySites
+    myModalCitySites,
+    myModalProvincesPan
   },
   props: [
     "modalData",
@@ -200,7 +169,9 @@ export default {
     "timeType",
     "timeTypeValue",
     "startTimes",
-    "endTimes"
+    "endTimes",
+    "moduleEnName",
+    "parentModule"
   ],
   data() {
     return {
@@ -210,15 +181,71 @@ export default {
       isIndeterminate: true
     };
   },
+  mounted: {
+    //初始请求加载页面数据
+  },
   methods: {
-    goCart(){
+    goCart() {
       this.$router.push("/cart");
+    },
+    getFileContentData() {
+      //根据父组件传过来的变量，到后台请求数据   放到mounted钩子函数中
+      let self = this;
+      this.axios
+        .get("DataService.svc/GetProvince",{
+          params:{
+            
+          }
+        })
+        .then(response => {
+          //需要接收父组件传过来的参数去后台查询相应的省市和站点
+          resData = eval("(" + response.data + ")");
+          var provincesArr = [];
+          for (var i = 0; i < resData.length; i++) {
+            provincesArr[i] = {
+              provinceName: resData[i].province,
+              provinceCode: resData[i].provinceCode
+            };
+            // self.provinces.push(resData[i].province);
+            // self.provinceCode.push(resData[i].provinceCode);
+            //   provincesArr[i] = resData[i].province;
+          }
+          self.provinces = provincesArr;
+        })
+        .catch(response => {
+          console.log(response);
+        });
+    },
+    getElementData() {
+      //根据父组件传过来的变量，到后台请求数据   放到mounted钩子函数中
+       let self = this;
+      this.axios.get("DataService.svc/GetElement",{
+        params:{
+          
+        }
+      }).then(response => {
+        //需要接收父组件传过来的参数去后台查询相应的省市和站点
+        resData = eval("(" + response.data + ")");
+        var provincesArr = [];
+        for (var i = 0; i < resData.length; i++) {
+           provincesArr[i]={
+            provinceName:resData[i].province,
+            provinceCode:resData[i].provinceCode
+          };
+          // self.provinces.push(resData[i].province);
+          // self.provinceCode.push(resData[i].provinceCode);
+          //   provincesArr[i] = resData[i].province;
+        }
+         self.provinces = provincesArr;
+      }).catch(response => {
+          console.log(response);
+        });
     },
     Hidden() {
       //通过$emit引用组件传过来的hidden()事件
       this.$emit("hidden");
     },
-     handleCheckAllChange(val) {
+    handleCheckAllChange(val) {
       this.checkedCities = val ? this.modalData[0].dataDownLoad[0].element : [];
       this.isIndeterminate = false;
     },
@@ -291,7 +318,7 @@ export default {
   width: 70%;
   height: 100%;
   float: left;
-  font-size: 1em;
+  font-size: 0.95em;
 }
 
 .data-content {
@@ -416,8 +443,7 @@ export default {
 .date-name {
   font-size: 1.9em;
 }
-.date-value {
-}
+
 .provinces-position-wrap {
   float: left;
   height: 38%;
@@ -425,95 +451,13 @@ export default {
   padding-right: 4%;
   padding-top: 0.5%;
 }
-.provinces-title-wraps {
-  width: 44%;
-  height: 100%;
-}
-.provinces-title-wrap {
-  height: 14%;
-  float: left;
-  width: 100%;
-  padding-top: 0.5vh;
-}
-.positon-title-wrap {
-  height: 2vh;
-  float: left;
-  width: 50%;
-}
-.position-pic {
-  background: url("../../../assets/img/modal/position.png") no-repeat center
-    center;
-  width: 17%;
-  height: 2vh;
-  float: left;
-}
-.position-title {
-  padding-left: 20%;
-}
+
 .all-select-wrap {
   float: right;
   width: 53px;
   height: 18px;
 }
-.all-select-wrap input {
-  float: left;
-  margin-right: 7px;
-}
-.all-select-name {
-}
-.provinces-wrap {
-  height: 77%;
-  float: left;
-  width: 100%;
-  background-color: #f9fbfb;
-  border: solid #8080802b 0.5px;
-  overflow: hidden;
-  padding-bottom: 1vh;
-}
-.province-wrap {
-  width: 97%;
-  height: 100%;
-  padding-left: 3%;
-  padding-top: 2%;
-}
-.province {
-  width: 14%;
-  padding-left: 2.5%;
-  padding-top: 2.1%;
-  padding-right: 2.5%;
-  float: left;
-  color: #5476b7;
-  /* transform: scale(0.9,0.9); */
-  font-weight: bold;
-}
 
-.arrow-wrap {
-  width: 12%;
-  height: 98%;
-}
-.arrow {
-  width: 100%;
-  height: 100%;
-  background: url("../../../assets/img/modal/jiantou2.png") no-repeat center
-    center;
-}
-.province-sites {
-  width: 44%;
-  height: 99%;
-}
-.site-title {
-  height: 17%;
-}
-.sites-wrap {
-  height: 74%;
-  float: left;
-  width: 100%;
-  background-color: #f9fbfb;
-  border: solid #8080802b 0.5px;
-  overflow-x: hidden;
-}
-.site-radio-font-wrap {
-}
 .radio-wrap {
   float: left;
   margin-right: 3%;
@@ -555,7 +499,7 @@ export default {
 }
 .element-content {
   height: 80%;
-  width: 100%;
+  width: 98%;
   float: left;
   border: solid #8080802b 0.5px;
   padding-top: 0.8%;
@@ -564,7 +508,7 @@ export default {
 .element-content >>> .el-checkbox + .el-checkbox {
   margin-left: 0px;
 }
-.element-content>>> .el-checkbox {
+.element-content >>> .el-checkbox {
   margin-right: 8%;
   padding-top: 0.5%;
 }
