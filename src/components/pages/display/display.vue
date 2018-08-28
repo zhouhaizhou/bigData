@@ -37,9 +37,9 @@ export default {
         this.selPlayInterval=null;
         this.playInterval=null;
         this.getData("", "", "", "", "");
-      }
-    },
-    deep:true
+      },
+      deep:true
+    }
   },
   data() {
     return {
@@ -83,6 +83,7 @@ export default {
             self.isFirst=false;
             if(data.endTime=='WRF'){
               data.endTime="";
+              data.area=["华东"];
             }
             self.condition = data;
             self.playInterval = self.condition.intervalOpt[0]["key"];

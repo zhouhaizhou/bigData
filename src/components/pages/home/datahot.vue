@@ -117,8 +117,41 @@ export default {
     };
   },
   mounted(){
+    this.getDownLoadRankData();
+    this.GetDynamicInfo();
+    this.GetOpenStat();
   },
-  methods: {}
+  methods: {
+    getDownLoadRankData(){
+      let time=this._global.formatDate(new Date(),'yyyyMMdd000000');
+      this.axios.get("HomeDataService.svc/GetDownloadRank",{
+        params:{
+          time:time
+        }
+      }).then(response=>{
+        let data=response.data;
+        data=data.replace(/DataType/g,"txt");
+        this.datahot[0].item=JSON.parse(data);
+      })
+      .catch(response=>{
+        console.log(response)
+      })
+    },
+    GetDynamicInfo(){
+      this.axios.get("HomeDataService.svc/GetDynamicInfo").then(res=>{
+        let data=res.data;
+        data=data.replace(/Item/g,"txt").replace(/Date/g,"time");
+        this.datahot[1].item=JSON.parse(data);
+      }).catch(res=>console.log(res))
+    },
+    GetOpenStat(){
+      this.axios.get("HomeDataService.svc/GetOpenStat").then(res=>{
+        let data=res.data;
+        data=data.replace(/name/g,"txt").replace(/date/g,"time").replace(/dataSize/g,"stat");
+        this.datahot[2].item=JSON.parse(data);
+      }).catch(res=>console.log(res))
+    }
+  }
 };
 </script>
 

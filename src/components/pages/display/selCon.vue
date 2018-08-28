@@ -55,10 +55,15 @@ export default {
     }
   },
   watch: {
+     $route:{
+      handler(val){
+        this.areaActive= 0,
+        this.typeActive= 0,
+        this.selPlayInterval=null
+      },
+      deep:true
+    },
     playInterval() {
-      this.areaActive= 0,
-      this.typeActive= 0,
-      this.selPlayInterval=null
       this.selPlayInterval = this.playInterval;
     },
     selPlayInterval(val){
