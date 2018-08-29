@@ -52,8 +52,14 @@ export default {
       this.selectIndex=this.selectedTime;
     },
     selectIndex(val) {
-      let temp = this.times[val].url;
-      let path = this.webProduct + temp;
+      let path="";
+      if(val!=-1){
+        let temp = this.times[val].url;
+        path ='./static/webProduct/'+temp;
+      }
+      //temp=temp.split('?')[0];
+      //let path = this.webProduct + temp;
+      // this.$emit("selShowImg", path);
       this.$emit("selShowImg", path);
     }
   },

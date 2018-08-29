@@ -52,7 +52,7 @@ export default {
 .menu-container0 >>> li .el-submenu__title {
   background-color: white !important;
   border-bottom: 1px solid #ddd;
-  font-size: 18px;
+  font-size: 16px;
 }
 .menu-container0 >>> .indis {
   display: none !important;
@@ -61,10 +61,10 @@ export default {
   border-bottom: 1px solid #ddd;
 }
 .menu-container0 .el-menu-item span{
-  font-size: 18px;
+  font-size: 16px;
 }
 .menu-container0 .el-menu-item-group .el-menu-item span{
-  font-size: 15px;
+  font-size: 13px;
 }
 .el-menu{
   width: 100% !important;
@@ -102,4 +102,13 @@ color: white !important;
   font-size: 14px;
   font-weight: bold;
 }
+.menu-container0 >>>.el-submenu .el-menu-item{
+  height: 45px;
+  line-height: 45px;
+}
+.menu-container0 >>>.el-menu-item,.menu-container0 >>> .el-submenu__title{
+  height: 45px;
+  line-height: 45px;
+}
+
 </style>

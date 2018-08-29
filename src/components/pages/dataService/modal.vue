@@ -3,7 +3,7 @@
     <div id="modal" class="body-background">
       <div class="modal-wraps">
         <div class="modal-wrap-left">
-          <div class="top-wrap">
+          <div class="top-wrap" v-drag>
             <div class="top-font">{{modalData[0].title}}</div>
           </div>
           <div class="middle-wrap">
@@ -156,7 +156,7 @@
 <script>
 import myModalCitySites from "./modalCitySites";
 import myModalProvincesPan from "./modalProvincesPan";
-
+import drag from "../../../utils/directive.js";
 export default {
   components: {
     myModalCitySites,

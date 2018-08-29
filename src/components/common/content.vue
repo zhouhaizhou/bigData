@@ -43,7 +43,7 @@ export default {
 <style scoped>
 .side {
   position: fixed;
-  width: 15vw;
+  width: 14vw;
   z-index: 2;
   left: 2.5vw;
   border: 1px solid #ccc;

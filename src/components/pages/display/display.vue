@@ -120,8 +120,10 @@ export default {
     },
     download() {
       let img = document.querySelector(".loadImg").src;
+      let temp=img.split('/');
+      let filename=temp[temp.length-1].split('?')[0];
       let a = document.createElement("a");
-      a.download = img;
+      a.download = filename;
       a.href = img;
       a.click();
     },

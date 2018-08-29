@@ -8,56 +8,63 @@
           <div class="sub-title">下载清单</div>
         </div>
         <div class="items-wrap">
-          <div class="item-wrap" v-for="(item,index) in items">
-            <div class="left-wrap">
-              <input type="checkbox" class="check-style">
-            </div>
-            <div class="right-wrap">
-              <div class="right-title">
-                <span class="title-index">{{index+1}}</span>
-                <span class="title-name">{{item.title}}</span>
+          <div class="item-tr-wrap" v-for="(item,index) in items">
+            <div class="item-wrap">
+              <div class="left-wrap">
+                <el-checkbox v-model="item.checked"></el-checkbox>
+                <!-- <input type="checkbox" class="check-style" @click="checkboxNum(item)"> -->
               </div>
-              <div class="right-content">
-                <div class="date-wrap span-wrap">
-                  <span>日期：</span>
-                  <span>{{item.date}}</span>
+              <div class="right-wrap">
+                <div class="right-title">
+                  <span class="title-index">{{index+1}}</span>
+                  <span class="title-name">{{item.title}}</span>
                 </div>
-                <div class="province-wrap span-wrap">
-                  <span>省(市)：</span>
-                  <span>{{item.province}}</span>
-                </div>
-                <div class="city-site-wrap span-wrap">
-                  <span>城市站点：</span>
-                  <span>{{item.citySites}}</span>
-                </div>
-                <div class="element-wrap span-wrap">
-                  <span>气象要素：</span>
-                  <span>{{item.element}}</span>
-                </div>
-                <div class="file-famat-wrap span-wrap">
-                  <span>文件格式：</span>
-                  <span>{{item.fileFamat}}</span>
-                </div>
-                <div class="time-interval-wrap span-wrap">
-                  <span>时间间隔：</span>
-                  <span>{{item.timeInterval}}</span>
+                <div class="right-content">
+                  <div class="date-wrap span-wrap">
+                    <span>日期：</span>
+                    <span>{{item.date}}</span>
+                  </div>
+                  <div class="province-wrap span-wrap">
+                    <span>省(市)：</span>
+                    <span>{{item.province}}</span>
+                  </div>
+                  <div class="city-site-wrap span-wrap">
+                    <span>城市站点：</span>
+                    <span>{{item.citySites}}</span>
+                  </div>
+                  <div class="element-wrap span-wrap">
+                    <span>气象要素：</span>
+                    <span>{{item.elements}}</span>
+                  </div>
+                  <div class="file-famat-wrap span-wrap">
+                    <span>文件格式：</span>
+                    <span>{{item.fileFamat}}</span>
+                  </div>
+                  <div class="time-interval-wrap span-wrap">
+                    <span>时间间隔：</span>
+                    <span>{{item.timeInterval}}</span>
+                  </div>
                 </div>
               </div>
             </div>
+            <div class="line"></div>
           </div>
         </div>
         <div class="boot-wrap">
           <div class="select-all-wrap">
-            <span><input type="checkbox"></span>
+            <el-checkbox v-model="all" @change="allChecked()"></el-checkbox>
             <span>全选文件</span>
           </div>
           <div class="select-num-wrap">
             <span>已选择</span>
-            <span>1</span>
+            <span>{{counts}}</span>
             <span>个文件</span>
           </div>
           <div class="download-button">
-            <el-button type="primary" icon="el-icon-download">下载</el-button>
+            <el-button type="danger" icon="el-icon-delete" @click="delect">删除</el-button>
+          </div>
+          <div class="download-button">
+            <el-button type="primary" icon="el-icon-download" @click="download">下载</el-button>
           </div>
         </div>
         <div class="clearfloat"></div>
@@ -77,8 +84,12 @@ export default {
   },
   data() {
     return {
+      all: true,
+      ids: [],
       items: [
         {
+          id: "1",
+          checked: true,
           title: "中国地面气象站逐小时观测资料",
           date: "20180706 - 20180806",
           province: "上海",
@@ -88,6 +99,8 @@ export default {
           timeInterval: "24小时"
         },
         {
+          id: "2",
+          checked: false,
           title: "中国地面气象站逐小时观测资料",
           date: "20180706 - 20180806",
           province: "上海",
@@ -97,6 +110,8 @@ export default {
           timeInterval: "24小时"
         },
         {
+          id: "3",
+          checked: false,
           title: "中国地面气象站逐小时观测资料",
           date: "20180706 - 20180806",
           province: "上海",
@@ -106,6 +121,8 @@ export default {
           timeInterval: "24小时"
         },
         {
+          id: "4",
+          checked: false,
           title: "中国地面气象站逐小时观测资料",
           date: "20180706 - 20180806",
           province: "上海",
@@ -115,6 +132,8 @@ export default {
           timeInterval: "24小时"
         },
         {
+          id: "5",
+          checked: false,
           title: "中国地面气象站逐小时观测资料",
           date: "20180706 - 20180806",
           province: "上海",
@@ -124,6 +143,8 @@ export default {
           timeInterval: "24小时"
         },
         {
+          id: "6",
+          checked: false,
           title: "中国地面气象站逐小时观测资料",
           date: "20180706 - 20180806",
           province: "上海",
@@ -133,6 +154,8 @@ export default {
           timeInterval: "24小时"
         },
         {
+          id: "7",
+          checked: false,
           title: "中国地面气象站逐小时观测资料",
           date: "20180706 - 20180806",
           province: "上海",
@@ -144,7 +167,162 @@ export default {
       ]
     };
   },
-  methods() {}
+  watch: {
+    items: {
+      handler() {
+        let self = this;
+        this.items.filter((item, index) => {
+          let id = item.id;
+          let num = self.ids.indexOf(id);
+          if (item.checked) {
+            if (num == -1) {
+              self.ids.push(item.id);
+            }
+          } else {
+            if (num > -1) {
+              self.ids.splice(num, 1);
+            }
+          }
+        });
+        this.ids.sort();
+      },
+      deep: true
+    }
+  },
+  computed: {
+    counts() {
+      let num = 0;
+      this.items.filter(item => {
+        if (item.checked) {
+          num++;
+        }
+      });
+      if (num < this.items.length) {
+        //判断是否全选了
+        this.all = false;
+      } else {
+        this.all = true;
+      }
+      return num;
+    }
+  },
+  mounted() {
+    this.getDownLoadData();
+  },
+  methods: {
+    allChecked() {
+      if (!this.all) {
+        this.filterItems(false);
+      } else {
+        this.filterItems(true);
+      }
+    },
+    filterItems(flag) {
+      this.items.filter(item => {
+        item.checked = flag;
+      });
+      this.all = flag;
+    },
+    getDownLoadData() {
+      this.axios
+        .get("DataService.svc/GetActiveList", {
+          params: {
+            userName: "readearth"
+          }
+        })
+        .then(res => {
+          let data = res.data;
+          data = data
+            .replace(/elementCn/g, "elements")
+            .replace(/citySiteDetail/g, "citySites")
+            .replace(/famat/g, "fileFamat")
+            .replace(/moduleCnName/g, "title");
+          let obj = JSON.parse(data);
+          obj.filter(item => {
+            item.checked = true;
+          });
+          this.items = obj;
+          console.log(res.data);
+        })
+        .catch(res => {
+          console.log(res.data);
+        });
+    },
+    getIds() {
+      let ids = "";
+      this.ids.forEach((element, index) => {
+        if (index == this.ids.length - 1) {
+          ids += element;
+        } else {
+          ids += element + ",";
+        }
+      });
+      return ids;
+    },
+    delect() {
+      if (this.ids.length == 0) {
+        alert("未选择数据，请选择后再进行此操作！");
+        return;
+      }
+      let ids = this.getIds();
+      this.axios
+        .get("DataService.svc/deleteDownList", {
+          params: {
+            userName: "readearth",
+            ids: ids
+          }
+        })
+        .then(res => {
+          if (res.data == this.ids.length) {
+            alert("删除成功！");
+          }
+          this.getDownLoadData();
+        })
+        .catch(res => {
+          alert("删除失败！");
+          console.log(res.data);
+        });
+    },
+    download() {
+      if (this.ids.length == 0) {
+        alert("未选择数据，请选择后再进行此操作！");
+        return;
+      }
+      const loading = this.$loading({
+          lock: true,
+          text: '正在请求数据...',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+      });
+      let ids = this.getIds();
+      this.axios
+        .get("DataService.svc/BatchDownload", {
+          params: {
+            userName: "readearth",
+            ids: ids
+          }
+        })
+        .then(res => {
+          let data = res.data;
+          loading.close();
+          let arr = JSON.parse(data);
+          let a = document.createElement("a");
+          let path = this._global.downPath;
+          arr.forEach(element => {
+            let fileName = element.zipDownUrl;
+            let id = element.id;
+            let fullPath = path + id + "/" + fileName;
+            a.download = fileName;
+            a.href = fullPath;
+            a.click();
+          });
+        })
+        .catch(res => {
+          console.log(res.data);
+          alert("下载失败");
+        });
+    }
+  }
 };
 </script>
 
@@ -161,8 +339,8 @@ export default {
   width: 73%;
   background-color: white;
   margin-top: 1%;
-  margin-bottom: 1%;
   border: solid 0.5px #8080805e;
+  margin-bottom: 1%;
 }
 .nav-marker {
   float: left;
@@ -186,10 +364,9 @@ export default {
   font-weight: bold;
 }
 .item-wrap {
-  border-bottom: solid #808080c2 0.5px;
   padding-left: 3%;
-  padding-top: 1%;
-  padding-bottom: 0.5%;
+  padding-top: 1.9%;
+  /* padding-bottom: 0.5%; */
   width: 97%;
   height: 20vh;
 }
@@ -210,6 +387,11 @@ export default {
 .span-wrap {
   padding-top: 1.5%;
 }
+.line {
+  height: 0.1vh;
+  background-color: #808080c2;
+  margin-top: 1%;
+}
 
 .boot-wrap {
   display: flex;
@@ -222,7 +404,7 @@ export default {
   width: 7%;
 }
 .select-num-wrap {
-  margin-left: 68%;
+  margin-left: 60%;
 }
 .select-num-wrap span:nth-child(2) {
   color: red;
