@@ -3,35 +3,35 @@
     <div id="modal" class="body-background">
       <div class="modal-wraps">
         <div class="modal-wrap-left">
-          <div class="top-wrap" v-drag>
-            <div class="top-font">{{modalData[0].title}}</div>
+          <div class="top-wrap">
+            <div class="top-font">{{moduleCnName}}</div>
           </div>
           <div class="middle-wrap">
             <div class="middle">
               <div class="middle-name-wrap">
-                <span>{{modalData[0].dataContent[0].name}}</span>
+                <span>资料内容</span>
               </div>
               <div class="middle-left-wrap">
-                <div class="data-content padding-bottom">{{modalData[0].dataContent[0].content}}</div>
+                <div class="data-content padding-bottom">{{modalData[0].subTitle}}</div>
                 <div class="data-start-time-wrap padding-bottom">
                   <div class="data-start-time-name float-left font-style1">数据起始时间：</div>
-                  <div class="data-start-time-value font-style2">{{modalData[0].dataContent[0].startTime}}</div>
+                  <div class="data-start-time-value font-style2">{{modalData[0].startTime}}</div>
                 </div>
                 <div class="data-end-time-wrap padding-bottom">
                   <div class="data-end-time-wrap-name float-left font-style1">数据终止时间：</div>
-                  <div class="data-end-time-wrap-value font-style2">{{modalData[0].dataContent[0].endTime}}</div>
+                  <div class="data-end-time-wrap-value font-style2">{{modalData[0].endTime}}</div>
                 </div>
                 <div class="update-wrap padding-bottom">
                   <div class="update-name float-left font-style1">更新频率：</div>
-                  <div class="update-value font-style2">{{modalData[0].dataContent[0].upDateRate}}</div>
+                  <div class="update-value font-style2">{{modalData[0].UpdateInter}}</div>
                 </div>
                 <div class="data-soure-wrap padding-bottom">
                   <div class="data-soure-name float-left font-style1">数据源：</div>
-                  <div class="data-soure-value font-style2">{{modalData[0].dataContent[0].dataSource}}</div>
+                  <div class="data-soure-value font-style2">{{modalData[0].dataSource}}</div>
                 </div>
                 <div class="share-wrap padding-bottom">
                   <div class="share-name float-left font-style1">共享级别：</div>
-                  <div class="share-value font-style2">{{modalData[0].dataContent[0].shareClass}}</div>
+                  <div class="share-value font-style2">{{modalData[0].shareClassID}}</div>
                 </div>
 
               </div>
@@ -39,17 +39,17 @@
                 <div class="comments-wrap padding-bottom border-bottom">
                   <div class="comment-pic float-left icon-style1"></div>
                   <div class="comment-name float-left icon-font-style">评论</div>
-                  <div class="comment-count">{{modalData[0].dataContent[0].commentCount}}</div>
+                  <div class="comment-count">{{modalData[0].commentCount}}</div>
                 </div>
                 <div class="likes-wrap padding-bottom border-bottom">
                   <div class="likes-pic float-left icon-style1"></div>
                   <div class="likes-name float-left icon-font-style">收藏</div>
-                  <div class="likes-count ">{{modalData[0].dataContent[0].likesCount}}</div>
+                  <div class="likes-count ">{{modalData[0].likesCount}}</div>
                 </div>
                 <div class="views-wrap padding-bottom border-bottom">
                   <div class="views-pic float-left icon-style1"></div>
                   <div class="views-name float-left icon-font-style">浏览量</div>
-                  <div class="views-count ">{{modalData[0].dataContent[0].viewCount}}</div>
+                  <div class="views-count ">{{modalData[0].viewCount}}</div>
                 </div>
                 <div class="share-wrap padding-bottom border-bottom">
                   <div class="share-pic float-left icon-style1"></div>
@@ -69,19 +69,19 @@
               </div>
               <div class="date-value">
                 <div class="start-time">
-                  <el-date-picker v-model="startTimes" type="datetime" prefix-icon="1">
+                  <el-date-picker v-model="startTimes" type="datetime" format="yyyy-MM-dd HH" value-format="yyyy-MM-dd HH" clear-icon="close" prefix-icon="1">
                   </el-date-picker>
                 </div>
                 <div class="dao font-style1">到</div>
                 <div class="end-time">
-                  <el-date-picker v-model="endTimes" type="datetime" prefix-icon="1">
+                  <el-date-picker v-model="endTimes" type="datetime" format="yyyy-MM-dd HH" value-format="yyyy-MM-dd HH" clear-icon="close" prefix-icon="1">
                   </el-date-picker>
                 </div>
               </div>
             </div>
             <div class="provinces-position-wrap">
 
-              <my-modal-provinces-pan :style="{height:'100%'}" :moduleEnName="moduleEnName"></my-modal-provinces-pan>
+              <my-modal-provinces-pan ref="c1" v-on:getParams="getChildComProvinceParams" v-on:getCityParams="getChildComCityParams" :style="{height:'100%'}" :moduleEnName="moduleEnName"></my-modal-provinces-pan>
 
             </div>
             <div class="elements-select-wrap">
@@ -99,8 +99,8 @@
               <div class="element-content">
                 <!-- <div class="element-radio-font-wrap" v-for="ele in modalData[0].dataDownLoad[0].element">
                   <div class="radio-wrap"><input type="radio"></div>{{ele}}</div> -->
-                <el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">
-                  <el-checkbox v-for="city in modalData[0].dataDownLoad[0].element" :label="city" :key="city">{{city}}</el-checkbox>
+                <el-checkbox-group v-model="checkedElements" @change="handleCheckedCitiesChange">
+                  <el-checkbox v-for="(element,index) in elements" :label="index" :key="index">{{element.elementCnName}}</el-checkbox>
                 </el-checkbox-group>
               </div>
             </div>
@@ -113,28 +113,28 @@
                 <div class="famat-name float-left">文件格式：</div>
                 <div class="famat-value float-left">
                   <el-select v-model="famatValue" placeholder="请选择">
-                    <el-option v-for="item in famatOptions" :key="item.value" :label="item.label" :value="item.value">
+                    <el-option v-for="item in famatOptions" :key="item.label" :label="item.label" :value="item.label">
                     </el-option>
                   </el-select>
                 </div>
 
                 <div class="time-interval-name float-left">时间间隔：</div>
                 <div class="time-interval-value float-left">
-                  <el-input placeholder="请输入内容"></el-input>
+                  <el-input v-model="timeInput" @keyup.native="proving1" @blur="checkInputIsEmpty()" placeholder="请输入数字"></el-input>
                 </div>
                 <div class="time-interval-unit ">
-                  <el-select v-model="timeTypeValue" placeholder="请选择">
-                    <el-option v-for="item in timeType" :key="item.value" :label="item.label" :value="item.value">
+                  <el-select v-model="timeValue" placeholder="请选择">
+                    <el-option v-for="item in timeType" :key="item.value" :label="item.label" :value="item.label">
                     </el-option>
                   </el-select>
                 </div>
               </div>
             </div>
             <div class="btns-wrap">
-              <div class="now-download-wrap">
+              <div class="now-download-wrap" @click="nowDownLoad">
                 <el-button type="success">直接下载</el-button>
               </div>
-              <div class="add-in-car">
+              <div class="add-in-car" @click="insertCart">
                 <el-button type="primary">加入清单</el-button>
               </div>
             </div>
@@ -154,106 +154,408 @@
 </template>
 
 <script>
-import myModalCitySites from "./modalCitySites";
 import myModalProvincesPan from "./modalProvincesPan";
-import drag from "../../../utils/directive.js";
+
 export default {
   components: {
-    myModalCitySites,
     myModalProvincesPan
   },
-  props: [
-    "modalData",
-    "famatOptions",
-    "famatValue",
-    "timeType",
-    "timeTypeValue",
-    "startTimes",
-    "endTimes",
-    "moduleEnName",
-    "parentModule"
-  ],
+  props: ["moduleEnName", "moduleCnName"],
+  watch:{
+    moduleEnName(){
+      if(this.moduleEnName!=""){
+        this.getFileContentData();
+        this.getElementData();
+        this.getTime();
+      }
+    }
+  },
   data() {
     return {
+      elementCnName: "",
+      modalData: [],
+      province: "",
+      provinceData: "",
+      citySite: "",
+      citySiteDetail: "",
       checkAll: false,
-      checkedCities: ["气压"],
-      // cities: modalData[0].dataDownLoad[0].element,
-      isIndeterminate: true
+      checkedElements: [],
+      isIndeterminate: true,
+      elements: [],
+      elementCnNameArr: [],
+      elementsIndexArr: [],
+      famatOptions: [
+        {
+          value: "0",
+          label: "txt"
+        },
+        {
+          value: "1",
+          label: "csv"
+        }
+      ],
+      famatValue: "csv",
+      timeInput: "1",
+      timeValue: "小时",
+      timeType: [
+        {
+          value: "0",
+          label: "年"
+        },
+        {
+          value: "1",
+          label: "月"
+        },
+        {
+          value: "2",
+          label: "日"
+        },
+        {
+          value: "3",
+          label: "时"
+        }
+      ],
+      timeTypeValue: "",
+      startTimes: "",
+      endTimes:this._global.formatDate(new Date(),'yyyy-MM-dd hh')
     };
   },
-  mounted: {
+  mounted() {
     //初始请求加载页面数据
+    // this.getFileContentData();
+    // this.getElementData();
+    // this.getTime();
   },
   methods: {
+    getTime() {
+      // let date = new Date()
+      // let y = date.getFullYear()
+      // let m = date.getMonth() + 1
+      // let d = date.getDate()-1
+      // let h=date.getHours()-1
+      // console.log(d)
+      // let time = y + '-' + m + '-' + d+' '+h
+      // this.startTimes = time
+
+      const start = new Date();
+      start.setTime(start.getTime() - 3600 * 1000 * 1); //提前一小时
+      // start.setTime(start.getTime() - 3600 * 1000 * 24);//提前一天
+      // start.setTime(start.getTime() - 3600 * 1000 * 24*30);//提前一个月
+      // start.setTime(start.getTime() - 3600 * 1000 * 24*30*12);//提前一年
+      this.startTimes =this._global.formatDate(start,'yyyy-MM-dd hh');
+    },
+    getChildComProvinceParams(val) {
+      this.province = val.province;
+      this.provinceData = val.provinceData;
+    },
+    getChildComCityParams(val) {
+      this.citySite = val.citySite;
+      this.citySiteDetail = val.citySiteDetail;
+    },
     goCart() {
       this.$router.push("/cart");
     },
     getFileContentData() {
-      //根据父组件传过来的变量，到后台请求数据   放到mounted钩子函数中
       let self = this;
       this.axios
-        .get("DataService.svc/GetProvince",{
-          params:{
-            
+        .get("DataService.svc/getSubTitle", {
+          params: {
+            moduleEnName: this.moduleEnName //待修改为moduleEnName，先用固定值代替
+           // moduleEnName: "hourData" //待修改为moduleEnName，先用固定值代替
           }
         })
         .then(response => {
-          //需要接收父组件传过来的参数去后台查询相应的省市和站点
-          resData = eval("(" + response.data + ")");
-          var provincesArr = [];
-          for (var i = 0; i < resData.length; i++) {
-            provincesArr[i] = {
-              provinceName: resData[i].province,
-              provinceCode: resData[i].provinceCode
-            };
-            // self.provinces.push(resData[i].province);
-            // self.provinceCode.push(resData[i].provinceCode);
-            //   provincesArr[i] = resData[i].province;
-          }
-          self.provinces = provincesArr;
+          let resData = eval("(" + response.data + ")");
+          self.modalData = resData;
         })
         .catch(response => {
           console.log(response);
         });
     },
     getElementData() {
-      //根据父组件传过来的变量，到后台请求数据   放到mounted钩子函数中
-       let self = this;
-      this.axios.get("DataService.svc/GetElement",{
-        params:{
-          
-        }
-      }).then(response => {
-        //需要接收父组件传过来的参数去后台查询相应的省市和站点
-        resData = eval("(" + response.data + ")");
-        var provincesArr = [];
-        for (var i = 0; i < resData.length; i++) {
-           provincesArr[i]={
-            provinceName:resData[i].province,
-            provinceCode:resData[i].provinceCode
-          };
-          // self.provinces.push(resData[i].province);
-          // self.provinceCode.push(resData[i].provinceCode);
-          //   provincesArr[i] = resData[i].province;
-        }
-         self.provinces = provincesArr;
-      }).catch(response => {
+      let self = this;
+      this.axios
+        .get("DataService.svc/GetElement", {
+          params: {
+            DataType: this.moduleEnName //待修改为moduleEnName，先用固定值代替
+            //DataType: "cimissHour" //待修改为moduleEnName，先用固定值代替
+          }
+        })
+        .then(response => {
+          let resData = eval("(" + response.data + ")");
+          var elementsArr = [];
+          self.elementCnNameArr=[];
+          self.elementsIndexArr=[];
+          for (var i = 0; i < resData.length; i++) {
+            elementsArr[i] = {
+              id: resData[i].id,
+              elementCnName: resData[i].elementCn,
+              elementEnName: resData[i].elementEn
+            };
+            self.elementCnNameArr.push(resData[i].elementCn);
+            self.elementsIndexArr.push(i);
+          }
+          self.elements = elementsArr;
+        })
+        .catch(response => {
           console.log(response);
         });
+    },
+    nowDownLoad() {
+      var data = this.getNowFormatDate();
+      var nowTime = data.toString().replace(/[^0-9]/gi, "");
+
+      //处理时间为数字字符串
+      var startT = this.startTimes.replace(/[^0-9]/gi, "");
+      var endT = this.endTimes.replace(/[^0-9]/gi, "");
+      // alert(this.checkedElements);
+      var checkedIndex = this.checkedElements;
+      var eleObj = {
+        eleEn: [],
+        eleCn: []
+      };
+      if (checkedIndex.length != 0) {
+        for (var i = 0; i < checkedIndex.length; i++) {
+          eleObj.eleEn.push(
+            this.elements[this.checkedElements[i]].elementEnName
+          );
+          eleObj.eleCn.push(
+            this.elements[this.checkedElements[i]].elementCnName
+          );
+        }
+      } else {
+        eleObj.eleEn.push("");
+        eleObj.eleCn.push("");
+      }
+      var eleEnStr = eleObj.eleEn.toString();
+      var eleCnStr = eleObj.eleCn.toString();
+      var timeIntervalStr = this.timeInput + this.timeValue;
+
+      var comparTime = startT > endT;
+      if (startT == "" || endT == "") {
+        alert("选择的日期不能空！");
+        return;
+      } else if (comparTime == true) {
+        alert("起始时间不能大于结束时间！");
+        return;
+      } else if (this.citySite == "" || this.citySiteDetail == "") {
+        alert("请选择省市对应的站点！");
+        return;
+      } else if (eleEnStr == "" || eleCnStr == "") {
+        alert("请选择要素！");
+        return;
+      } else {
+        var obj = {
+          userName: "readearth",
+          downTime: nowTime + "",
+          moduleEnName: this.moduleEnName,
+          date: startT + "0000-" + endT + "0000",
+          province: this.province,
+          provinceData: this.provinceData,
+          citySite: this.citySite,
+          citySiteDetail: this.citySiteDetail,
+          elementEn: eleEnStr,
+          elementCn: eleCnStr,
+          famat: this.famatValue,
+          timeInterval: timeIntervalStr,
+          insertTime: nowTime,
+          downState: "1",
+          isDown: "1"
+        };
+
+        var objToStr = JSON.stringify(obj);
+        //添加loading加载层
+        const loading = this.$loading({
+          lock: true,
+          text: "正在请求数据...",
+          spinner: "el-icon-loading",
+          background: "rgba(0, 0, 0, 0.7)"
+        });
+
+        let self = this;
+        this.axios
+          .get("DataService.svc/insertDownList", {
+            params: {
+              funParams: objToStr //待修改为moduleEnName，先用固定值代替
+            }
+          })
+          .then(res => {
+            let data = res.data;
+            loading.close();
+            let arr = JSON.parse(data);
+            let a = document.createElement("a");
+            let path = this._global.downPath;
+            arr.result.forEach(element => {
+              let fileName = element.zipDownUrl;
+              let id = element.id;
+              let fullPath = path + id + "/" + fileName;
+              a.download = fileName;
+              a.href = fullPath;
+              a.click();
+            });
+          })
+          .catch(response => {
+            // console.log(res.data);
+            alert("下载失败");
+          });
+      }
+    },
+    getSTime(val) {
+      // var d = new Date(val);
+      // this.startTimes = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate()+'-'+d.getHours();
+    },
+    getETime(val) {
+      // var d = new Date(val);
+      // this.endTimes = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate()+' '+d.getHours();
+    },
+    getNowFormatDate() {
+      var date = new Date();
+      var seperator1 = "-";
+      var seperator2 = ":";
+      var month = date.getMonth() + 1;
+
+      var strDate = date.getDate();
+      if (month >= 1 && month <= 9) {
+        month = "0" + month;
+      }
+      if (strDate >= 0 && strDate <= 9) {
+        strDate = "0" + strDate;
+      }
+
+      var strHour = date.getHours();
+      if (strHour >= 0 && strHour <= 9) {
+        strHour = "0" + strHour;
+      }
+
+      var strMin = date.getMinutes();
+      if (strMin >= 0 && strMin <= 9) {
+        strMin = "0" + strMin;
+      }
+
+      var strSec = date.getSeconds();
+      if (strSec >= 0 && strSec <= 9) {
+        strSec = "0" + strSec;
+      }
+
+      var currentdate =
+        date.getFullYear() +
+        seperator1 +
+        month +
+        seperator1 +
+        strDate +
+        " " +
+        strHour +
+        seperator2 +
+        strMin +
+        seperator2 +
+        strSec;
+      return currentdate;
+    },
+    insertCart() {
+      var data = this.getNowFormatDate();
+      var nowTime = data.toString().replace(/[^0-9]/gi, "");
+
+      //处理时间为数字字符串
+      var startT = this.startTimes.replace(/[^0-9]/gi, "");
+      var endT = this.endTimes.replace(/[^0-9]/gi, "");
+      // alert(this.checkedElements);
+      var checkedIndex = this.checkedElements;
+      var eleObj = {
+        eleEn: [],
+        eleCn: []
+      };
+      if (checkedIndex.length != 0) {
+        for (var i = 0; i < checkedIndex.length; i++) {
+          eleObj.eleEn.push(
+            this.elements[this.checkedElements[i]].elementEnName
+          );
+          eleObj.eleCn.push(
+            this.elements[this.checkedElements[i]].elementCnName
+          );
+        }
+      } else {
+        eleObj.eleEn.push("");
+        eleObj.eleCn.push("");
+      }
+      var eleEnStr = eleObj.eleEn.toString();
+      var eleCnStr = eleObj.eleCn.toString();
+      var timeIntervalStr = this.timeInput + this.timeValue;
+
+      var comparTime = startT > endT;
+      if (startT == "" || endT == "") {
+        alert("选择的日期不能空！");
+        return;
+      } else if (comparTime == true) {
+        alert("起始时间不能大于结束时间！");
+        return;
+      } else if (this.citySite == "" || this.citySiteDetail == "") {
+        alert("请选择省市对应的站点！");
+        return;
+      } else if (eleEnStr == "" || eleCnStr == "") {
+        alert("请选择要素！");
+        return;
+      } else {
+        var obj = {
+          userName: "readearth",
+          downTime: nowTime + "",
+          moduleEnName: this.moduleEnName,
+          date: startT + "0000-" + endT + "0000",
+          province: this.province,
+          provinceData: this.provinceData,
+          citySite: this.citySite,
+          citySiteDetail: this.citySiteDetail,
+          elementEn: eleEnStr,
+          elementCn: eleCnStr,
+          famat: this.famatValue,
+          timeInterval: timeIntervalStr,
+          insertTime: nowTime,
+          downState: "0",
+          isDown: "0"
+        };
+
+        var objToStr = JSON.stringify(obj);
+
+        let self = this;
+        this.axios
+          .get("DataService.svc/insertDownList", {
+            params: {
+              funParams: objToStr //待修改为moduleEnName，先用固定值代替
+            }
+          })
+          .then(response => {
+            let resData = eval("(" + response.data + ")");
+            alert("加入清单成功！");
+          })
+          .catch(response => {
+            console.log(response);
+            alert("加入清单失败！");
+          });
+      }
+    },
+    //      验证只能输入正整数
+    proving1() {
+      this.timeInput = this.timeInput.replace(/[^\.\d]/g, "");
+      this.timeInput = this.timeInput.replace(".", "");
+    },
+    checkInputIsEmpty() {
+      if (this.timeInput == "") {
+        this.timeInput = "1";
+      }
     },
     Hidden() {
       //通过$emit引用组件传过来的hidden()事件
       this.$emit("hidden");
     },
     handleCheckAllChange(val) {
-      this.checkedCities = val ? this.modalData[0].dataDownLoad[0].element : [];
+      this.checkedElements = val ? this.elementsIndexArr : [];
+      // this.checkedElementsEn = val ? this.elementEnNameArr : [];
       this.isIndeterminate = false;
     },
     handleCheckedCitiesChange(value) {
       let checkedCount = value.length;
-      this.checkAll = checkedCount === this.cities.length;
+      this.checkAll = checkedCount === this.elements.length;
       this.isIndeterminate =
-        checkedCount > 0 && checkedCount < this.cities.length;
+        checkedCount > 0 && checkedCount < this.elements.length;
     }
   }
 };
@@ -465,6 +767,7 @@ export default {
 .elements-select-wrap {
   float: left;
   height: 30%;
+  width: 91%;
   padding-left: 5%;
   padding-right: 4%;
 }
@@ -509,7 +812,7 @@ export default {
   margin-left: 0px;
 }
 .element-content >>> .el-checkbox {
-  margin-right: 8%;
+  width: 20%;
   padding-top: 0.5%;
 }
 .element-radio-font-wrap {
@@ -594,7 +897,7 @@ export default {
   /* height: 30px; */
 }
 .btns-wrap {
-  height: 9%;
+  height: 8%;
   padding-left: 5%;
   padding-right: 4%;
 
@@ -645,19 +948,15 @@ export default {
   background: url("../../../assets/img/modal/xiazaiqingdan-1.png") no-repeat
     center center;
   width: 100%;
-  height: 25%;
+  height: 30%;
   padding-left: 12%;
   margin-left: 12%;
   cursor: pointer;
+  transition: all 0.5s;
 }
 .download-lists:hover {
   background: url("../../../assets/img/modal/xiazaiqingdan-2.png") no-repeat
     center center;
-  width: 100%;
-  height: 25%;
-  padding-left: 12%;
-  margin-left: 12%;
-  cursor: pointer;
 }
 
 .float-left {
@@ -688,8 +987,9 @@ export default {
   height: 2.1vh;
 }
 .icon-font-style {
-  width: 65%;
-  font-size: 1.1em !important;
+  padding-left: 8%;
+  width: 49%;
+  font-size: 14px !important;
 }
 #date {
   line-height: 22px;
@@ -720,6 +1020,9 @@ export default {
 .start-time >>> .el-date-editor.el-input {
   width: 100%;
 }
+.start-time >>> .el-input__icon {
+  line-height: 29px;
+}
 .start-time >>> .el-date-editor .el-input__inner {
   height: 25px !important;
 }
@@ -731,6 +1034,9 @@ export default {
 .end-time {
   float: left;
   width: 22%;
+}
+.end-time >>> .el-input__icon {
+  line-height: 29px;
 }
 .end-time >>> .el-date-editor.el-input {
   width: 100%;

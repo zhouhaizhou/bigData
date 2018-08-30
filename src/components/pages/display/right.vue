@@ -44,10 +44,13 @@ export default {
     };
   },
   mounted() {
-    //this.selectIndex=this.times.length-1;
-    this.webProduct = process.env.PRODUCT_PATH;
   },
   watch: {
+    $route:{
+      handler(val){
+        this.pause();
+      }
+    },
     selectedTime(val){
       this.selectIndex=this.selectedTime;
     },
@@ -215,6 +218,6 @@ export default {
   padding-left: 15px;
   border-radius: 30px;
   color: rgb(9, 157, 220);
-  height: 4.3vh;
+  height: 3.7vh;
 }
 </style>

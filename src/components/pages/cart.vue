@@ -19,38 +19,41 @@
                   <span class="title-index">{{index+1}}</span>
                   <span class="title-name">{{item.title}}</span>
                 </div>
-                <div class="right-content">
-                  <div class="date-wrap span-wrap">
-                    <span>日期：</span>
-                    <span>{{item.date}}</span>
+                <div class="right-content-wrap">
+                  <div class="right-content">
+                    <div class="date-wrap span-wrap">
+                      <span>日期：</span>
+                      <span>{{item.date}}</span>
+                    </div>
+                    <div class="province-wrap span-wrap">
+                      <span>省(市)：</span>
+                      <span>{{item.province}}</span>
+                    </div>
+                    <div class="city-site-wrap span-wrap">
+                      <span>城市站点：</span>
+                      <span>{{item.citySites}}</span>
+                    </div>
+                    <div class="element-wrap span-wrap">
+                      <span>气象要素：</span>
+                      <span>{{item.elements}}</span>
+                    </div>
+                    <div class="file-famat-wrap span-wrap">
+                      <span>文件格式：</span>
+                      <span>{{item.fileFamat}}</span>
+                    </div>
+                    <div class="time-interval-wrap span-wrap">
+                      <span>时间间隔：</span>
+                      <span>{{item.timeInterval}}</span>
+                    </div>
                   </div>
-                  <div class="province-wrap span-wrap">
-                    <span>省(市)：</span>
-                    <span>{{item.province}}</span>
-                  </div>
-                  <div class="city-site-wrap span-wrap">
-                    <span>城市站点：</span>
-                    <span>{{item.citySites}}</span>
-                  </div>
-                  <div class="element-wrap span-wrap">
-                    <span>气象要素：</span>
-                    <span>{{item.elements}}</span>
-                  </div>
-                  <div class="file-famat-wrap span-wrap">
-                    <span>文件格式：</span>
-                    <span>{{item.fileFamat}}</span>
-                  </div>
-                  <div class="time-interval-wrap span-wrap">
-                    <span>时间间隔：</span>
-                    <span>{{item.timeInterval}}</span>
-                  </div>
+
                 </div>
               </div>
             </div>
-            <div class="line"></div>
+            <!-- <div class="line"></div> -->
           </div>
         </div>
-        <div class="boot-wrap">
+        <div class="boot-wrap" :class="{unfixed:!fixed,fixed:fixed}">
           <div class="select-all-wrap">
             <el-checkbox v-model="all" @change="allChecked()"></el-checkbox>
             <span>全选文件</span>
@@ -84,87 +87,10 @@ export default {
   },
   data() {
     return {
+      fixed: false,
       all: true,
       ids: [],
-      items: [
-        {
-          id: "1",
-          checked: true,
-          title: "中国地面气象站逐小时观测资料",
-          date: "20180706 - 20180806",
-          province: "上海",
-          citySites: "[58376] 徐汇区,[48461]青浦,[58370]浦东",
-          elements: "气压,海平面气压,最高气温,最高气压,最大风速,极大风速",
-          fileFamat: "csv",
-          timeInterval: "24小时"
-        },
-        {
-          id: "2",
-          checked: false,
-          title: "中国地面气象站逐小时观测资料",
-          date: "20180706 - 20180806",
-          province: "上海",
-          citySites: "[58376] 徐汇区,[48461]青浦,[58370]浦东",
-          elements: "气压,海平面气压,最高气温,最高气压,最大风速,极大风速",
-          fileFamat: "csv",
-          timeInterval: "24小时"
-        },
-        {
-          id: "3",
-          checked: false,
-          title: "中国地面气象站逐小时观测资料",
-          date: "20180706 - 20180806",
-          province: "上海",
-          citySites: "[58376] 徐汇区,[48461]青浦,[58370]浦东",
-          elements: "气压,海平面气压,最高气温,最高气压,最大风速,极大风速",
-          fileFamat: "csv",
-          timeInterval: "24小时"
-        },
-        {
-          id: "4",
-          checked: false,
-          title: "中国地面气象站逐小时观测资料",
-          date: "20180706 - 20180806",
-          province: "上海",
-          citySites: "[58376] 徐汇区,[48461]青浦,[58370]浦东",
-          elements: "气压,海平面气压,最高气温,最高气压,最大风速,极大风速",
-          fileFamat: "csv",
-          timeInterval: "24小时"
-        },
-        {
-          id: "5",
-          checked: false,
-          title: "中国地面气象站逐小时观测资料",
-          date: "20180706 - 20180806",
-          province: "上海",
-          citySites: "[58376] 徐汇区,[48461]青浦,[58370]浦东",
-          elements: "气压,海平面气压,最高气温,最高气压,最大风速,极大风速",
-          fileFamat: "csv",
-          timeInterval: "24小时"
-        },
-        {
-          id: "6",
-          checked: false,
-          title: "中国地面气象站逐小时观测资料",
-          date: "20180706 - 20180806",
-          province: "上海",
-          citySites: "[58376] 徐汇区,[48461]青浦,[58370]浦东",
-          elements: "气压,海平面气压,最高气温,最高气压,最大风速,极大风速",
-          fileFamat: "csv",
-          timeInterval: "24小时"
-        },
-        {
-          id: "7",
-          checked: false,
-          title: "中国地面气象站逐小时观测资料",
-          date: "20180706 - 20180806",
-          province: "上海",
-          citySites: "[58376] 徐汇区,[48461]青浦,[58370]浦东",
-          elements: "气压,海平面气压,最高气温,最高气压,最大风速,极大风速",
-          fileFamat: "csv",
-          timeInterval: "24小时"
-        }
-      ]
+      items: []
     };
   },
   watch: {
@@ -207,7 +133,8 @@ export default {
     }
   },
   mounted() {
-    this.getDownLoadData();
+    window.addEventListener("scroll", this.handleScroll);
+    this.getDownLoadData("get");
   },
   methods: {
     allChecked() {
@@ -223,7 +150,7 @@ export default {
       });
       this.all = flag;
     },
-    getDownLoadData() {
+    getDownLoadData(status) {
       this.axios
         .get("DataService.svc/GetActiveList", {
           params: {
@@ -238,11 +165,14 @@ export default {
             .replace(/famat/g, "fileFamat")
             .replace(/moduleCnName/g, "title");
           let obj = JSON.parse(data);
+          let flag = status == "delete" ? false : true;
           obj.filter(item => {
-            item.checked = true;
+            item.checked = flag;
           });
           this.items = obj;
-          console.log(res.data);
+          this.$nextTick(() => {
+            this.handleScroll();
+          });
         })
         .catch(res => {
           console.log(res.data);
@@ -260,6 +190,9 @@ export default {
       return ids;
     },
     delect() {
+      if (!confirm("是否要删除？")) {
+        return;
+      }
       if (this.ids.length == 0) {
         alert("未选择数据，请选择后再进行此操作！");
         return;
@@ -276,7 +209,7 @@ export default {
           if (res.data == this.ids.length) {
             alert("删除成功！");
           }
-          this.getDownLoadData();
+          this.getDownLoadData("delete");
         })
         .catch(res => {
           alert("删除失败！");
@@ -289,10 +222,10 @@ export default {
         return;
       }
       const loading = this.$loading({
-          lock: true,
-          text: '正在请求数据...',
-          spinner: 'el-icon-loading',
-          background: 'rgba(0, 0, 0, 0.7)'
+        lock: true,
+        text: "正在请求数据...",
+        spinner: "el-icon-loading",
+        background: "rgba(0, 0, 0, 0.7)"
       });
       let ids = this.getIds();
       this.axios
@@ -321,6 +254,18 @@ export default {
           console.log(res.data);
           alert("下载失败");
         });
+    },
+    handleScroll() {
+      let mainHeight = document.querySelector(".carts-wrap").clientHeight;
+      let headerHeight = document.querySelector(".header").clientHeight;
+      let scrollTop = document.documentElement.scrollTop;
+      let pageHeight = document.documentElement.clientHeight;
+      let dValue = scrollTop + pageHeight - (headerHeight + mainHeight);
+      if (dValue <= 0) {
+        this.fixed = true;
+      } else {
+        this.fixed = false;
+      }
     }
   }
 };
@@ -336,7 +281,8 @@ export default {
   /* align-items: center; */
 }
 .cart-wrap {
-  width: 73%;
+  width: 60%;
+  height: 100%;
   background-color: white;
   margin-top: 1%;
   border: solid 0.5px #8080805e;
@@ -347,6 +293,16 @@ export default {
   width: 0.5vw;
   height: 2.5vh;
   background-color: #1bbf9d;
+}
+.item-tr-wrap {
+  width: 100%;
+  height: 25vh;
+  border-bottom: #808080c2 solid;
+  border-bottom-width: 1px;
+  padding-bottom: 0.8%;
+}
+.items-wrap {
+  width: 100%;
 }
 .title-wrap {
   padding-left: 2%;
@@ -368,14 +324,32 @@ export default {
   padding-top: 1.9%;
   /* padding-bottom: 0.5%; */
   width: 97%;
-  height: 20vh;
+  height: 89%;
 }
 .left-wrap {
   float: left;
   width: 2%;
+  height: 100%;
 }
 .right-wrap {
   float: left;
+  width: 95%;
+  height: 100%;
+  padding-left: 2%;
+}
+.right-title {
+  width: 100%;
+  height: 11%;
+}
+.right-content-wrap {
+  width: 100%;
+  height: 88%;
+  display: flex;
+  align-items: center;
+}
+.right-content {
+  width: 100%;
+  height: 100%;
 }
 .title-index {
   background-color: #4fa5e0;
@@ -385,26 +359,36 @@ export default {
   padding-right: 1%;
 }
 .span-wrap {
-  padding-top: 1.5%;
+  padding-top: 0.5%;
 }
 .line {
-  height: 0.1vh;
+  height: 0.5%;
   background-color: #808080c2;
   margin-top: 1%;
 }
-
+.fixed {
+  width: 60%;
+  z-index: 999;
+  position: fixed;
+  bottom: 0;
+  background-color: white;
+}
+.unfixed {
+  width: 100%;
+  position: relative;
+}
 .boot-wrap {
   display: flex;
   align-items: center;
-  width: 100%;
   height: 6vh;
 }
 .select-all-wrap {
   padding-left: 3%;
-  width: 7%;
+  width: 15%;
 }
 .select-num-wrap {
-  margin-left: 60%;
+  margin-left: 44%;
+  width: 13%;
 }
 .select-num-wrap span:nth-child(2) {
   color: red;

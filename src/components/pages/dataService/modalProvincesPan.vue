@@ -10,9 +10,10 @@
                     </div>
 
                 </div>
-
+                
                 <div class="province-wrap float-left sites-wrap-province">
-                    <div v-for="province in provinces" class="province" ><div  class="province-cur" :class="{'cur':provinceChecked==province.provinceCode}" @click="getCityData(province)">{{province.provinceName}}</div></div>
+                    <div v-for="province in provinces" class="province" ><div  class="province-cur" :class="{'cur':provinceChecked==province.provinceCode}" @click="getCityData(province)">
+                      {{province.provinceName}}</div></div>
                 </div>
 
             </div>
@@ -31,7 +32,7 @@
                     <div class="sites-wrap">
 
                         <el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">
-                            <el-checkbox v-for="city in cities" :label="city" :key="city">{{city}}</el-checkbox>
+                            <el-checkbox v-for="city in cities" :label="city" :key="city" :title="city">{{city}}</el-checkbox>
                         </el-checkbox-group>
 
                     </div>
@@ -45,59 +46,57 @@
 </template>
 
 <script>
-// var resData = ""; //向后台请求一次，将数据保存到前台，以便获取省市和站点都用此变量，直接遍历此变量就行
 
-var  cityOptions=[];
-
-var cityOptions = [
-        "[58361]闵行",
-        "[58367]徐家汇",
-        "[58361]闵行",
-        "[58367]浦东",
-        "[58361]长宁",
-        "[58367]普陀",
-        "[58361]嘉定",
-        "[58367]杨浦",
-        "[58361]崇明",
-        "[58367]青浦",
-        "[58361]宝山",
-        "[58367]松江",
-        "[58361]虹口",
-        "[58367]静安",
-        "[58361]金山",
-        "[58367]奉贤",
-        "[58361]黄埔",
-        "[58367]徐家汇",
-        "[58361]闵行",
-        "[58367]徐家汇",
-        "[58361]闵行",
-        "[58367]徐家汇"
-      ];
 
 export default {
   props:[
     "moduleEnName"
   ],
-  data() {
+   data() {
     return {
-      provinces: [],
+        provinces: [],
+        checkedProvince:{
+          provinceName:"上海市",
+          provinceAllName:"上海市"
+        },
      
     //   cities: [],
       checkAll: false,
-      checkedCities: ["[58367]徐家汇"],
-      cities: cityOptions,
+      checkedCities: [],
+      cities: [],
       isIndeterminate: true,
-      provinceChecked:'310000'
+      provinceChecked:'310000',
+      cityOptions:[],
+      province:"",
+      provinceData:"",
+      citySite:"",
+      citySiteDetail:""
+
     };
   },
   mounted() {
     this.getAllData();
      this.getCityData({
             provinceName:"上海市",
-            provinceCode:'310000'
+            provinceCode:'310000',
+            provinceAllName:"上海市"
           }); //暂时隐藏
+    this.deafultProvinceCity();
   },
   methods: {
+    deafultProvinceCity(){
+           let self=this;
+     let provinceObj={
+       province:self.checkedProvince.provinceName,
+       provinceData:"上海市"
+     }
+    //向父组件传值
+    this.$emit("getParams",provinceObj);
+
+    //获取默认勾选的城市站点,j将其传给父组件
+    this.getCheckedCitiesParams();
+
+    },
     getAllData() {
       let self = this;
       this.axios.get("DataService.svc/GetProvince").then(response => {
@@ -123,50 +122,80 @@ export default {
       // //点击省份，改变provinceChecked
      this.provinceChecked=province.provinceCode
      let self=this;
+     //获取点击的省份
+     self.province=province.provinceName;
+     self.provinceData=province.provinceAllName;
+     let provinceObj={
+       province:self.province,
+       provinceData:self.provinceData
+     }
+    //向父组件传值
+    this.$emit("getParams",provinceObj);
 
      var provinceAllName=province.provinceAllName;//作为参数传给后台
 
-this.axios.get("DataService.svc/getSubTitle",{
-  params:{
-DataType:moduleEnName,
-Provinces:provinceAllName
-  }
-}).then(response => {
+      this.axios.get("DataService.svc/GetStationByDataType",{
+         params: {
+            //DataType:"hourData",//待修改为this.moduleEnName，先用固定值代替
+            DataType:this.moduleEnName,//待修改为this.moduleEnName，先用固定值代替
+            Provinces:"'"+provinceAllName+"'"
+          }
+      }).then(response => {
         //需要接收父组件传过来的参数去后台查询相应的省市和站点
       let  resData = eval("(" + response.data + ")");
-        var stationArr = [];
-        for (var i = 0; i < resData.length; i++) {
-           stationArr[i]={
-             stationId:resData[i].stationId,
-             stationName:"闵行"//后台待添加
-          };
         
+        self.cityOptions=[];
+        self.cities=[];
+        for (var i = 0; i < resData.length; i++) {
+          self.cityOptions.push("["+resData[i].StationId+"]"+resData[i].Station_Name);
+          self.cities.push("["+resData[i].StationId+"]"+resData[i].Station_Name);
         }
-         self.cities
+         
       }).catch(response => {
           console.log(response);
         });
 
-      //点击省份，请求城市
-      for(var i=0;i<resData.length;i++){
-          if(province.provinceName==resData[i].province){
-              // self.cities=resData[i].adminName;//直接将点击省份对应的城市显示出来，默认显示上海的  在mounted中 getCityData("上海市");
-              // cityOptions=resData[i].adminName;
-              //测试
-              cityOptions=["[58361]虹口","[58367]静安",
-        "[58361]金山",
-        "[58367]奉贤"];
-        self.cities=["[58361]虹口","[58367]静安",
-        "[58361]金山",
-        "[58367]奉贤"];
-          }
-      }
+      // //点击省份，请求城市
+      // for(var i=0;i<resData.length;i++){
+      //     if(province.provinceName==resData[i].province){
+      //         // self.cities=resData[i].adminName;//直接将点击省份对应的城市显示出来，默认显示上海的  在mounted中 getCityData("上海市");
+      //         // cityOptions=resData[i].adminName;
+      //         //测试
+      //         cityOptions=["[58361]虹口","[58367]静安",
+      //   "[58361]金山",
+      //   "[58367]奉贤"];
+      //   self.cities=["[58361]虹口","[58367]静安",
+      //   "[58361]金山",
+      //   "[58367]奉贤"];
+      //     }
+      // }
 
     
     },
+    getCheckedCitiesParams(){//解析勾选的城市站点，传给父组件
+      let checkedCitie=this.checkedCities;
+      // var checkedCitieArr=checkedCitie.join(",");//将数组转化成字符串
+      var ids=[];
+      var sites=[];
+      for(var i=0;i<checkedCitie.length;i++){
+          ids.push(checkedCitie[i].replace(/[^0-9]/ig,""));
+          sites.push(checkedCitie[i].match(/\](.*)/)[1]);
+      }
+      this.citySite=ids.join();
+      this.citySiteDetail=sites.join();
+
+     let cityObj={
+       citySite:this.citySite,
+       citySiteDetail:(this.checkedCities).join()
+     }
+    //向父组件传值
+    this.$emit("getCityParams",cityObj);
+
+    },
     handleCheckAllChange(val) {
-      this.checkedCities = val ? cityOptions : [];
+      this.checkedCities = val ? this.cityOptions : [];
       this.isIndeterminate = false;
+      this.getCheckedCitiesParams();//更新选中的站点
     },
     handleCheckedCitiesChange(value) {
       let checkedCount = value.length;
@@ -175,6 +204,8 @@ Provinces:provinceAllName
       this.isIndeterminate =
         checkedCount > 0 &&
         checkedCount < this.cities.length;
+
+        this.getCheckedCitiesParams();//更新选中的站点
     }
   }
 };
@@ -309,7 +340,8 @@ Provinces:provinceAllName
   padding: 3% 5% 4% 5%;
   float: left;
   border: solid #8080802b 0.5px;
-  overflow: overlay;
+  overflow-y: overlay;
+  overflow-x: hidden;
 }
 /*定义滚动条高宽及背景
  高宽分别对应横竖滚动条的尺寸*/
@@ -337,8 +369,18 @@ Provinces:provinceAllName
   margin-left: 0px;
 }
 .sites-wrap >>> .el-checkbox {
-  margin-right: 8%;
+      width: 50%;
   padding-top: 3%;
+}
+.sites-wrap >>> .el-checkbox__label{
+  display: inline-block;
+    padding-left: 10px;
+    line-height: 19px;
+    font-size: 14px;
+    width: 76%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 .site-radio-font-wrap {
   width: 50%;
