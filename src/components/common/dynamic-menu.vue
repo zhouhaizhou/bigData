@@ -23,16 +23,6 @@
 <script>
 export default {
   name: "my-nav",
-  data() {
-    fromMenu: "";
-  },
-  watch: {
-    $route: {
-      handler(to, from) {
-        this.fromMenu = from.name;
-      }
-    }
-  },
   props: {
     menuList: {
       type: Array,

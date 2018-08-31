@@ -1,157 +1,184 @@
 <template>
-    <div>
-        <div class="province-city-wrap">
+  <div>
+    <div class="province-city-wrap">
 
-            <div class="provinces-title-wraps float-left">
-                <div class="provinces-title-wrap">
-                    <div class="positon-title-wrap">
-                        <div class="position-pic"></div>
-                        <div class="position-title font-style12">台站选择</div>
-                    </div>
-
-                </div>
-                
-                <div class="province-wrap float-left sites-wrap-province">
-                    <div v-for="province in provinces" class="province" ><div  class="province-cur" :class="{'cur':provinceChecked==province.provinceCode}" @click="getCityData(province)">
-                      {{province.provinceName}}</div></div>
-                </div>
-
-            </div>
-
-            <div class="arrow-wrap float-left">
-                <div class="arrow"></div>
-            </div>
-
-            <div class="province-sites float-left">
-
-                <div class="sites-div-wrap">
-                    <div class="checkAll">
-                        <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
-                    </div>
-
-                    <div class="sites-wrap">
-
-                        <el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">
-                            <el-checkbox v-for="city in cities" :label="city" :key="city" :title="city">{{city}}</el-checkbox>
-                        </el-checkbox-group>
-
-                    </div>
-                </div>
-
-            </div>
+      <div class="provinces-title-wraps float-left">
+        <div class="provinces-title-wrap">
+          <div class="positon-title-wrap">
+            <div class="position-pic"></div>
+            <div class="position-title font-style12">台站选择</div>
+          </div>
 
         </div>
 
+        <div class="province-wrap float-left sites-wrap-province">
+          <div v-for="province in provinces" class="province">
+            <div class="province-cur" :class="{'cur':provinceChecked==province.provinceCode}" @click="getCityData(province)">
+              {{province.provinceName}}</div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="arrow-wrap float-left">
+        <div class="arrow"></div>
+      </div>
+
+      <div class="province-sites float-left">
+
+        <div class="sites-div-wrap">
+          <div class="checkAll">
+            <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
+          </div>
+
+          <div class="sites-wrap">
+
+            <el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">
+              <el-checkbox v-for="city in cities" :label="city" :key="city" :title="city">{{city}}</el-checkbox>
+            </el-checkbox-group>
+
+          </div>
+        </div>
+
+      </div>
+
     </div>
+
+  </div>
 </template>
 
 <script>
-
-
 export default {
-  props:[
-    "moduleEnName"
-  ],
-   data() {
+  props: ["moduleEnName"],
+  data() {
     return {
-        provinces: [],
-        checkedProvince:{
-          provinceName:"上海市",
-          provinceAllName:"上海市"
-        },
-     
-    //   cities: [],
+      provinces: [],
+      checkedProvince: {
+        provinceName: "上海市",
+        provinceAllName: "上海市"
+      },
+
+      //   cities: [],
       checkAll: false,
       checkedCities: [],
       cities: [],
       isIndeterminate: true,
-      provinceChecked:'310000',
-      cityOptions:[],
-      province:"",
-      provinceData:"",
-      citySite:"",
-      citySiteDetail:""
-
+      provinceChecked: "310000",
+      cityOptions: [],
+      province: "",
+      provinceData: "",
+      citySite: "",
+      citySiteDetail: ""
     };
   },
+  watch: {
+    moduleEnName() {
+      if (this.moduleEnName != "") {
+        this.getAllData();
+        this.getCityData({
+          provinceName: "上海市",
+          provinceCode: "310000",
+          provinceAllName: "上海市",
+          isFirst: true
+        }); //暂时隐藏
+        this.deafultProvinceCity(); //更新默认城市
+      }
+    }
+  },
   mounted() {
-    this.getAllData();
-     this.getCityData({
-            provinceName:"上海市",
-            provinceCode:'310000',
-            provinceAllName:"上海市"
-          }); //暂时隐藏
-    this.deafultProvinceCity();
+     this.getAllData();
+        this.getCityData({
+          provinceName: "上海市",
+          provinceCode: "310000",
+          provinceAllName: "上海市",
+          isFirst: true
+        }); //暂时隐藏
+        this.deafultProvinceCity(); //更新默认城市
   },
   methods: {
-    deafultProvinceCity(){
-           let self=this;
-     let provinceObj={
-       province:self.checkedProvince.provinceName,
-       provinceData:"上海市"
-     }
-    //向父组件传值
-    this.$emit("getParams",provinceObj);
+    deafultProvinceCity() {
+      let self = this;
+      let provinceObj = {
+        province: self.checkedProvince.provinceName,
+        provinceData: "上海市"
+      };
+      //向父组件传值
+      this.$emit("getParams", provinceObj);
 
-    //获取默认勾选的城市站点,j将其传给父组件
-    this.getCheckedCitiesParams();
+      //获取默认勾选的城市站点,j将其传给父组件
+      this.getCheckedCitiesParams();
 
+      this.checkedCities = []; //更新默认选择的城市
     },
     getAllData() {
       let self = this;
-      this.axios.get("DataService.svc/GetProvince").then(response => {
-        //需要接收父组件传过来的参数去后台查询相应的省市和站点
-       let resData = eval("(" + response.data + ")");
-        var provincesArr = [];
-        for (var i = 0; i < resData.length; i++) {
-           provincesArr[i]={
-            provinceName:resData[i].province,
-            provinceCode:resData[i].provinceCode,
-            provinceAllName:resData[i].provinceData
-          };
-          // self.provinces.push(resData[i].province);
-          // self.provinceCode.push(resData[i].provinceCode);
-          //   provincesArr[i] = resData[i].province;
-        }
-         self.provinces = provincesArr;
-      }).catch(response => {
+      this.axios
+        .get("DataService.svc/GetProvince")
+        .then(response => {
+          //需要接收父组件传过来的参数去后台查询相应的省市和站点
+          let resData = eval("(" + response.data + ")");
+          var provincesArr = [];
+          for (var i = 0; i < resData.length; i++) {
+            provincesArr[i] = {
+              provinceName: resData[i].province,
+              provinceCode: resData[i].provinceCode,
+              provinceAllName: resData[i].provinceData
+            };
+            // self.provinces.push(resData[i].province);
+            // self.provinceCode.push(resData[i].provinceCode);
+            //   provincesArr[i] = resData[i].province;
+          }
+          self.provinces = provincesArr;
+        })
+        .catch(response => {
           console.log(response);
         });
     },
     getCityData(province) {
+      this.checkedCities = []; //点击下一个省份之前清空上一个省份点击的城市站点
       // //点击省份，改变provinceChecked
-     this.provinceChecked=province.provinceCode
-     let self=this;
-     //获取点击的省份
-     self.province=province.provinceName;
-     self.provinceData=province.provinceAllName;
-     let provinceObj={
-       province:self.province,
-       provinceData:self.provinceData
-     }
-    //向父组件传值
-    this.$emit("getParams",provinceObj);
+      this.provinceChecked = province.provinceCode;
+      let self = this;
+      //获取点击的省份
+      self.province = province.provinceName;
+      self.provinceData = province.provinceAllName;
+      let provinceObj = {
+        province: self.province,
+        provinceData: self.provinceData
+      };
+      let isFirst = province.isFirst == true ? province.isFirst : false;
+      //向父组件传值
+      this.$emit("getParams", provinceObj);
 
-     var provinceAllName=province.provinceAllName;//作为参数传给后台
+      var provinceAllName = province.provinceAllName; //作为参数传给后台
 
-      this.axios.get("DataService.svc/GetStationByDataType",{
-         params: {
-            //DataType:"hourData",//待修改为this.moduleEnName，先用固定值代替
-            DataType:this.moduleEnName,//待修改为this.moduleEnName，先用固定值代替
-            Provinces:"'"+provinceAllName+"'"
+      this.axios
+        .get("DataService.svc/GetStationByDataType", {
+          params: {
+            DataType: this.moduleEnName, //待修改为this.moduleEnName，先用固定值代替
+            Provinces: "'" + provinceAllName + "'"
           }
-      }).then(response => {
-        //需要接收父组件传过来的参数去后台查询相应的省市和站点
-      let  resData = eval("(" + response.data + ")");
-        
-        self.cityOptions=[];
-        self.cities=[];
-        for (var i = 0; i < resData.length; i++) {
-          self.cityOptions.push("["+resData[i].StationId+"]"+resData[i].Station_Name);
-          self.cities.push("["+resData[i].StationId+"]"+resData[i].Station_Name);
-        }
-         
-      }).catch(response => {
+        })
+        .then(response => {
+          //需要接收父组件传过来的参数去后台查询相应的省市和站点
+          let resData = eval("(" + response.data + ")");
+
+          self.cityOptions = [];
+          self.cities = [];
+          for (var i = 0; i < resData.length; i++) {
+            self.cityOptions.push(
+              "[" + resData[i].StationId + "]" + resData[i].Station_Name
+            );
+            self.cities.push(
+              "[" + resData[i].StationId + "]" + resData[i].Station_Name
+            );
+          }
+          if (isFirst) {//默认选中返回城市数据中的第一个  如果再次点击省份，由于点击省份对象中没有isFirst，上面定义的isFirst就为false，不执行选中功能
+            let defaultV = self.cities[0];
+            this.checkedCities = [defaultV];
+          }
+        })
+        .catch(response => {
           console.log(response);
         });
 
@@ -169,43 +196,39 @@ export default {
       //   "[58367]奉贤"];
       //     }
       // }
-
-    
     },
-    getCheckedCitiesParams(){//解析勾选的城市站点，传给父组件
-      let checkedCitie=this.checkedCities;
+    getCheckedCitiesParams() {
+      //解析勾选的城市站点，传给父组件
+      let checkedCitie = this.checkedCities;
       // var checkedCitieArr=checkedCitie.join(",");//将数组转化成字符串
-      var ids=[];
-      var sites=[];
-      for(var i=0;i<checkedCitie.length;i++){
-          ids.push(checkedCitie[i].replace(/[^0-9]/ig,""));
-          sites.push(checkedCitie[i].match(/\](.*)/)[1]);
+      var ids = [];
+      var sites = [];
+      for (var i = 0; i < checkedCitie.length; i++) {
+        ids.push(checkedCitie[i].replace(/[^0-9]/gi, ""));
+        sites.push(checkedCitie[i].match(/\](.*)/)[1]);
       }
-      this.citySite=ids.join();
-      this.citySiteDetail=sites.join();
+      this.citySite = ids.join();
+      this.citySiteDetail = sites.join();
 
-     let cityObj={
-       citySite:this.citySite,
-       citySiteDetail:(this.checkedCities).join()
-     }
-    //向父组件传值
-    this.$emit("getCityParams",cityObj);
-
+      let cityObj = {
+        citySite: this.citySite,
+        citySiteDetail: this.checkedCities.join()
+      };
+      //向父组件传值
+      this.$emit("getCityParams", cityObj);
     },
     handleCheckAllChange(val) {
       this.checkedCities = val ? this.cityOptions : [];
       this.isIndeterminate = false;
-      this.getCheckedCitiesParams();//更新选中的站点
+      this.getCheckedCitiesParams(); //更新选中的站点
     },
     handleCheckedCitiesChange(value) {
       let checkedCount = value.length;
-      this.checkAll =
-        checkedCount === this.cities.length;
+      this.checkAll = checkedCount === this.cities.length;
       this.isIndeterminate =
-        checkedCount > 0 &&
-        checkedCount < this.cities.length;
+        checkedCount > 0 && checkedCount < this.cities.length;
 
-        this.getCheckedCitiesParams();//更新选中的站点
+      this.getCheckedCitiesParams(); //更新选中的站点
     }
   }
 };
@@ -285,10 +308,10 @@ export default {
   font-weight: bold;
   text-align: center;
 }
-.province-cur{
+.province-cur {
   cursor: pointer;
 }
-.cur{
+.cur {
   background-color: #10be8f;
 }
 .arrow-wrap {
@@ -336,6 +359,7 @@ export default {
   height: 15%;
 }
 .sites-wrap {
+  width: 90%;
   height: 73%;
   padding: 3% 5% 4% 5%;
   float: left;
@@ -369,18 +393,18 @@ export default {
   margin-left: 0px;
 }
 .sites-wrap >>> .el-checkbox {
-      width: 50%;
+  width: 50%;
   padding-top: 3%;
 }
-.sites-wrap >>> .el-checkbox__label{
+.sites-wrap >>> .el-checkbox__label {
   display: inline-block;
-    padding-left: 10px;
-    line-height: 19px;
-    font-size: 14px;
-    width: 76%;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+  padding-left: 10px;
+  line-height: 19px;
+  font-size: 14px;
+  width: 76%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 .site-radio-font-wrap {
   width: 50%;

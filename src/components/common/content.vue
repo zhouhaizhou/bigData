@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="side">
-      <el-menu :unique-opened=true @select="select" :collapse="isSidebarNavCollapse"
+      <el-menu :unique-opened=true :collapse="isSidebarNavCollapse"
        background-color="#fff" text-color="#2c3e50" active-text-color="rgb(0, 162, 243)" 
        :default-active="currentMenu">
         <DynamicMenu :menuList="sidebarMenu"></DynamicMenu>
@@ -23,7 +23,7 @@ export default {
   },
   data() {
     return {
-      current:''
+     
     };
   },
   computed: {

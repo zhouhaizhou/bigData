@@ -160,16 +160,7 @@ export default {
   components: {
     myModalProvincesPan
   },
-  props: ["moduleEnName", "moduleCnName"],
-  watch:{
-    moduleEnName(){
-      if(this.moduleEnName!=""){
-        this.getFileContentData();
-        this.getElementData();
-        this.getTime();
-      }
-    }
-  },
+  props: ["moduleEnName", "moduleCnName", "isShow"],
   data() {
     return {
       elementCnName: "",
@@ -196,7 +187,7 @@ export default {
       ],
       famatValue: "csv",
       timeInput: "1",
-      timeValue: "小时",
+      timeValue: "天",
       timeType: [
         {
           value: "0",
@@ -208,41 +199,93 @@ export default {
         },
         {
           value: "2",
-          label: "日"
-        },
-        {
-          value: "3",
-          label: "时"
+          label: "天"
         }
       ],
       timeTypeValue: "",
       startTimes: "",
-      endTimes:this._global.formatDate(new Date(),'yyyy-MM-dd hh')
+      endTimes: this._global.formatDate(new Date(), "yyyy-MM-dd hh")
     };
   },
   mounted() {
-    //初始请求加载页面数据
+    // //初始请求加载页面数据
     // this.getFileContentData();
     // this.getElementData();
     // this.getTime();
   },
-  methods: {
-    getTime() {
-      // let date = new Date()
-      // let y = date.getFullYear()
-      // let m = date.getMonth() + 1
-      // let d = date.getDate()-1
-      // let h=date.getHours()-1
-      // console.log(d)
-      // let time = y + '-' + m + '-' + d+' '+h
-      // this.startTimes = time
+  created() {
+    // this.getTime();
+  },
+  watch: {
+    moduleEnName() {
+      if (this.moduleEnName != "") {//更新页面
+        this.getFileContentData();
+        this.getElementData();
+        this.defaultSetByModuleEnName();
+      }
+    },
+    isShow(){//监听
+      if(this.isShow==false){
+        this.checkedElements=[];//弹框关闭时，清除选择的要素
+      }else{//弹框显示时，默认选中后台返回数据中的第一个要素
 
+      }
+
+    }
+  },
+  methods: {
+    defaultSetByModuleEnName(){
+      let hour=(this.moduleEnName).indexOf('our');//注意：数据库中配置时，年月日时，的命名采用要包含此处对应的字符
+      let day=(this.moduleEnName).indexOf('Day');
+      let month=(this.moduleEnName).indexOf('Month');
+      let year=(this.moduleEnName).indexOf('Year');
+      if(hour!=-1){
+        this.getTime('hour');
+        this.timeValue="天";//去掉间隔单位“小时”，小时数据也用“天”单位
+      }else if(day!=1){
+        this.getTime('day');
+        this.timeValue="天";
+      }else if(month!=1){
+        this.getTime('month');
+        this.timeValue="月";
+      }else if(year!=1){
+        this.getTime('year');
+        this.timeValue="年";
+      }else{
+        this.getTime('day');
+        this.timeValue="天";
+      }
+    },
+    getTime(time) {
       const start = new Date();
+      switch (time) {
+        case 'hour':
+          start.setTime(start.getTime() - 3600 * 1000 * 1); //提前一小时
+          this.startTimes = this._global.formatDate(start, "yyyy-MM-dd hh");
+          break;
+          case 'day':
+          start.setTime(start.getTime() - 3600 * 1000 * 24);//提前一天
+          this.startTimes = this._global.formatDate(start, "yyyy-MM-dd hh");
+          break;
+          case 'month':
+          start.setTime(start.getTime() - 3600 * 1000 * 24*30);//提前一个月
+          this.startTimes = this._global.formatDate(start, "yyyy-MM-dd hh");
+          break;
+          case 'year':
+          start.setTime(start.getTime() - 3600 * 1000 * 24*30*12);//提前一年
+          this.startTimes = this._global.formatDate(start, "yyyy-MM-dd hh");
+          break;
+      
+        default:
+        start.setTime(start.getTime() - 3600 * 1000 * 24);//提前一天    如果非年月日，就默认采用天
+          this.startTimes = this._global.formatDate(start, "yyyy-MM-dd hh");
+          break;
+      }
       start.setTime(start.getTime() - 3600 * 1000 * 1); //提前一小时
       // start.setTime(start.getTime() - 3600 * 1000 * 24);//提前一天
       // start.setTime(start.getTime() - 3600 * 1000 * 24*30);//提前一个月
       // start.setTime(start.getTime() - 3600 * 1000 * 24*30*12);//提前一年
-      this.startTimes =this._global.formatDate(start,'yyyy-MM-dd hh');
+      this.startTimes = this._global.formatDate(start, "yyyy-MM-dd hh");
     },
     getChildComProvinceParams(val) {
       this.province = val.province;
@@ -261,7 +304,7 @@ export default {
         .get("DataService.svc/getSubTitle", {
           params: {
             moduleEnName: this.moduleEnName //待修改为moduleEnName，先用固定值代替
-           // moduleEnName: "hourData" //待修改为moduleEnName，先用固定值代替
+            // moduleEnName: "hourData" //待修改为moduleEnName，先用固定值代替
           }
         })
         .then(response => {
@@ -284,8 +327,8 @@ export default {
         .then(response => {
           let resData = eval("(" + response.data + ")");
           var elementsArr = [];
-          self.elementCnNameArr=[];
-          self.elementsIndexArr=[];
+          self.elementCnNameArr = [];
+          self.elementsIndexArr = [];
           for (var i = 0; i < resData.length; i++) {
             elementsArr[i] = {
               id: resData[i].id,
@@ -296,6 +339,8 @@ export default {
             self.elementsIndexArr.push(i);
           }
           self.elements = elementsArr;
+
+          this.checkedElements=[self.elementsIndexArr[0]];//默认选中第一个要素
         })
         .catch(response => {
           console.log(response);
@@ -376,7 +421,7 @@ export default {
         this.axios
           .get("DataService.svc/insertDownList", {
             params: {
-              funParams: objToStr //待修改为moduleEnName，先用固定值代替
+              funParams: objToStr
             }
           })
           .then(res => {
@@ -519,7 +564,7 @@ export default {
         this.axios
           .get("DataService.svc/insertDownList", {
             params: {
-              funParams: objToStr //待修改为moduleEnName，先用固定值代替
+              funParams: objToStr
             }
           })
           .then(response => {
