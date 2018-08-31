@@ -49,7 +49,7 @@
     </div>
     <div class="mymodal" v-show="isShow">
       <!-- 父组件传一个点击事件@hidden="hiddenShow"-->
-      <my-modal @hidden="hiddenShow" :moduleEnName="moduleEnName" :moduleCnName="moduleCnName" ></my-modal>
+      <my-modal @hidden="hiddenShow" :moduleEnName="moduleEnName" :moduleCnName="moduleCnName"></my-modal>
     </div>
   </div>
 </template>
@@ -81,8 +81,8 @@ export default {
       timeTypeValue: null,
       startTimes: null,
       endTimes: null,
-      moduleCnName:"",
-      moduleEnName:""
+      moduleCnName: "",
+      moduleEnName: ""
     };
   },
   mounted() {
@@ -127,69 +127,69 @@ export default {
         .get("DataService.svc/GetModuleByParentModule", {
           params: {
             parentModule: "dataDownLoad",
-           roldId: ""
+            roldId: ""
           }
         })
         .then(response => {
           let data = eval("(" + response.data + ")");
-          var itemsArr=[];
-        for(var i=0;i<data.length;i++){
-          itemsArr[i]={
-            name:"",
-            lists:""
-          }
-          itemsArr[i].name={
-           parentModuleCnName:data[i].parentModuleCnName,
-           parentModule:data[i].parentModule
-          };
-        
-          var listData=data[i].listData;
-          var listsArr=[];
-          for(var j=0;j<listData.length;j++){
-            listsArr[j]={
-              moduleEnName:"",
-              moduleCnName:"",
-              parentModule:"",
-              imgUrl: "",
-              title: "",
-              viewCount: "",
-              commentCount: "",
-              likesCount: "",
-              imgInfo:""
+          var itemsArr = [];
+          for (var i = 0; i < data.length; i++) {
+            itemsArr[i] = {
+              name: "",
+              lists: ""
             };
-            listsArr[j].moduleEnName=listData[j].moduleEnName;
-            listsArr[j].moduleCnName=listData[j].moduleCnName;
-            listsArr[j].parentModule=listData[j].parentModule;
+            itemsArr[i].name = {
+              parentModuleCnName: data[i].parentModuleCnName,
+              parentModule: data[i].parentModule
+            };
 
-            listData[j].imgUrl = require("../../../assets/img" +listData[j].imgUrl);
-            listsArr[j].imgUrl=listData[j].imgUrl;
-            listsArr[j].title=listData[j].moduleCnName;
-            listsArr[j].viewCount=listData[j].viewCount;
-            listsArr[j].commentCount=listData[j].commentCount;
-            listsArr[j].likesCount=listData[j].likesCount;
-            listsArr[j].imgInfo=listData[j].content;
+            var listData = data[i].listData;
+            var listsArr = [];
+            for (var j = 0; j < listData.length; j++) {
+              listsArr[j] = {
+                moduleEnName: "",
+                moduleCnName: "",
+                parentModule: "",
+                imgUrl: "",
+                title: "",
+                viewCount: "",
+                commentCount: "",
+                likesCount: "",
+                imgInfo: ""
+              };
+              listsArr[j].moduleEnName = listData[j].moduleEnName;
+              listsArr[j].moduleCnName = listData[j].moduleCnName;
+              listsArr[j].parentModule = listData[j].parentModule;
+
+              listData[j].imgUrl = require("../../../assets/img" +
+                listData[j].imgUrl);
+              listsArr[j].imgUrl = listData[j].imgUrl;
+              listsArr[j].title = listData[j].moduleCnName;
+              listsArr[j].viewCount = listData[j].viewCount;
+              listsArr[j].commentCount = listData[j].commentCount;
+              listsArr[j].likesCount = listData[j].likesCount;
+              listsArr[j].imgInfo = listData[j].content;
+            }
+            itemsArr[i].lists = listsArr; //将解析过的数据赋值给items
           }
-          itemsArr[i].lists=listsArr;//将解析过的数据赋值给items
-        }
-        self.items=itemsArr;
+          self.items = itemsArr;
+          this.$nextTick(()=>{
+            this.goAnchor(this.$route);
+          });
         })
         .catch(response => {
           console.log(response);
-          
         });
-
-  
     },
 
     showModal(list, img, index) {
       var self = this;
       //获取当前路由的父名称
-      let pName = self.$route.meta.parentEntityName;//将此
+      let pName = self.$route.meta.parentEntityName; //将此
 
-      this.moduleEnName=list.moduleEnName;
-      this.moduleCnName=list.moduleCnName;//作为标题名
-     self.isShow = true; //显示弹出框
-   
+      this.moduleEnName = list.moduleEnName;
+      this.moduleCnName = list.moduleCnName; //作为标题名
+      self.isShow = true; //显示弹出框
     },
     hiddenShow() {
       //更改modal弹出框隐藏（传给子组件一个点击事件）
@@ -299,56 +299,53 @@ export default {
 }
 .list-marker-wrap {
   height: 11%;
-    width: 94%;
+  width: 94%;
   margin-left: 6%;
   text-align: left;
   color: #bbbbbb;
 }
-.icon-text-wrap-com{
-      float: left;
-    width: 32%;
-    display: flex;
-    align-items: center;
+.icon-text-wrap-com {
+  float: left;
+  width: 32%;
+  display: flex;
+  align-items: center;
 }
-.icon-wrap-com{
-    width: 54%;
+.icon-wrap-com {
+  width: 54%;
 }
-.text-wrap-com{
-        width: 92%;
-    padding-left: 9%;
+.text-wrap-com {
+  width: 92%;
+  padding-left: 9%;
 }
 .view-wrap {
   float: left;
- 
 }
 .view-icon {
   background: url("../../../assets/img/dataDownLoad/view.png") no-repeat center
     center;
-  
+
   height: 2vh;
   float: left;
 }
 .view-count {
 }
 .comment-wrap {
-
 }
 .comment-icon {
   background: url("../../../assets/img/dataDownLoad/comment.png") no-repeat
     center center;
- 
+
   height: 2vh;
   float: left;
 }
 .comment-count {
 }
 .likes-wrap {
-
 }
 .likes-icon {
   background: url("../../../assets/img/dataDownLoad/likes.png") no-repeat center
     center;
- 
+
   height: 2vh;
   float: left;
 }
@@ -375,5 +372,4 @@ export default {
   z-index: 999;
   height: 100vh;
 }
-
 </style>

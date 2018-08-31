@@ -1,7 +1,9 @@
 <template>
   <div>
     <div class="side">
-      <el-menu :unique-opened=true :collapse="isSidebarNavCollapse" background-color="#fff" text-color="#2c3e50" active-text-color="rgb(0, 162, 243)" :default-active="currentMenu">
+      <el-menu :unique-opened=true @select="select" :collapse="isSidebarNavCollapse"
+       background-color="#fff" text-color="#2c3e50" active-text-color="rgb(0, 162, 243)" 
+       :default-active="currentMenu">
         <DynamicMenu :menuList="sidebarMenu"></DynamicMenu>
       </el-menu>
     </div>
@@ -20,7 +22,9 @@ export default {
     DynamicMenu
   },
   data() {
-    return {};
+    return {
+      current:''
+    };
   },
   computed: {
     ...mapState([
@@ -35,8 +39,7 @@ export default {
       document.querySelector(".navColor").offsetTop +
       document.querySelector(".navColor").offsetHeight;
      document.querySelector(".side").style.top = navH +15+ "px";
-  },
-  methods: {}
+  }
 };
 </script>
 

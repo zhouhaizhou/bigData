@@ -19,6 +19,10 @@ var topPermissioin = [{
       entityName: 'display'
     },
     {
+      name: '开放指数',
+      entityName: 'statistics'
+    },
+    {
       name: '相关成果',
       entityName: 'relateResults'
     },

@@ -40,9 +40,9 @@
       </el-col>
     </el-row>
     <el-row>
-      <el-col :span="20" :offset="4">
-        <el-tabs v-model="page" @tab-click="handleClick($event)"  @mouseover.native="mouseover"  @mouseout.native="mouseout">
-          <el-tab-pane :label="option.meta.name" :name="option.name" v-for="(option,index) in topbarMenu" :key='index'>
+      <el-col :span="20" :offset="2">
+        <el-tabs v-model="page" @tab-click="handleClick($event)" :before-leave="brforeLeave"  @mouseover.native="mouseover"  @mouseout.native="mouseout">
+          <el-tab-pane :label="option.meta.name"  :name="option.name" v-for="(option,index) in topbarMenu" :key='index'>
           </el-tab-pane>
         </el-tabs>
       </el-col>
@@ -71,39 +71,6 @@ export default {
       date: "",
       week: "",
       inputKey: "",
-      from:null,
-      options: [
-        {
-          name: "home",
-          path: "/home",
-          CName: "首页"
-        },
-        {
-          name: "dataService",
-          path: "/dataService",
-          CName: "数据服务"
-        },
-        {
-          name: "display",
-          path: "/display",
-          CName: "在线展示"
-        },
-        {
-          name: "relateResult",
-          path: "/relateResult",
-          CName: "相关成果"
-        },
-        {
-          name: "userSupport",
-          path: "/userSupport",
-          CName: "用户支持"
-        },
-        {
-          name: "about",
-          path: "/about",
-          CName: "关于我们"
-        }
-      ]
     };
   },
   computed: {
@@ -118,12 +85,19 @@ export default {
   },
   mounted() {
     this.headerInit();
-    this.page = this.$router.currentRoute.name;
-    this.activeName = this.$router.currentRoute.name;
+    this.page = this.$router.currentRoute.path.split('/')[1];
   },
   methods: {
     ...mapActions(["FETCH_PERMISSION"]),
     ...mapMutations(["SETLOCALCITY"]),
+    brforeLeave(activeName,oldActiveName){
+      if(activeName=="statistics"){
+        window.open("statistics.html");
+        return false;
+      }else{
+        return true;
+      }
+    },
     headerInit() {
       this.temp = "16/23°";
       (this.weather = "多云转晴"),

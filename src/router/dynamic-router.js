@@ -81,6 +81,19 @@
      }
    },
    {
+    path: '/statistics',
+    children: [],
+    component: content,
+    name: 'statistics',
+    meta: {
+      name: '开放指数',
+      entityName: 'statistics',
+      type: 'top',
+      parentEntityName: '/',
+      firstLoad: true
+    }
+   },
+   {
      path: '/relateResults',
      component: building,
      children: [],
