@@ -40,7 +40,7 @@
       </el-col>
     </el-row>
     <el-row>
-      <el-col :span="20" :offset="2">
+      <el-col :span="21" :offset="2">
         <el-tabs v-model="page" @tab-click="handleClick($event)" :before-leave="brforeLeave"  @mouseover.native="mouseover"  @mouseout.native="mouseout">
           <el-tab-pane :label="option.meta.name"  :name="option.name" v-for="(option,index) in topbarMenu" :key='index'>
           </el-tab-pane>
@@ -124,9 +124,9 @@ export default {
       let left=obj.offsetLeft+margetLeft;
       let targetObj=document.querySelector('.el-tabs__hover-bar');
       if(obj.id.indexOf('home')>0){
-        lNum=20
+        lNum=0
       }else{
-        lNum=40;
+        lNum=20;
       }
       if(obj.id.indexOf('about')>0||obj.id.indexOf('home')>0){
         wNum=20;
