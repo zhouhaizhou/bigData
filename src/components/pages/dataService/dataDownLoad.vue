@@ -1,0 +1,388 @@
+<template>
+  <div>
+    <div>
+
+      <div class="center">
+        <div class="items-trs-wrap">
+
+          <div class="item-tr-wrap" v-for="item in items" :class="item.name.parentModule">
+            <div class="item-wrap">
+              <div class="sub-title-wrap">
+                <div class="nav-marker"></div>
+                <div class="sub-title">{{item.name.parentModuleCnName}}</div>
+              </div>
+              <div class="lists-wrap">
+                <div class="list-wrap" v-for="(list,index) in item.lists" @mouseout="mouseout" @mouseover="mouseover">
+                  <div class="list-img" :style="{backgroundImage:'url('+list.imgUrl+')',backgroundRepeat:'no-repeat',backgroundPosition:'center center',backgroundSize:'cover'}" @mouseover="showContent(list)" @click="showModal(list)">
+                    <div class="info-wrap">
+                      <div class="info-font">{{list.imgInfo}}</div>
+                    </div>
+                  </div>
+
+                  <div class="list-title">{{list.title}}</div>
+                  <div class="list-marker-wrap">
+                    <div class="view-wrap icon-text-wrap-com">
+                      <div class="view-icon icon-wrap-com" src=""></div>
+                      <div class="view-count text-wrap-com">{{list.viewCount}}</div>
+                    </div>
+                    <div class="comment-wrap icon-text-wrap-com">
+                      <div class="comment-icon icon-wrap-com" src=""></div>
+                      <div class="comment-count text-wrap-com">{{list.commentCount}}</div>
+                    </div>
+                    <div class="likes-wrap icon-text-wrap-com">
+                      <div class="likes-icon icon-wrap-com" src=""></div>
+                      <div class="likes-count text-wrap-com">{{list.likesCount}}</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="clearfloat" style="clear:both;height:0;font-size: 1px;line-height: 0px;"></div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- <div v-show="isShow" class="modal-wrap" ><div @click="closeModal">×</div></div> -->
+      </div>
+
+    </div>
+    <div class="mymodal" v-show="isShow">
+      <!-- 父组件传一个点击事件@hidden="hiddenShow"-->
+      <my-modal @hidden="hiddenShow" :moduleEnName="moduleEnName" :moduleCnName="moduleCnName" :isShow="isShow " ref="c1" ></my-modal>
+    </div>
+  </div>
+</template>
+
+<script>
+import myHeader from "../../common/header";
+import myFooter from "../../common/foot";
+import myModal from "./modal";
+import { mapActions } from "vuex";
+var moduleEnName = "",
+  parentModule = "";
+export default {
+  components: {
+    myHeader,
+    myFooter,
+    myModal
+  },
+  data() {
+    return {
+      isShow: false,
+
+      items: [],
+
+      //将请求到的生成modal弹框的数据通过属性标签传给子组件，子组件通过props接收数据
+      modalData: null,
+      famatOptions: null,
+      famatValue: null,
+      timeType: null,
+      timeTypeValue: null,
+      startTimes: null,
+      endTimes: null,
+      moduleCnName:"",
+      moduleEnName:""
+    };
+  },
+  mounted() {
+    this.getAllData();
+  },
+  watch: {
+    //监听路由变化
+
+    $route(to) {
+      this.goAnchor(to);
+    }
+  },
+  methods: {
+    ...mapActions(["scrollAnchor"]),
+    goAnchor(val) {
+      let entityName = val.meta.entityName;
+      let toObj = document.querySelector("." + entityName);
+      let top = document.documentElement.scrollTop;
+      this.scrollAnchor({ top: top, obj: toObj, isScroll: true });
+    },
+    clear: function() {
+      var para1 = this.$refs.splitLine[this.$refs.splitLine.length - 1];
+      para1.parentNode.removeChild(para1);
+    },
+    showContent: function(list) {
+      //鼠标悬浮图片时显示的文字内容，不悬浮时，不请求显示
+      // alert(list);
+      // console.log(list);
+    },
+    mouseout(env) {
+      // env.currentTarget.classList.remove("hover");
+    },
+    mouseover(env) {
+      // env.currentTarget.classList.add("hover");
+    },
+    getAllData() {
+      //初始加载和路由监听事件时，执行此方法
+      let self = this;
+      //获取当前路由的父名称
+      let pName = self.$route.meta.parentEntityName; //当点击左侧子路由时，获取父路由名称给后台
+      // console.log(list);
+
+      this.axios
+        .get("DataService.svc/GetModuleByParentModule", {
+          params: {
+            parentModule: "dataDownLoad",
+           roldId: ""
+          }
+        })
+        .then(response => {
+          let data = eval("(" + response.data + ")");
+          var itemsArr=[];
+        for(var i=0;i<data.length;i++){
+          itemsArr[i]={
+            name:"",
+            lists:""
+          }
+          itemsArr[i].name={
+           parentModuleCnName:data[i].parentModuleCnName,
+           parentModule:data[i].parentModule
+          };
+        
+          var listData=data[i].listData;
+          var listsArr=[];
+          for(var j=0;j<listData.length;j++){
+            listsArr[j]={
+              moduleEnName:"",
+              moduleCnName:"",
+              parentModule:"",
+              imgUrl: "",
+              title: "",
+              viewCount: "",
+              commentCount: "",
+              likesCount: "",
+              imgInfo:""
+            };
+            listsArr[j].moduleEnName=listData[j].moduleEnName;
+            listsArr[j].moduleCnName=listData[j].moduleCnName;
+            listsArr[j].parentModule=listData[j].parentModule;
+
+            listData[j].imgUrl = require("../../../assets/img" +listData[j].imgUrl);
+            listsArr[j].imgUrl=listData[j].imgUrl;
+            listsArr[j].title=listData[j].moduleCnName;
+            listsArr[j].viewCount=listData[j].viewCount;
+            listsArr[j].commentCount=listData[j].commentCount;
+            listsArr[j].likesCount=listData[j].likesCount;
+            listsArr[j].imgInfo=listData[j].content;
+          }
+          itemsArr[i].lists=listsArr;//将解析过的数据赋值给items
+        }
+
+        self.items=itemsArr;
+
+        this.$nextTick(()=>{  
+            this.goAnchor(this.$route);
+          });
+
+
+        })
+        .catch(response => {
+          console.log(response);
+          
+        });
+
+  
+    },
+
+    showModal(list, img, index) {
+      var self = this;
+      //获取当前路由的父名称
+      let pName = self.$route.meta.parentEntityName;//将此
+
+      this.moduleEnName=list.moduleEnName;
+      this.moduleCnName=list.moduleCnName;//作为标题名
+     self.isShow = true; //显示弹出框
+   
+    },
+    hiddenShow() {
+      //更改modal弹出框隐藏（传给子组件一个点击事件）
+      let that = this; //为了避免this指向出现歧义，把vue实例的this赋值给另一个变量再使用
+      that.isShow = false;
+    }
+  }
+};
+</script>
+
+<style scoped>
+.center {
+  background-color: #f3f8fc;
+  /* margin-left: 20vw; */
+  /* width: 80vw; */
+}
+.items-trs-wrap {
+  padding-bottom: 3vh;
+}
+.item-tr-wrap {
+  clear: both;
+  padding-top: 2vh;
+  margin-left: 1vw;
+  /* height: 45vh; */
+}
+.item-wrap {
+  /* height: 40vh; */
+}
+.sub-title-wrap {
+}
+.item-tr-wrap .list-wrap:last-child {
+  margin-bottom: 3vh;
+}
+.nav-marker {
+  float: left;
+  width: 0.5vw;
+  height: 2.5vh;
+  background-color: #1bbf9d;
+}
+.sub-title {
+  float: left;
+  margin-left: 0.8vw;
+  font-size: 1vw;
+  font-weight: bold;
+}
+.lists-wrap {
+  clear: both;
+  text-align: center;
+  width: 100%;
+}
+.list-wrap {
+  float: left;
+  width: 20%;
+  height: 34vh;
+  margin-right: 2vw;
+  /* border: solid 1px; */
+  border-radius: 3%;
+  box-shadow: 0px 0px 1px 1.5px #80808038;
+  background-color: #fffffd;
+  margin-top: 3vh;
+  display: inline-block;
+
+  transition: all 0.3s;
+}
+.hover {
+  transform: scale(1.08);
+}
+.list-img {
+  width: 14.5vw;
+  height: 24vh;
+  margin: 4%;
+  cursor: pointer;
+}
+
+.info-wrap {
+  position: absolute;
+  width: 14.5vw;
+  height: 24vh;
+
+  background-color: white;
+  text-indent: 2em;
+
+  opacity: 0; /*不透明度：通过不透明度来实现层的隐藏效果    透明*/
+  -webkit-transition: opacity 0.5s ease-in-out;
+  -moz-transition: opacity 0.5s ease-in-out;
+  -o-transition: opacity 0.5s ease-in-out;
+  transition: opacity 0.5s ease-in-out;
+}
+.info-font {
+  text-align: left;
+  padding-left: 5%;
+  margin-top: 1vh;
+  line-height: 1.8;
+}
+.info-wrap:hover {
+  background-color: white;
+  opacity: 0.85; /*不透明度：通过不透明度来实现层的显示效果    显示 */
+  filter: alpha(opacity=0.7);
+  text-indent: 2em;
+}
+.list-title {
+  margin-left: 6%;
+  text-align: left;
+  font-weight: bold;
+  margin-bottom: 1vh;
+  font-size: 1em;
+}
+.list-marker-wrap {
+  height: 11%;
+    width: 94%;
+  margin-left: 6%;
+  text-align: left;
+  color: #bbbbbb;
+}
+.icon-text-wrap-com{
+      float: left;
+    width: 32%;
+    display: flex;
+    align-items: center;
+}
+.icon-wrap-com{
+    width: 54%;
+}
+.text-wrap-com{
+        width: 92%;
+    padding-left: 9%;
+}
+.view-wrap {
+  float: left;
+ 
+}
+.view-icon {
+  background: url("../../../assets/img/dataDownLoad/view.png") no-repeat center
+    center;
+  
+  height: 2vh;
+  float: left;
+}
+.view-count {
+}
+.comment-wrap {
+
+}
+.comment-icon {
+  background: url("../../../assets/img/dataDownLoad/comment.png") no-repeat
+    center center;
+ 
+  height: 2vh;
+  float: left;
+}
+.comment-count {
+}
+.likes-wrap {
+
+}
+.likes-icon {
+  background: url("../../../assets/img/dataDownLoad/likes.png") no-repeat center
+    center;
+ 
+  height: 2vh;
+  float: left;
+}
+.likes-count {
+}
+.hr-wrap {
+  margin-top: 4vh;
+  margin-bottom: 2vh;
+  clear: both;
+}
+.hr-self {
+}
+.modal-wrap {
+  width: 1000px;
+  height: 500px;
+  background-color: red;
+}
+
+.mymodal {
+  position: fixed;
+  width: 100vw;
+  top: 0;
+  left: 0;
+  z-index: 999;
+  height: 100vh;
+}
+
+</style>

@@ -14,6 +14,7 @@ module.exports = {
     proxyTable: {
       '/api': {
         target: 'http://61.152.122.108:8282/BIGDATAWCF/SYS/BigData',//设置你调用的接口域名和端口号 别忘了加http
+        // target: 'http://localhost:45990/SYS/BigData',//设置你调用的接口域名和端口号 别忘了加http  本地调wcf
         //target: 'https://api.douban.com',//设置你调用的接口域名和端口号 别忘了加http
         changeOrigin: true,
         pathRewrite: {

@@ -135,7 +135,7 @@ export default {
   color: white;
 }
 .timewrap {
-  height: 656px;
+  height: 69vh;
   overflow: auto;
 }
 .time {

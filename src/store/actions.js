@@ -10,16 +10,22 @@ export default  {
     var Top = paramObj.top;
     var obj = paramObj.obj;
     var self = this;
-    if (document.documentElement.scrollTop >= obj.offsetTop) {
+    document.documentElement.scrollTop=Top;
+    let isScroll=paramObj.isScroll==undefined?true:paramObj.isScroll;   //页面到最低端之后点击其他的菜单时所触发的条件，每次点击菜单则为true,首页锚点定位没有传这个参数
+    if (Math.abs(document.documentElement.scrollTop - obj.offsetTop) <= 1) {   //初底部以外到达该条件就退出
       return;
     }
-    document.documentElement.scrollTop=Top;
+    let isBottom=document.body.scrollHeight-document.documentElement.scrollTop-document.documentElement.clientHeight;  //判断滚动是否到达底部的条件
+    if(!isScroll && Math.abs(isBottom) <=1){   //判断如果到底部了就退出
+      return;
+    }
     var timer = setInterval(function() {
       clearInterval(timer);
       let distance = (obj.offsetTop - document.documentElement.scrollTop) / 10 //步长
       self.dispatch('scrollAnchor', {
         top: distance + Top,
-        obj: obj
+        obj: obj,
+        isScroll:false
       });
     }, 15);
 },
@@ -40,11 +46,11 @@ export default  {
       if (path.split('/').length > 2) {
         return;
       } else {
-        commit('SET_SIDERMENU', state.cacheSiderBar[path]);
+         commit('SET_SIDERMENU', state.cacheSiderBar[path]);
         setDefaultRoute(DynamicR, path.split('/')[1], defaultRouter);
         router.push(defaultRouter);
-        return;
-      }
+         //return;
+       }
     }
     if (type == 'top') { //第一次获取一级菜单
       permissionList = fetchPermission("");
@@ -57,7 +63,7 @@ export default  {
       DynamicR = state.permissionList;
       siderBarRouters(path.split('/')[1]).then(function (res) {
         routers = res;
-        children = joinRouter(DynamicR, routers, path);
+        children = joinRouter(DynamicR, routers, "/"+path.split('/')[1]);
         state.cacheSiderBar[path] = routers;
         commit('SET_SIDERMENU', state.cacheSiderBar[path]);
         router.addRoutes(DynamicR);

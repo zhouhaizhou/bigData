@@ -1,7 +1,9 @@
  import home from '@/components/pages/home/home'
  import building from '@/components/common/building'
+ import about from '@/components/pages/about/about'
  import content from '../components/common/content.vue'
  import axios from 'axios';
+ import relateResults from '../components/pages/relateResult/relateResults.vue'
 
  function siderBarRouters(path) {
    return new Promise((resolve, reject) => {
@@ -82,7 +84,7 @@
    },
    {
      path: '/relateResults',
-     component: building,
+     component: relateResults,
      children: [],
      name: 'relateResults',
      meta: {
@@ -95,7 +97,7 @@
    },
    {
      path: '/userSupport',
-     component: building,
+     component: content,
      children: [],
      name: 'userSupport',
      meta: {
@@ -108,7 +110,7 @@
    },
    {
      path: '/about',
-     component: building,
+     component: about,
      children: [],
      name: 'about',
      meta: {
