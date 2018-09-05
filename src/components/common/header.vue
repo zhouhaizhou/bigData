@@ -40,9 +40,9 @@
       </el-col>
     </el-row>
     <el-row>
-      <el-col :span="20" :offset="4">
-        <el-tabs v-model="page" @tab-click="handleClick($event)"  @mouseover.native="mouseover"  @mouseout.native="mouseout">
-          <el-tab-pane :label="option.meta.name" :name="option.name" v-for="(option,index) in topbarMenu" :key='index'>
+      <el-col :span="20" :offset="2">
+        <el-tabs v-model="page" @tab-click="handleClick($event)" :before-leave="brforeLeave"  @mouseover.native="mouseover"  @mouseout.native="mouseout">
+          <el-tab-pane :label="option.meta.name"  :name="option.name" v-for="(option,index) in topbarMenu" :key='index'>
           </el-tab-pane>
         </el-tabs>
       </el-col>
@@ -71,39 +71,6 @@ export default {
       date: "",
       week: "",
       inputKey: "",
-      from:null,
-      options: [
-        {
-          name: "home",
-          path: "/home",
-          CName: "首页"
-        },
-        {
-          name: "dataService",
-          path: "/dataService",
-          CName: "数据服务"
-        },
-        {
-          name: "display",
-          path: "/display",
-          CName: "在线展示"
-        },
-        {
-          name: "relateResult",
-          path: "/relateResult",
-          CName: "相关成果"
-        },
-        {
-          name: "userSupport",
-          path: "/userSupport",
-          CName: "用户支持"
-        },
-        {
-          name: "about",
-          path: "/about",
-          CName: "关于我们"
-        }
-      ]
     };
   },
   computed: {
@@ -118,12 +85,19 @@ export default {
   },
   mounted() {
     this.headerInit();
-    this.page = this.$router.currentRoute.name;
-    this.activeName = this.$router.currentRoute.name;
+    this.page = this.$router.currentRoute.path.split('/')[1];
   },
   methods: {
     ...mapActions(["FETCH_PERMISSION"]),
     ...mapMutations(["SETLOCALCITY"]),
+    brforeLeave(activeName,oldActiveName){
+      if(activeName=="statistics"){
+        window.open("statistics.html");
+        return false;
+      }else{
+        return true;
+      }
+    },
     headerInit() {
       this.temp = "16/23°";
       (this.weather = "多云转晴"),
@@ -135,18 +109,24 @@ export default {
     mouseover(evt){
       let lNum=20;
       let wNum=40;
-      document.querySelector('.el-tabs__hover-bar').style.display="block";
+      let obj=evt.target;
+      if(obj.id.indexOf(this.page)<0){
+        document.querySelector('.el-tabs__active-bar').style.opacity="0";
+        document.querySelector('.el-tabs__hover-bar').style.opacity="1";
+      }else{
+        document.querySelector('.el-tabs__hover-bar').style.opacity="0";
+        document.querySelector('.el-tabs__active-bar').style.opacity="1";;
+      }
       let margetLeft=document.querySelector('.el-tabs').offsetLeft;
       let activeObj=document.querySelector('.el-tabs__active-bar');
       let activeW=activeObj.clientWidth;
-      let obj=evt.target;
       let width=obj.clientWidth;
       let left=obj.offsetLeft+margetLeft;
       let targetObj=document.querySelector('.el-tabs__hover-bar');
       if(obj.id.indexOf('home')>0){
-        lNum=0
+        lNum=20
       }else{
-        lNum=20;
+        lNum=40;
       }
       if(obj.id.indexOf('about')>0||obj.id.indexOf('home')>0){
         wNum=20;
@@ -158,7 +138,8 @@ export default {
     },
     mouseout(evt){
       let obj=evt.target;
-      document.querySelector('.el-tabs__hover-bar').style.display="none";
+      document.querySelector('.el-tabs__active-bar').style.opacity="1";
+      document.querySelector('.el-tabs__hover-bar').style.opacity="0";
     },
     getLocal() {
       if (this.localCity == "") {
@@ -249,6 +230,7 @@ export default {
 .header >>> .el-tabs__active-bar {
   background-color: white;
   height: 4px;
+  transition: all .5s;
 }
 .header >>> .el-tabs__item.is-active {
   color: white !important;
@@ -259,7 +241,7 @@ export default {
 .header >>> .el-tabs__item {
   color: white;
   font-weight: bold;
-  width: 35%;
+  width: 12vw;
   text-align: center;
   height: 51px;
   line-height: 50px;
@@ -288,7 +270,7 @@ export default {
   background-color: white;
   height: 4px;
   position: absolute;
-  bottom: 0;
+  bottom: -1px;
   left: 0;
   transition: all 0.5s;
   list-style: none;

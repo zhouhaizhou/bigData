@@ -40,19 +40,29 @@ export default {
       playSpeed: "800",
       timer: null,
       selectIndex: -1,
+      webProduct:null
     };
   },
   mounted() {
-    //this.selectIndex=this.times.length-1;
   },
   watch: {
+    $route:{
+      handler(val){
+        this.pause();
+      }
+    },
     selectedTime(val){
       this.selectIndex=this.selectedTime;
     },
     selectIndex(val) {
-      let temp = this.times[val].url;
-      temp = temp.split("?")[0];
-      let path = require("../../../../webProduct/" + temp);
+      let path="";
+      if(val!=-1){
+        let temp = this.times[val].url;
+        path ='./static/webProduct/'+temp;
+      }
+      //temp=temp.split('?')[0];
+      //let path = this.webProduct + temp;
+      // this.$emit("selShowImg", path);
       this.$emit("selShowImg", path);
     }
   },
@@ -145,7 +155,7 @@ export default {
 }
 .time:hover,
 .active {
-  color: rgb(9, 157, 220);
+  color: #3f9ddd;
   background-color: rgb(231, 238, 244);
 }
 .control {
@@ -208,6 +218,6 @@ export default {
   padding-left: 15px;
   border-radius: 30px;
   color: rgb(9, 157, 220);
-  height: 4.3vh;
+  height: 3.7vh;
 }
 </style>

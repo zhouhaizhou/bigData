@@ -176,11 +176,9 @@ export default {
 
         self.items=itemsArr;
 
-        this.$nextTick(()=>{  
+        this.$nextTick(()=>{
             this.goAnchor(this.$route);
           });
-
-
         })
         .catch(response => {
           console.log(response);

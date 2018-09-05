@@ -8,7 +8,7 @@
       </div>
       <div  class="img">
           <!-- <div class="img" :style="style"></div> -->
-          <img :src="style" style="height:80vh"  alt="">
+          <img :src="style" style="height:80vh"  class="loadImg" alt="">
           <!-- <div class="img" @click="showImg" :style="style"></div> -->
       </div>
       <right class="right" :times="times" :selPlayInterval="selPlayInterval" v-on:selShowImg="selShowImg"></right>
@@ -37,9 +37,9 @@ export default {
         this.selPlayInterval=null;
         this.playInterval=null;
         this.getData("", "", "", "", "");
-      }
-    },
-    deep:true
+      },
+      deep:true
+    }
   },
   data() {
     return {
@@ -81,6 +81,10 @@ export default {
           self.SETSELECTEDTIME(self.times.length-1)
           if (self.isFirst) {
             self.isFirst=false;
+            if(data.endTime=='WRF'){
+              data.endTime="";
+              data.area=["华东"];
+            }
             self.condition = data;
             self.playInterval = self.condition.intervalOpt[0]["key"];
             self.calImgWidth();
@@ -99,8 +103,7 @@ export default {
       document.querySelector(".img").style.width = imgW + "px";
     },
     creatImg() {
-      let imagePath = document.querySelector(".img").style.backgroundImage;
-      imagePath = imagePath.replace('url("', "").replace('")', "");
+      let imagePath = document.querySelector(".loadImg").src;
       var img = document.createElement("img");
       img.src = imagePath;
       return img;
@@ -116,10 +119,11 @@ export default {
       return false;
     },
     download() {
-      let img = document.querySelector(".img").style.backgroundImage;
-      img = img.replace('url("', "").replace('")', "");
+      let img = document.querySelector(".loadImg").src;
+      let temp=img.split('/');
+      let filename=temp[temp.length-1].split('?')[0];
       let a = document.createElement("a");
-      a.download = img;
+      a.download = filename;
       a.href = img;
       a.click();
     },
