@@ -165,6 +165,7 @@ export default {
     return {
       elementCnName: "",
       modalData: [],
+      UpdateInterValue:"",
       province: "",
       provinceData: "",
       citySite: "",
@@ -221,12 +222,12 @@ export default {
       if (this.moduleEnName != "") {//更新页面
         this.getFileContentData();
         this.getElementData();
-        this.defaultSetByModuleEnName();
+        //this.defaultSetByModuleEnName();//由于设置默认值方法中的变量需要axios异步执行完才能获取到，所以，此方法不能直接在变量没生成的情况下单独执行
       }
     },
     isShow(){//监听
       if(this.isShow==false){
-        this.checkedElements=[];//弹框关闭时，清除选择的要素
+        // this.checkedElements=[];//弹框关闭时，清除选择的要素
       }else{//弹框显示时，默认选中后台返回数据中的第一个要素
 
       }
@@ -235,20 +236,21 @@ export default {
   },
   methods: {
     defaultSetByModuleEnName(){
-      let hour=(this.moduleEnName).indexOf('our');//注意：数据库中配置时，年月日时，的命名采用要包含此处对应的字符
-      let day=(this.moduleEnName).indexOf('Day');
-      let month=(this.moduleEnName).indexOf('Month');
-      let year=(this.moduleEnName).indexOf('Year');
+      let hour=(this.UpdateInterValue).indexOf('时');//注意：数据库中配置时，年月日时，的命名采用要包含此处对应的字符
+      let day=(this.UpdateInterValue).indexOf('天');
+      let day1=(this.UpdateInterValue).indexOf('日');
+      let month=(this.UpdateInterValue).indexOf('月');
+      let year=(this.UpdateInterValue).indexOf('年');
       if(hour!=-1){
         this.getTime('hour');
         this.timeValue="天";//去掉间隔单位“小时”，小时数据也用“天”单位
-      }else if(day!=1){
+      }else if(day!=-1||day1!=-1){
         this.getTime('day');
         this.timeValue="天";
-      }else if(month!=1){
+      }else if(month!=-1){
         this.getTime('month');
         this.timeValue="月";
-      }else if(year!=1){
+      }else if(year!=-1){
         this.getTime('year');
         this.timeValue="年";
       }else{
@@ -281,11 +283,7 @@ export default {
           this.startTimes = this._global.formatDate(start, "yyyy-MM-dd hh");
           break;
       }
-      start.setTime(start.getTime() - 3600 * 1000 * 1); //提前一小时
-      // start.setTime(start.getTime() - 3600 * 1000 * 24);//提前一天
-      // start.setTime(start.getTime() - 3600 * 1000 * 24*30);//提前一个月
-      // start.setTime(start.getTime() - 3600 * 1000 * 24*30*12);//提前一年
-      this.startTimes = this._global.formatDate(start, "yyyy-MM-dd hh");
+
     },
     getChildComProvinceParams(val) {
       this.province = val.province;
@@ -310,6 +308,9 @@ export default {
         .then(response => {
           let resData = eval("(" + response.data + ")");
           self.modalData = resData;
+          self.UpdateInterValue=self.modalData[0].UpdateInter;//将更新频率赋值给变量数据UpdateInterValue，用于设置默认时间
+
+          this.defaultSetByModuleEnName();//需要的变量生成后执行   解决axios不能同步
         })
         .catch(response => {
           console.log(response);

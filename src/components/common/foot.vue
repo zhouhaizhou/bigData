@@ -8,7 +8,8 @@
       </div>
     </div>
     <div class="middle-content">
-      <div class="units-wrap">
+<div class="middle-content-wrap">
+        <div class="units-wrap">
         <div class="units-title">相关单位</div>
         <div class="unit" v-for="unit in units">
           <div @click="linkClick(unit.url)">{{unit.name}}</div>
@@ -26,6 +27,7 @@
           <div class="friendly-link" v-for="fL in fLinks" @click="linkClick(fL.url)">{{fL.name}}</div>
         </div>
       </div>
+</div>
     </div>
     <div class="bak"><img src="../../assets/img/gongan.png">
       <span class="bak-text">备案信息：沪ICP备18015098号-1</span>
@@ -138,9 +140,15 @@ export default {
   justify-content: center;
   align-items: center;
 }
+.middle-content-wrap{
+  width: 70%;
+    display: flex;
+    justify-content: center;
+    padding-left: 7%;
+}
 .units-wrap {
-  width: 26vw;
-  margin-top: 2vh;
+    width: 22%;
+    margin-top: 2vh;
 }
 .units-title {
   margin-left: 3vw;
@@ -154,8 +162,8 @@ export default {
   color: #a4a4a6;
 }
 .address-wrap {
-  width: 18vw;
-  margin-top: 2vh;
+    width: 21%;
+    margin-top: 2vh;
 }
 .address-title {
   margin-left: 4vw;
@@ -168,8 +176,8 @@ export default {
   color: #a4a4a6;
 }
 .friendly-link-wrap {
-  width: 22vw;
-  margin-top: 2vh;
+    width: 33%;
+    margin-top: 2vh;
 }
 .friendly-link-title {
   margin-left: 7vw;

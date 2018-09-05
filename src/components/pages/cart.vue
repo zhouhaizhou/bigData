@@ -1,8 +1,8 @@
  <template>
   <div>
     <my-header></my-header>
-    <div class="carts-wrap">
-      <div class="cart-wrap">
+    <div :class="{cartsWrap:!h,cartsWrapH:h}">
+      <div id="cart-wrap" :class="{cartWrap:!h,cartWrapH:h}">
         <div class="title-wrap">
           <div class="nav-marker"></div>
           <div class="sub-title">下载清单</div>
@@ -53,10 +53,10 @@
             <!-- <div class="line"></div> -->
           </div>
         </div>
-        <div class="boot-wrap" :class="{unfixed:!fixed,fixed:fixed}">
+        <div class="boot-wrap" :class="{unfixed:!fixed,fixed:fixed,noDisplay:showText}">
           <div class="select-all-wrap">
             <el-checkbox v-model="all" @change="allChecked()"></el-checkbox>
-            <span>全选文件</span>
+            <span style="margin-left: 5%;">全选文件</span>
           </div>
           <div class="select-num-wrap">
             <span>已选择</span>
@@ -70,6 +70,7 @@
             <el-button type="primary" icon="el-icon-download" @click="download">下载</el-button>
           </div>
         </div>
+        <div v-show="showText" class="showText">无数据记录，请添加记录</div>
         <div class="clearfloat"></div>
       </div>
     </div>
@@ -88,9 +89,12 @@ export default {
   data() {
     return {
       fixed: false,
+      h: false,
+      itemsHeight: "0",
       all: true,
       ids: [],
-      items: []
+      items: [],
+      showText: false
     };
   },
   watch: {
@@ -113,6 +117,9 @@ export default {
         this.ids.sort();
       },
       deep: true
+    },
+    itemsHeight() {
+      this.setContainerHeight();
     }
   },
   computed: {
@@ -123,11 +130,17 @@ export default {
           num++;
         }
       });
-      if (num < this.items.length) {
-        //判断是否全选了
+      //判断是否全选了
+      if (this.items.length == 0 || num < this.items.length) {
         this.all = false;
       } else {
         this.all = true;
+      }
+      //如果没有插入记录，就显示无数据插入的文字提示
+      if (this.items.length == 0) {
+        this.showText = true;
+      } else {
+        this.showText = false;
       }
       return num;
     }
@@ -172,7 +185,11 @@ export default {
           this.items = obj;
           this.$nextTick(() => {
             this.handleScroll();
+            this.itemsHeight = document.querySelector(
+              ".items-wrap"
+            ).clientHeight;
           });
+          // this.setContainerHeight();
         })
         .catch(res => {
           console.log(res.data);
@@ -256,7 +273,7 @@ export default {
         });
     },
     handleScroll() {
-      let mainHeight = document.querySelector(".carts-wrap").clientHeight;
+      let mainHeight = document.querySelector(".cartsWrap").clientHeight;
       let headerHeight = document.querySelector(".header").clientHeight;
       let scrollTop = document.documentElement.scrollTop;
       let pageHeight = document.documentElement.clientHeight;
@@ -266,13 +283,37 @@ export default {
       } else {
         this.fixed = false;
       }
+    },
+    setContainerHeight() {
+      let headerHeight = document.querySelector(".header").clientHeight;
+      let titleHeight = document.querySelector(".title-wrap").clientHeight;
+      let itemsHeight = document.querySelector(".items-wrap").clientHeight;
+
+      let footHeight = document.querySelector(".foot-wrap").clientHeight;
+      let pageHeight = document.documentElement.clientHeight;
+      let dHeight =
+        (headerHeight + titleHeight + itemsHeight + footHeight+20) - pageHeight;
+      if (dHeight <= 0) {
+        this.h = true;
+        //当通过computed计算得到的值发生变化后，执行相应的操作
+      } else {
+        this.h = false;
+      }
     }
   }
 };
 </script>
 
 <style scoped>
-.carts-wrap {
+#cart-wrap >>> .el-checkbox__inner{
+  width: 17px;
+    height: 17px;
+}
+#cart-wrap >>> .el-checkbox__inner::after{
+  left: 5px;
+  top:2px;
+}
+.cartsWrap {
   width: 100%;
   /* height: 100vh; */
   background-color: #f3f8fc;
@@ -280,9 +321,25 @@ export default {
   justify-content: center;
   /* align-items: center; */
 }
-.cart-wrap {
+.cartsWrapH {
+  width: 100%;
+  height: 58vh;
+  background-color: #f3f8fc;
+  display: flex;
+  justify-content: center;
+  /* align-items: center; */
+}
+.cartWrap {
   width: 60%;
   height: 100%;
+  background-color: white;
+  margin-top: 1%;
+  border: solid 0.5px #8080805e;
+  margin-bottom: 1%;
+}
+.cartWrapH {
+  width: 60%;
+  height: 65%;
   background-color: white;
   margin-top: 1%;
   border: solid 0.5px #8080805e;
@@ -382,6 +439,9 @@ export default {
   align-items: center;
   height: 6vh;
 }
+.noDisplay {
+  display: none !important;
+}
 .select-all-wrap {
   padding-left: 3%;
   width: 15%;
@@ -400,7 +460,11 @@ export default {
 .download-button >>> .el-button {
   padding: 6px 17px;
 }
-
+.showText {
+  text-align: center;
+  padding-top: 10px;
+  font-weight: bold;
+}
 .clearfloat {
   clear: both;
   height: 0;

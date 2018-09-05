@@ -124,9 +124,9 @@ export default {
       let left=obj.offsetLeft+margetLeft;
       let targetObj=document.querySelector('.el-tabs__hover-bar');
       if(obj.id.indexOf('home')>0){
-        lNum=0
+        lNum=20
       }else{
-        lNum=20;
+        lNum=40;
       }
       if(obj.id.indexOf('about')>0||obj.id.indexOf('home')>0){
         wNum=20;
@@ -241,7 +241,7 @@ export default {
 .header >>> .el-tabs__item {
   color: white;
   font-weight: bold;
-  width: 35%;
+  width: 12vw;
   text-align: center;
   height: 51px;
   line-height: 50px;

@@ -81,7 +81,7 @@ export default {
           provinceAllName: "上海市",
           isFirst: true
         }); //暂时隐藏
-        this.deafultProvinceCity(); //更新默认城市
+        this.deafultProvince(); //更新默认城市
       }
     }
   },
@@ -93,10 +93,10 @@ export default {
           provinceAllName: "上海市",
           isFirst: true
         }); //暂时隐藏
-        this.deafultProvinceCity(); //更新默认城市
+        this.deafultProvince(); //更新默认城市
   },
   methods: {
-    deafultProvinceCity() {
+    deafultProvince() {
       let self = this;
       let provinceObj = {
         province: self.checkedProvince.provinceName,
@@ -105,10 +105,6 @@ export default {
       //向父组件传值
       this.$emit("getParams", provinceObj);
 
-      //获取默认勾选的城市站点,j将其传给父组件
-      this.getCheckedCitiesParams();
-
-      this.checkedCities = []; //更新默认选择的城市
     },
     getAllData() {
       let self = this;
@@ -135,8 +131,7 @@ export default {
         });
     },
     getCityData(province) {
-      this.checkedCities = []; //点击下一个省份之前清空上一个省份点击的城市站点
-      // //点击省份，改变provinceChecked
+      //点击省份，改变provinceChecked
       this.provinceChecked = province.provinceCode;
       let self = this;
       //获取点击的省份
@@ -147,7 +142,7 @@ export default {
         provinceData: self.provinceData
       };
       let isFirst = province.isFirst == true ? province.isFirst : false;
-      //向父组件传值
+      //默认省份或点击省份，向父组件传省份值
       this.$emit("getParams", provinceObj);
 
       var provinceAllName = province.provinceAllName; //作为参数传给后台
@@ -164,6 +159,7 @@ export default {
           let resData = eval("(" + response.data + ")");
 
           self.cityOptions = [];
+          this.checkedCities = []; //点击下一个省份之前清空上一个省份点击的城市站点
           self.cities = [];
           for (var i = 0; i < resData.length; i++) {
             self.cityOptions.push(
@@ -176,26 +172,14 @@ export default {
           if (isFirst) {//默认选中返回城市数据中的第一个  如果再次点击省份，由于点击省份对象中没有isFirst，上面定义的isFirst就为false，不执行选中功能
             let defaultV = self.cities[0];
             this.checkedCities = [defaultV];
+            //获取默认勾选的城市站点,将其传给父组件
+            this.getCheckedCitiesParams();
           }
         })
         .catch(response => {
           console.log(response);
         });
 
-      // //点击省份，请求城市
-      // for(var i=0;i<resData.length;i++){
-      //     if(province.provinceName==resData[i].province){
-      //         // self.cities=resData[i].adminName;//直接将点击省份对应的城市显示出来，默认显示上海的  在mounted中 getCityData("上海市");
-      //         // cityOptions=resData[i].adminName;
-      //         //测试
-      //         cityOptions=["[58361]虹口","[58367]静安",
-      //   "[58361]金山",
-      //   "[58367]奉贤"];
-      //   self.cities=["[58361]虹口","[58367]静安",
-      //   "[58361]金山",
-      //   "[58367]奉贤"];
-      //     }
-      // }
     },
     getCheckedCitiesParams() {
       //解析勾选的城市站点，传给父组件
@@ -214,7 +198,7 @@ export default {
         citySite: this.citySite,
         citySiteDetail: this.checkedCities.join()
       };
-      //向父组件传值
+      //向父组件传城市站点值
       this.$emit("getCityParams", cityObj);
     },
     handleCheckAllChange(val) {
