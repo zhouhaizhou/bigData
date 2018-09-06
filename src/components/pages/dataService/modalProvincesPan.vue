@@ -253,7 +253,10 @@ export default {
   float: left;
 }
 .position-title {
-  padding-left: 20%;
+     padding-left: 20%;
+    color: #3d6b84;
+    font-weight: bold;
+    font-size: 1.9em;
 }
 .all-select-wrap {
   float: right;
