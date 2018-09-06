@@ -66,16 +66,19 @@ geolocation(){
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 82vh;
+    height: auto;
     width: 100%;
+    overflow: hidden;
 }
 .body-wrap{
     width: 50%;
-    height: 88%;
+    height: auto;;
     background-color: white;
     border: 1px solid #80808061;
     padding-left: 4%;
     padding-right: 4%;
+    margin-top: 2%;
+    margin-bottom: 2%;
 }
 .title-wrap{
     width: 96%;
@@ -89,7 +92,7 @@ geolocation(){
 } 
 .content-wrap{
 width: 100%;
-    height: 35%;
+    height: auto;
     text-indent: 2em;
     line-height: 3;
     padding-top: 1%;

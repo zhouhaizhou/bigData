@@ -1,6 +1,6 @@
 <template>
 <div :class="{bodyWrap:!highIsSmall,bodyWrapH:highIsSmall}">
-	<div class="img-font-wrap"><div class="img"></div><div class="font">用户反馈</div></div>
+	<div class="img-font-wrap"><div class="img"></div><div class="font">常见问题</div></div>
 	<div class="content-wrap" >
 <div class="content" v-for="content in contents">
 	<div><p class="triangle">Q:&#12288;{{content.question}}</p></div>

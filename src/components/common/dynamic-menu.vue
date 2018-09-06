@@ -44,7 +44,7 @@ export default {
     gotoRoute(name, evt) {
       if (name == "GISInterVisual") {
         let obj = document.querySelector(".el-menu-item.is-active");
-        window.open('https://www.baidu.com');
+        window.open('http://61.152.122.108:8282/BGDATAGIS/');
         setTimeout(() => {
           obj.classList.add("from-menu");
         }, 1);
