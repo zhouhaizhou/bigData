@@ -107,7 +107,7 @@
             <div class="files-wrap">
               <div class="pic-file-wrap">
                 <div class="file-pic"></div>
-                <div class="file-name font-style1">文件选择</div>
+                <div class="file-name font-style12">文件选择</div>
               </div>
               <div class="famat-time-wrap">
                 <div class="famat-name float-left">文件格式：</div>
@@ -221,6 +221,7 @@ export default {
     moduleEnName() {
       if (this.moduleEnName != "") {//更新页面
         this.getFileContentData();
+       this.elements="";
         this.getElementData();
         //this.defaultSetByModuleEnName();//由于设置默认值方法中的变量需要axios异步执行完才能获取到，所以，此方法不能直接在变量没生成的情况下单独执行
       }
@@ -773,13 +774,13 @@ export default {
   line-height: 1.5;
 }
 .date-all-wrap {
-  height: 8.1%;
+  height: 11.1%;
   padding-left: 5%;
   padding-right: 4%;
   padding-top: 2%;
 }
 .date-wrap {
-  padding-bottom: 0.6%;
+  padding-bottom: 1.5%;
 }
 .date-pic {
   background: url("../../../assets/img/modal/date.png") no-repeat center center;
@@ -794,7 +795,7 @@ export default {
 
 .provinces-position-wrap {
   float: left;
-  height: 38%;
+  height: 40%;
   padding-left: 5%;
   padding-right: 4%;
   padding-top: 0.5%;
@@ -812,17 +813,17 @@ export default {
 }
 .elements-select-wrap {
   float: left;
-  height: 30%;
+  height: 25%;
   width: 91%;
   padding-left: 5%;
   padding-right: 4%;
 }
 .element-select-title {
   width: 100%;
-  height: 15%;
+  height: 17%;
   float: left;
   /* margin-top: 0.5%; */
-  margin-bottom: 0.5%;
+  margin-bottom: 1.5%;
 }
 .element-select-wrap {
   width: 18%;
@@ -847,11 +848,11 @@ export default {
 .element-all-select-wrap-postion {
 }
 .element-content {
-  height: 80%;
+  height: 65%;
   width: 98%;
   float: left;
   border: solid #8080802b 0.5px;
-  padding-top: 0.8%;
+  padding-top: 1.5%;
   padding-left: 2%;
 }
 .element-content >>> .el-checkbox + .el-checkbox {
@@ -859,7 +860,7 @@ export default {
 }
 .element-content >>> .el-checkbox {
   width: 20%;
-  padding-top: 0.5%;
+  padding-top: 2%;    
 }
 .element-radio-font-wrap {
   width: 24%;
@@ -870,7 +871,7 @@ export default {
 }
 .files-wrap {
   float: left;
-  height: 8%;
+  height: 11%;
   padding-left: 5%;
   padding-right: 4%;
   padding-top: 1.5%;
@@ -947,7 +948,7 @@ export default {
   padding-left: 5%;
   padding-right: 4%;
 
-  padding-top: 1%;
+  padding-top: 0%;
 
   display: flex;
   -webkit-box-pack: center;
@@ -1023,7 +1024,7 @@ export default {
 .font-style12 {
   color: #3d6b84;
   font-weight: bold;
-  font-size: 1.8em !important;
+  font-size: 1.9em !important;
 }
 .font-style2 {
   color: #4bacf2;

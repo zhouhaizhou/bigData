@@ -19,7 +19,7 @@
 
                </div>
                <div class="foot-right">
-    <div style="width:400px;height:300px;border:1px solid gray;margin:2.5% auto" id="container"></div>
+    <div style="width:570px;height:300px;border:1px solid gray;margin:2.5% auto" id="container"></div>
                </div>
            </div>
        </div>
@@ -117,12 +117,14 @@ font-size: 1.5em;
 }
 .foot-text{
     color: #2c81D9;
-    padding-top: 2%;
+    padding-top: 5%;
 
 }
 .foot-right{
     float: left;
-    width: 55%;
+    width: 60%;
+        padding-top: 2%;
+        padding-bottom: 2%;
 }
 </style>
 

@@ -5,7 +5,7 @@
           <p style="color:rgb(148,152,152);font-size:16px;margin: 0px;padding-top: 1vh;padding-bottom: 1vh;">DATA PRODUCTION SERVICE</p>
       </div>
       <div class="imgdisplay">
-          <div class="imgsingle" :class="{imgscale:option.hoverImg}" v-for="option in options" @mouseover="enterImg(option)" @mouseout="leaveImg(option)">
+          <div class="imgsingle" :class="{imgscale:option.hoverImg}" v-for="option in options" @click="goPage(option)" @mouseover="enterImg(option)" @mouseout="leaveImg(option)">
             <div class="imgframe" :style="{background:'url('+option.img+') no-repeat center center',backgroundSize:'cover'}">
               <!-- <img :src="option.img"  alt=""> -->
               <!-- <img :src="option.img"  alt=""> -->
@@ -27,23 +27,31 @@ export default {
             {
                 CName:'数据清单',
                 EName:'Data List',
+                goPage:"dataService",
+                routeName:"dataLists",
                 img:require('../../../assets/img/dataProduct1.png'),
                 hoverImg:false
             },
             {
                 CName:'数据接口',
+                routeName:"dataInterface",
+                goPage:"dataService",
                 EName:'Data Interface',
                 img:require('../../../assets/img/dataProduct2.png'),
                 hoverImg:false
             },
             {
                 CName:'检索订制',
+                routeName:"customizeSearch",
+                goPage:"dataService",
                 EName:'Retrieval and Order',
                 img:require('../../../assets/img/dataProduct3.png'),
                 hoverImg:false
             },
             {
                 CName:'图像展示',
+                routeName:"CimissRain",
+                goPage:"display",
                 EName:'Image Display',
                 img:require('../../../assets/img/dataProduct4.png'),
                 hoverImg:false
@@ -59,12 +67,14 @@ export default {
 
       },
     enterImg(option){
-      // var obj=env.currentTarget.children[1].add('imgtxtbg');
       option.hoverImg=true;
     },
     leaveImg(option){
-      // env.currentTarget.children[1].remove('imgtxtbg');
       option.hoverImg=false;
+    },
+    goPage(option){
+      this.$router.push({ name: option.goPage,params:{redirect:option.routeName}});
+      //this.$router.push({ name: option.routeName ,params:{redirect:"redirection"}});
     }
   }
 }
