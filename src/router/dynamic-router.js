@@ -7,15 +7,17 @@
 
  function siderBarRouters(path) {
    return new Promise((resolve, reject) => {
-     // axios.defaults.baseURL="";
-     //  url="GetModules";
      axios.get("GetImageProducts.svc/GetModules", {
          params: {
            token: "readearth",
            moduleName: path
          }
        }).then(function (response) {
-         let data = response.data
+         let data = response.data;
+         if(data.indexOf("失败")>0){
+           reject(data);
+           return;
+         }
          data=JSON.parse(data);
          proRoutersObj(data);
          resolve(data);
@@ -88,7 +90,7 @@
     component: content,
     name: 'statistics',
     meta: {
-      name: '开放指数',
+      name: '开放统计',
       entityName: 'statistics',
       type: 'top',
       parentEntityName: '/',

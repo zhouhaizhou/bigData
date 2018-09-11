@@ -41,8 +41,8 @@
     </el-row>
     <el-row>
       <el-col :span="21" :offset="2">
-        <el-tabs v-model="page" @tab-click="handleClick($event)" :before-leave="brforeLeave"  @mouseover.native="mouseover"  @mouseout.native="mouseout">
-          <el-tab-pane :label="option.meta.name"  :name="option.name" v-for="(option,index) in topbarMenu" :key='index'>
+        <el-tabs v-model="page" @tab-click="handleClick($event)" :before-leave="brforeLeave" @mouseover.native="mouseover" @mouseout.native="mouseout">
+          <el-tab-pane :label="option.meta.name" :name="option.name" v-for="(option,index) in topbarMenu" :key='index'>
           </el-tab-pane>
         </el-tabs>
       </el-col>
@@ -70,7 +70,7 @@ export default {
       local: "",
       date: "",
       week: "",
-      inputKey: "",
+      inputKey: ""
     };
   },
   computed: {
@@ -83,18 +83,26 @@ export default {
       }
     }
   },
+  watch: {
+    $route: {
+      handler(val) {
+          this.page = val.path.split('/')[1];
+      },
+      deep: true
+    }
+  },
   mounted() {
     this.headerInit();
-    this.page = this.$router.currentRoute.path.split('/')[1];
+    this.page = this.$router.currentRoute.path.split("/")[1];
   },
   methods: {
     ...mapActions(["FETCH_PERMISSION"]),
     ...mapMutations(["SETLOCALCITY"]),
-    brforeLeave(activeName,oldActiveName){
-      if(activeName=="statistics"){
+    brforeLeave(activeName, oldActiveName) {
+      if (activeName == "statistics") {
         window.open("statistics.html");
         return false;
-      }else{
+      } else {
         return true;
       }
     },
@@ -106,40 +114,40 @@ export default {
         this.getWeek();
       //console.log(this);
     },
-    mouseover(evt){
-      let lNum=20;
-      let wNum=40;
-      let obj=evt.target;
-      if(obj.id.indexOf(this.page)<0){
-        document.querySelector('.el-tabs__active-bar').style.opacity="0";
-        document.querySelector('.el-tabs__hover-bar').style.opacity="1";
-      }else{
-        document.querySelector('.el-tabs__hover-bar').style.opacity="0";
-        document.querySelector('.el-tabs__active-bar').style.opacity="1";;
+    mouseover(evt) {
+      let lNum = 20;
+      let wNum = 40;
+      let obj = evt.target;
+      if (obj.id.indexOf(this.page) < 0) {
+        document.querySelector(".el-tabs__active-bar").style.opacity = "0";
+        document.querySelector(".el-tabs__hover-bar").style.opacity = "1";
+      } else {
+        document.querySelector(".el-tabs__hover-bar").style.opacity = "0";
+        document.querySelector(".el-tabs__active-bar").style.opacity = "1";
       }
-      let margetLeft=document.querySelector('.el-tabs').offsetLeft;
-      let activeObj=document.querySelector('.el-tabs__active-bar');
-      let activeW=activeObj.clientWidth;
-      let width=obj.clientWidth;
-      let left=obj.offsetLeft+margetLeft;
-      let targetObj=document.querySelector('.el-tabs__hover-bar');
-      if(obj.id.indexOf('home')>0){
-        lNum=0
-      }else{
-        lNum=20;
+      let margetLeft = document.querySelector(".el-tabs").offsetLeft;
+      let activeObj = document.querySelector(".el-tabs__active-bar");
+      let activeW = activeObj.clientWidth;
+      let width = obj.clientWidth;
+      let left = obj.offsetLeft + margetLeft;
+      let targetObj = document.querySelector(".el-tabs__hover-bar");
+      if (obj.id.indexOf("home") > 0) {
+        lNum = 0;
+      } else {
+        lNum = 20;
       }
-      if(obj.id.indexOf('about')>0||obj.id.indexOf('home')>0){
-        wNum=20;
-      } else{
-        wNum=40;
+      if (obj.id.indexOf("about") > 0 || obj.id.indexOf("home") > 0) {
+        wNum = 20;
+      } else {
+        wNum = 40;
       }
-      targetObj.style.left=left+lNum+'px';
-      targetObj.style.width=width-wNum+'px';
+      targetObj.style.left = left + lNum + "px";
+      targetObj.style.width = width - wNum + "px";
     },
-    mouseout(evt){
-      let obj=evt.target;
-      document.querySelector('.el-tabs__active-bar').style.opacity="1";
-      document.querySelector('.el-tabs__hover-bar').style.opacity="0";
+    mouseout(evt) {
+      let obj = evt.target;
+      document.querySelector(".el-tabs__active-bar").style.opacity = "1";
+      document.querySelector(".el-tabs__hover-bar").style.opacity = "0";
     },
     getLocal() {
       if (this.localCity == "") {
@@ -172,7 +180,7 @@ export default {
       this.week = weekday[myddy];
     },
     handleClick(ev) {
-      if(ev.$parent.value==this.page){
+      if (ev.$parent.value == this.page) {
         return;
       }
       this.$router.push({ name: this.page });
@@ -180,7 +188,7 @@ export default {
     register() {
       this.$router.push("/register");
     },
-    goCart(){
+    goCart() {
       this.$router.push("/cart");
     }
   }
@@ -230,7 +238,7 @@ export default {
 .header >>> .el-tabs__active-bar {
   background-color: white;
   height: 4px;
-  transition: all .5s;
+  transition: all 0.5s;
 }
 .header >>> .el-tabs__item.is-active {
   color: white !important;

@@ -11,7 +11,7 @@
             <my-nav :menuList="v.children"></my-nav>
           </el-menu-item-group>
         </el-submenu>
-        <el-menu-item :key="v.name" :index="v.name" :class="{'gis-active':v.name=='GISInterVisual'}" @click="gotoRoute(v.name,$event)" v-else>
+        <el-menu-item :key="v.name" :index="v.name" :class="{'gis-active':v.name=='GISInterVisual','text-center':v.meta.parentEntityName=='userSupport'}" @click="gotoRoute(v.name,$event)" v-else>
           <!-- <i class="iconfont" :class="v.meta.icon"></i> -->
           <span slot="title">{{v.meta.name}}</span>
         </el-menu-item>
@@ -66,6 +66,9 @@ export default {
   background-color: white !important;
   border-bottom: 1px solid #ddd;
   font-size: 16px;
+}
+.text-center{
+  text-align: center !important;
 }
 .menu-container0 >>> .indis {
   display: none !important;

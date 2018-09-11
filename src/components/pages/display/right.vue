@@ -141,7 +141,7 @@ export default {
   line-height: 45px;
 }
 .title {
-  background-color: rgb(90 171 216);
+  background-color: #3f9ddd;
   color: white;
 }
 .timewrap {

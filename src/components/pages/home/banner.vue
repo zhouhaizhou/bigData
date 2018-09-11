@@ -3,7 +3,7 @@
     <div class="bg">
       <!-- <my-polygon></my-polygon> -->
       <div class="module" id="module">
-        <div class="_module" :class="{select:modul.hoverModule,unselect:!modul.hoverModule}" ref="_module" v-for="(modul,index) in modules" :style="{top:modul.top+'vh',left:modul.left+'vw'}" @mouseover="mouseover(modul)" @mouseout="mouseout(modul)">
+        <div class="_module" :class="{select:modul.hoverModule,unselect:!modul.hoverModule}" ref="_module" v-for="(modul,index) in modules" :style="{top:modul.top+'vh',left:modul.left+'vw'}" @click="goPage(modul)" @mouseover="mouseover(modul)" @mouseout="mouseout(modul)">
           <p v-html="modul.txt" :class="{fushe:index===1}"></p>
         </div>
       </div>
@@ -36,55 +36,71 @@ export default {
           txt: "地面气象</br>资料",
           top: 8.5,
           left: -6.32,
-          hoverModule: false
+          hoverModule: false,
+          goPage:"dataService",
+          routeName:"dSurfMeteo"
         },
         {
           txt: "辐射资料",
           top: 0,
           left: 0.75,
-          hoverModule: false
+          hoverModule: false,
+          goPage:"dataService",
+          routeName:"dRadioFile"
         },
         {
           txt: "大气成分<br/>资料",
           top: 17,
           left: 0.7,
-          hoverModule: false
+          hoverModule: false,
+          goPage:"dataService",
+          routeName:"dAatmoCom"
         },
         {
           txt: "高空气象</br>资料",
           top: 25.3,
           left: -6.32,
-          hoverModule: false
+          hoverModule: false,
+          goPage:"dataService",
+          routeName:"dAerologicalFile"
         },
         {
           txt: "八大数据</br>共享模块",
           top: 8.5,
           left: 7.8,
-          hoverModule: false
+          hoverModule: false,
         },
         {
           txt: "卫星探测</br>资料",
           top: 0,
           left: 14.85,
-          hoverModule: false
+          hoverModule: false,
+          goPage:"dataService",
+          routeName:"dSateSound"
         },
         {
           txt: "数值预报</br>产品",
           top: 17,
           left: 14.85,
-          hoverModule: false
+          hoverModule: false,
+          goPage:"dataService",
+          routeName:"dNumFore"
         },
         {
           txt: "雷达探测</br>资料",
           top: 8.5,
           left: 21.9,
-          hoverModule: false
+          hoverModule: false,
+          goPage:"dataService",
+          routeName:"dRadarDetec"
         },
         {
           txt: "综合观测</br>数据",
           top: 25.3,
           left: 21.95,
-          hoverModule: false
+          hoverModule: false,
+          goPage:"dataService",
+          routeName:"dCompreObser"
         }
       ]
     };
@@ -111,6 +127,10 @@ export default {
     },
     goAnchor(){
       this.$emit('goAnchor');
+    },
+    goPage(modul){
+      if(modul.txt.indexOf("共享模块")>0) return;
+      this.$router.push({ name: modul.goPage,params:{redirect:modul.routeName}});
     },
     mouseoverIcon(){
       this.staticIcon=require('../../../assets/img/动效2.png')
