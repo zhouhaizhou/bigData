@@ -78,6 +78,16 @@ export default {
     getArticleLink(article) {
       // window.location.href=article.articleUrl;
       window.open(article.articleUrl);
+    },
+    getPageData(){
+            this.axios.get("").then(response => {
+            let resData = eval("(" + response.data + ")");
+            //解析传过来的数据
+
+          }
+			).catch(response => {
+            console.log(response);
+          });
     }
   }
 };
@@ -96,10 +106,10 @@ export default {
 .article-icon {
   background: url("../../../assets/img/userSupport/article.png") no-repeat
     center center;
-  width: 5%;
-  height: 5vh;
-  float: left;
-  background-size: 62%;
+    width: 5%;
+    height: 4vh;
+    float: left;
+    background-size: 56%;
 }
 .article {
   cursor: pointer;
@@ -138,13 +148,16 @@ export default {
   padding-bottom: 2%;
 }
 .item-title {
-  border-bottom: 1px solid #80808073;
-  padding-bottom: 1%;
-  padding-left: 4%;
-  margin-bottom: 2%;
+    border-bottom: 1px solid #80808073;
+    padding-bottom: 1%;
+    padding-left: 4%;
+    margin-bottom: 2%;
+    display: flex;
+    align-items: center;
 }
 .item-title-font {
-  font-size: 2em;
+     font-size: 1.2em;
+    font-weight: bold;
 }
 .item-lists {
   padding-left: 5%;

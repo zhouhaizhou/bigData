@@ -128,7 +128,7 @@ export default {
       this.axios
         .get("DataService.svc/GetModuleByParentModule", {
           params: {
-            parentModule: "dataDownLoad",
+           parentModule: "dataDownLoad",
            roldId: ""
           }
         })
@@ -202,6 +202,7 @@ export default {
       //更改modal弹出框隐藏（传给子组件一个点击事件）
       let that = this; //为了避免this指向出现歧义，把vue实例的this赋值给另一个变量再使用
       that.isShow = false;
+      that.moduleEnName="";//将moduleEnName恢复至初始状态  防止重复点击时，watch监听不到moduleEnName变化
     }
   }
 };
