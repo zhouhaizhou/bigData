@@ -72,7 +72,7 @@ geolocation(){
 }
 .body-wrap{
     width: 50%;
-    height: auto;;
+    height: auto;
     background-color: white;
     border: 1px solid #80808061;
     padding-left: 4%;
