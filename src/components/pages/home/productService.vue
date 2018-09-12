@@ -50,7 +50,7 @@ export default {
             },
             {
                 CName:'图像展示',
-                routeName:"CimissRain",
+                routeName:"CimissTemp",
                 goPage:"display",
                 EName:'Image Display',
                 img:require('../../../assets/img/dataProduct4.png'),
