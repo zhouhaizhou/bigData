@@ -249,7 +249,8 @@ export default {
         .get("DataService.svc/BatchDownload", {
           params: {
             userName: "readearth",
-            ids: ids
+            ids: ids,
+            timeout: 1000 * 60 * 5
           }
         })
         .then(res => {
@@ -267,9 +268,19 @@ export default {
             a.click();
           });
         })
-        .catch(res => {
-          console.log(res.data);
-          alert("下载失败");
+        .catch(error => {
+          // console.log(error);
+          // alert("下载失败");
+
+      var str = error + ''
+      
+        if (str.search('timeout') !== -1) {   // 超时error捕获
+          // self.showLoadMore = true
+          // self.showLoadMoreOk = false
+          alert("请求超时")
+        }
+      
+
         });
     },
     handleScroll() {

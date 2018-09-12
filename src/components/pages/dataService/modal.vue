@@ -424,12 +424,14 @@ export default {
           .get("DataService.svc/insertDownList", {
             params: {
               funParams: objToStr
-            }
+            },
+            timeout: 1000 * 60 * 5
           })
           .then(res => {
             let data = res.data;
-            loading.close();
-            let arr = JSON.parse(data);
+            loading.close();  
+            if(data!="ERROR"){  
+  let arr = JSON.parse(data);
             let a = document.createElement("a");
             let path = this._global.downPath;
             arr.result.forEach(element => {
@@ -440,10 +442,23 @@ export default {
               a.href = fullPath;
               a.click();
             });
+            }else{
+              alert("后台返回Error");   
+            }
+          
           })
-          .catch(response => {
-            // console.log(res.data);
-            alert("下载失败");
+          .catch(error => {
+            console.log(error.data);
+            // alert("下载失败");
+            // console.log(error)
+      var str = error + ''
+     
+        if (str.search('timeout') !== -1) {   // 超时error捕获
+          // self.showLoadMore = true
+          // self.showLoadMoreOk = false
+          alert("请求超时，起止时间过大，请缩小时间跨度")
+        }
+      
           });
       }
     },
