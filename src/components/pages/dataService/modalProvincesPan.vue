@@ -290,7 +290,7 @@ export default {
   padding-top: 2.1%;
   padding-right: 2.5%;
   float: left;
-  color: #003299;
+  color: #606266;
   /* transform: scale(0.9,0.9); */
   font-weight: bold;
   text-align: center;

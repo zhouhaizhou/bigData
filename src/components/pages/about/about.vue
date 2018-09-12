@@ -19,7 +19,7 @@
 
                </div>
                <div class="foot-right">
-    <div style="width:570px;height:300px;border:1px solid gray;margin:2.5% auto" id="container"></div>
+    <div style="width:28vw;height:42vh;border:1px solid gray;margin:2.5% auto" id="container"></div>
                </div>
            </div>
        </div>
@@ -91,12 +91,13 @@ geolocation(){
     padding-bottom: 1%;
 } 
 .content-wrap{
-width: 100%;
+    width: 100%;
     height: auto;
     text-indent: 2em;
-    line-height: 3;
+    line-height: 2.3;
     padding-top: 1%;
     color: gray;
+    font-size: 1.2em;
     border-bottom: 1px solid #8080802e;
 }
 .foot-wrap{
@@ -116,15 +117,15 @@ font-size: 1.5em;
     padding-bottom: 2%;
 }
 .foot-text{
-    color: #2c81D9;
-    padding-top: 5%;
-
+color: #2c81D9;
+    padding-top: 8%;
+    font-size: 1.2em;
 }
 .foot-right{
     float: left;
     width: 60%;
         padding-top: 2%;
-        padding-bottom: 2%;
+        padding-bottom: 4%;
 }
 </style>
 

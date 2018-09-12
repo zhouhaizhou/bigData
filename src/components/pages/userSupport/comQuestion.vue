@@ -103,7 +103,9 @@ height: 6vh;
 }
 .Answer-wrap{
       padding-left: 4%;
+      padding-right: 4%;
       line-height: 2;
+      font-size: 1.1em;
 }
 .Answer{
 	   text-indent: 2em;
