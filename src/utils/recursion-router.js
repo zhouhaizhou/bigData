@@ -4,6 +4,7 @@
  * @param  {Array} allRouter  前端配置好的所有动态路由的集合
  * @return {Array} realRoutes 过滤后的路由
  */
+import axios from 'axios'
 
 export function recursionRouter(userRouter = [], allRouter = []) {
   var realRoutes = []
@@ -71,32 +72,44 @@ var cloneObj = function (obj) {
  *
  * 递归为所有有子路由的路由设置第一个children.path为默认路由
  */
-export function setDefaultRoute(routes, parentName,defaultRoute) {
-  routes.forEach((v, i) => {
-    if (v.children && v.children.length > 0) {
-      if (v.name == parentName) {
-        if (v.children[0].children != undefined) {
-          setDefaultRoute(v.children, v.children[0].name,defaultRoute);
-        } else {
-          defaultRoute.name=v.children[0].name;
-         // return v.children[0].name;
+// export function setDefaultRoute(routes, parentName, defaultRoute) {
+  // routes.forEach((v, i) => {
+  //   if (v.children && v.children.length > 0) {
+  //     if (v.name == parentName) {
+  //       if (v.children[0].children != undefined) {
+  //         setDefaultRoute(v.children, v.children[0].name,defaultRoute);
+  //       } else {
+  //         defaultRoute.name=v.children[0].name;
+  //        // return v.children[0].name;
+  //       }
+  //     }
+  //     setDefaultRoute(v.children, parentName,defaultRoute);
+  //   }
+  // })
+  export function setDefaultRoute(parentName) {
+  return new Promise((resolve, reject) => {
+      axios({
+        method: "get",
+        url: "./static/pageDefaultRouter.json",
+        baseURL: ''
+      }).then(res => {
+        let data = res.data;
+        let router = data[parentName];
+        resolve(router)
+      }).catch(res => {console.log(res);reject(res)})
+    })
+  }
+
+  export function joinRouter(MainContainer, routers, path) {
+    for (let i = 0; i < MainContainer.length; i++) {
+      let item = MainContainer[i]
+      if (item.children.length > 0 && item.meta.type != 'top') {
+        joinRouter(item.children, routers, path);
+      } else {
+        if (item.path == path && (item.meta.entityName == routers[0].meta.parentEntityName)) {
+          item.children.push(...routers);
         }
       }
-      setDefaultRoute(v.children, parentName,defaultRoute);
     }
-  })
-}
-
-export function joinRouter(MainContainer, routers, path) {
-  for (let i = 0; i < MainContainer.length; i++) {
-    let item = MainContainer[i]
-    if (item.children.length > 0 && item.meta.type!='top') {
-      joinRouter(item.children, routers,path);
-    } else {
-      if (item.path == path && (item.meta.entityName==routers[0].meta.parentEntityName)) {
-        item.children.push(...routers);
-      }
-    }
+    return MainContainer;
   }
-  return MainContainer;
-}

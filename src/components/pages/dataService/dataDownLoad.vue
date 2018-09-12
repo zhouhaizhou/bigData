@@ -5,33 +5,33 @@
       <div class="center">
         <div class="items-trs-wrap">
 
-          <div class="item-tr-wrap" v-for="(img,index) in imges">
+          <div class="item-tr-wrap" v-for="item in items" :class="item.name.parentModule">
             <div class="item-wrap">
               <div class="sub-title-wrap">
                 <div class="nav-marker"></div>
-                <div class="sub-title" :nameEn="img.nameAbbr">{{img.name}}</div>
+                <div class="sub-title">{{item.name.parentModuleCnName}}</div>
               </div>
               <div class="lists-wrap">
-                <div class="list-wrap" v-for="(list,index2) in img.lists" @mouseout="mouseout" @mouseover="mouseover">
-                  <div class="list-img" :style="{backgroundImage:'url('+ list.imgurl+')',backgroundRepeat:'no-repeat',backgroundPosition:'center center',backgroundSize:'cover'}" @mouseover="showContent(list)" @click="showModal(img,list,index,index2)">
+                <div class="list-wrap" v-for="(list,index) in item.lists" @mouseout="mouseout" @mouseover="mouseover">
+                  <div class="list-img" :style="{backgroundImage:'url('+list.imgUrl+')',backgroundRepeat:'no-repeat',backgroundPosition:'center center',backgroundSize:'cover'}" @mouseover="showContent(list)" @click="showModal(list)">
                     <div class="info-wrap">
-                      <div class="info-font">{{imgInfoes[index].lists[index2].imgInfo}}</div>
+                      <div class="info-font">{{list.imgInfo}}</div>
                     </div>
                   </div>
 
-                  <div class="list-title">{{titles[index].lists[index2].title}}</div>
+                  <div class="list-title">{{list.title}}</div>
                   <div class="list-marker-wrap">
-                    <div class="view-wrap">
-                      <div class="view-icon" src=""></div>
-                      <div class="view-count">{{counts[index].lists[index2].viewCount}}</div>
+                    <div class="view-wrap icon-text-wrap-com">
+                      <div class="view-icon icon-wrap-com" src=""></div>
+                      <div class="view-count text-wrap-com">{{list.viewCount}}</div>
                     </div>
-                    <div class="comment-wrap">
-                      <div class="comment-icon" src=""></div>
-                      <div class="comment-count">{{counts[index].lists[index2].commentCount}}</div>
+                    <div class="comment-wrap icon-text-wrap-com">
+                      <div class="comment-icon icon-wrap-com" src=""></div>
+                      <div class="comment-count text-wrap-com">{{list.commentCount}}</div>
                     </div>
-                    <div class="likes-wrap">
-                      <div class="likes-icon" src=""></div>
-                      <div class="likes-count">{{counts[index].lists[index2].likesCount}}</div>
+                    <div class="likes-wrap icon-text-wrap-com">
+                      <div class="likes-icon icon-wrap-com" src=""></div>
+                      <div class="likes-count text-wrap-com">{{list.likesCount}}</div>
                     </div>
                   </div>
                 </div>
@@ -49,7 +49,7 @@
     </div>
     <div class="mymodal" v-show="isShow">
       <!-- 父组件传一个点击事件@hidden="hiddenShow"-->
-      <my-modal @hidden="hiddenShow" :modalData="modalData" :famatOptions="famatOptions" :famatValue="famatValue" :timeType="timeType" :timeTypeValue="timeTypeValue" :startTimes="startTimes" :endTimes="endTimes"></my-modal>
+      <my-modal @hidden="hiddenShow" :moduleEnName="moduleEnName" :moduleCnName="moduleCnName" :isShow="isShow " ref="c1" ></my-modal>
     </div>
   </div>
 </template>
@@ -58,7 +58,9 @@
 import myHeader from "../../common/header";
 import myFooter from "../../common/foot";
 import myModal from "./modal";
-
+import { mapActions } from "vuex";
+var moduleEnName = "",
+  parentModule = "";
 export default {
   components: {
     myHeader,
@@ -69,10 +71,7 @@ export default {
     return {
       isShow: false,
 
-      imges: null,
-      titles: null,
-      counts: null,
-      imgInfoes: null,
+      items: [],
 
       //将请求到的生成modal弹框的数据通过属性标签传给子组件，子组件通过props接收数据
       modalData: null,
@@ -81,7 +80,9 @@ export default {
       timeType: null,
       timeTypeValue: null,
       startTimes: null,
-      endTimes: null
+      endTimes: null,
+      moduleCnName:"",
+      moduleEnName:""
     };
   },
   mounted() {
@@ -90,15 +91,18 @@ export default {
   watch: {
     //监听路由变化
 
-    $route(to, from) {
-      console.log(to, from);
-
-      //  to , from 分别表示从哪跳转到哪，都是一个对象
-
-      // to.path   ( 表示的是要跳转到的路由的地址 eg:  /home );
+    $route(to) {
+      this.goAnchor(to);
     }
   },
   methods: {
+    ...mapActions(["scrollAnchor"]),
+    goAnchor(val) {
+      let entityName = val.meta.entityName;
+      let toObj = document.querySelector("." + entityName);
+      let top = document.documentElement.scrollTop;
+      this.scrollAnchor({ top: top, obj: toObj, isScroll: true });
+    },
     clear: function() {
       var para1 = this.$refs.splitLine[this.$refs.splitLine.length - 1];
       para1.parentNode.removeChild(para1);
@@ -116,84 +120,83 @@ export default {
     },
     getAllData() {
       //初始加载和路由监听事件时，执行此方法
-      var self = this;
+      let self = this;
       //获取当前路由的父名称
       let pName = self.$route.meta.parentEntityName; //当点击左侧子路由时，获取父路由名称给后台
       // console.log(list);
 
-      this.axios({
-        //.get("./static/modalData.json")
-        method: "get",
-        baseURL: "",
-        url: "./static/dataDownLoad.json"
-      })
-        .then(response => {
-          // let data = eval("(" + response.data + ")");
-          let data = response.data;
-          for (let index = 0; index < data.imges.length; index++) {
-            let lists=data.imges[index].lists;
-            for (let i = 0; i < lists.length; i++) {
-              lists[i].imgurl =require("../../../assets/img"+lists[i].imgurl);
-              //lists[i].imgurl =require("../../../assets/img/dataDownLoad/dmqx11.png");
-            }
+      this.axios
+        .get("DataService.svc/GetModuleByParentModule", {
+          params: {
+            parentModule: "dataDownLoad",
+           roldId: ""
           }
-          self.imges = data.imges;
-          //this.proData(self.imges);
+        })
+        .then(response => {
+          let data = eval("(" + response.data + ")");
+          var itemsArr=[];
+        for(var i=0;i<data.length;i++){
+          itemsArr[i]={
+            name:"",
+            lists:""
+          }
+          itemsArr[i].name={
+           parentModuleCnName:data[i].parentModuleCnName,
+           parentModule:data[i].parentModule
+          };
+        
+          var listData=data[i].listData;
+          var listsArr=[];
+          for(var j=0;j<listData.length;j++){
+            listsArr[j]={
+              moduleEnName:"",
+              moduleCnName:"",
+              parentModule:"",
+              imgUrl: "",
+              title: "",
+              viewCount: "",
+              commentCount: "",
+              likesCount: "",
+              imgInfo:""
+            };
+            listsArr[j].moduleEnName=listData[j].moduleEnName;
+            listsArr[j].moduleCnName=listData[j].moduleCnName;
+            listsArr[j].parentModule=listData[j].parentModule;
 
-          self.titles = data.titles;
-          self.counts = data.counts;
-          self.imgInfoes = data.imgInfoes;
+            listData[j].imgUrl = require("../../../assets/img" +listData[j].imgUrl);
+            listsArr[j].imgUrl=listData[j].imgUrl;
+            listsArr[j].title=listData[j].moduleCnName;
+            listsArr[j].viewCount=listData[j].viewCount;
+            listsArr[j].commentCount=listData[j].commentCount;
+            listsArr[j].likesCount=listData[j].likesCount;
+            listsArr[j].imgInfo=listData[j].content;
+          }
+          itemsArr[i].lists=listsArr;//将解析过的数据赋值给items
+        }
+
+        self.items=itemsArr;
+
+        this.$nextTick(()=>{
+            this.goAnchor(this.$route);
+          });
         })
         .catch(response => {
           console.log(response);
+          
         });
+
+  
     },
-    // proData(data) {
-    //   for (var key in data) {
-    //     let val = data[key];
-    //     if (key == "imgurl") {
-    //       val = require("../../../assets/img/" + val + "");
-    //      // val = val.default;
-    //     }
-    //     data[key] = typeof val === "object" ? this.proData(val) : val;
-    //   }
-    // },
-    showModal(img, list, index, index2) {
+
+    showModal(list, img, index) {
       var self = this;
       //获取当前路由的父名称
-      let pName = self.$route.meta.parentEntityName;
-      //获取当前图片属于哪个子路由
-      // let ptitle=img.nameAbbr;
-      //获取当前点击的是哪个图片
-      // let thisIndex=index2;//先用数组中的索引  如果后台指定了每个图片的唯一标识（例如，数据下载-地面气象资料下的小时图片），就获取图片标识传给后台进行请求
-      console.log(index);
-      console.log(index2);
-      // console.log(list);
-      self
-        .axios({
-          //.get("./static/modalData.json")
-          method: "get",
-          baseURL: "",
-          url: "./static/modalData.json"
-        })
-        .then(function(response) {
-          //获取当前点击
+      let pName = self.$route.meta.parentEntityName;//将此
 
-          self.isShow = true; //显示弹出框
-          // var data = eval("(" + response.data + ")");
-          var data = response.data;
-          self.modalData = data.modalData;
-          self.famatOptions = data.famatOptions;
-
-          self.famatValue = data.famatValue;
-          self.timeType = data.timeType;
-          self.timeTypeValue = data.timeTypeValue;
-          self.startTimes = data.startTimes;
-          self.endTimes = data.endTimes;
-        })
-        .catch(function(response) {
-          console.log(response); //发生错误时执行的代码
-        });
+      this.moduleEnName=list.moduleEnName;
+      this.moduleCnName=list.moduleCnName;//作为标题名
+     self.isShow = true; //显示弹出框
+   
     },
     hiddenShow() {
       //更改modal弹出框隐藏（传给子组件一个点击事件）
@@ -270,7 +273,7 @@ export default {
 
 .info-wrap {
   position: absolute;
-  width: 14.1vw;
+  width: 14.5vw;
   height: 24vh;
 
   background-color: white;
@@ -302,44 +305,57 @@ export default {
   font-size: 1em;
 }
 .list-marker-wrap {
+  height: 11%;
+    width: 94%;
   margin-left: 6%;
   text-align: left;
   color: #bbbbbb;
 }
+.icon-text-wrap-com{
+      float: left;
+    width: 32%;
+    display: flex;
+    align-items: center;
+}
+.icon-wrap-com{
+    width: 54%;
+}
+.text-wrap-com{
+        width: 92%;
+    padding-left: 9%;
+}
 .view-wrap {
   float: left;
-  width: 5vw;
+ 
 }
 .view-icon {
   background: url("../../../assets/img/dataDownLoad/view.png") no-repeat center
     center;
-  width: 1.5vw;
+  
   height: 2vh;
   float: left;
 }
 .view-count {
 }
 .comment-wrap {
-  float: left;
-  width: 3vw;
+
 }
 .comment-icon {
   background: url("../../../assets/img/dataDownLoad/comment.png") no-repeat
     center center;
-  width: 1.5vw;
+ 
   height: 2vh;
   float: left;
 }
 .comment-count {
 }
 .likes-wrap {
-  float: left;
-  width: 5vw;
+
 }
 .likes-icon {
   background: url("../../../assets/img/dataDownLoad/likes.png") no-repeat center
     center;
-  width: 1.5vw;
+ 
   height: 2vh;
   float: left;
 }
@@ -366,4 +382,5 @@ export default {
   z-index: 999;
   height: 100vh;
 }
+
 </style>

@@ -37,9 +37,9 @@ export default {
         this.selPlayInterval=null;
         this.playInterval=null;
         this.getData("", "", "", "", "");
-      }
-    },
-    deep:true
+      },
+      deep:true
+    }
   },
   data() {
     return {
@@ -81,6 +81,10 @@ export default {
           self.SETSELECTEDTIME(self.times.length-1)
           if (self.isFirst) {
             self.isFirst=false;
+            if(data.endTime=='WRF'){
+              data.endTime="";
+              data.area=["华东"];
+            }
             self.condition = data;
             self.playInterval = self.condition.intervalOpt[0]["key"];
             self.calImgWidth();
@@ -116,8 +120,10 @@ export default {
     },
     download() {
       let img = document.querySelector(".loadImg").src;
+      let temp=img.split('/');
+      let filename=temp[temp.length-1].split('?')[0];
       let a = document.createElement("a");
-      a.download = img;
+      a.download = filename;
       a.href = img;
       a.click();
     },

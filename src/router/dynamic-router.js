@@ -1,19 +1,23 @@
  import home from '@/components/pages/home/home'
  import building from '@/components/common/building'
+ import about from '@/components/pages/about/about'
  import content from '../components/common/content.vue'
  import axios from 'axios';
+ import relateResults from '../components/pages/relateResult/relateResults.vue'
 
  function siderBarRouters(path) {
    return new Promise((resolve, reject) => {
-     // axios.defaults.baseURL="";
-     //  url="GetModules";
      axios.get("GetImageProducts.svc/GetModules", {
          params: {
            token: "readearth",
            moduleName: path
          }
        }).then(function (response) {
-         let data = response.data
+         let data = response.data;
+         if(data.indexOf("失败")>0){
+           reject(data);
+           return;
+         }
          data=JSON.parse(data);
          proRoutersObj(data);
          resolve(data);
@@ -81,8 +85,21 @@
      }
    },
    {
+    path: '/statistics',
+    children: [],
+    component: content,
+    name: 'statistics',
+    meta: {
+      name: '开放统计',
+      entityName: 'statistics',
+      type: 'top',
+      parentEntityName: '/',
+      firstLoad: true
+    }
+   },
+   {
      path: '/relateResults',
-     component: building,
+     component: relateResults,
      children: [],
      name: 'relateResults',
      meta: {
@@ -95,7 +112,7 @@
    },
    {
      path: '/userSupport',
-     component: building,
+     component: content,
      children: [],
      name: 'userSupport',
      meta: {
@@ -108,7 +125,7 @@
    },
    {
      path: '/about',
-     component: building,
+     component: about,
      children: [],
      name: 'about',
      meta: {

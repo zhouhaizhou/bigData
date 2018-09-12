@@ -6,6 +6,8 @@ import register from '@/components/pages/userRegister.vue'
 import cart from '@/components/pages/cart.vue'
 // import HelloWorld from '@/components/HelloWorld'
 
+import modalProvincesPan from '@/components/pages/dataService/modalProvincesPan.vue'
+
 Vue.use(Router)
 
 export default new Router({
@@ -21,6 +23,12 @@ export default new Router({
           path:'/cart',
           component:cart
         }
+        // ,
+        // {
+        //   path:'/modalProvincesPan',
+        //   name:'modalProvincesPan',
+        //   component:modalProvincesPan
+        // }
     ]
 })
 export const DynamicRoutes = [
