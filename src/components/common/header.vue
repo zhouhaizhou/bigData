@@ -107,11 +107,11 @@ export default {
       }
     },
     headerInit() {
-      this.temp = "16/23°";
-      (this.weather = "多云转晴"),
-        this.getLocal(),
-        (this.date = this._global.formatDate(new Date(), "yyyy-MM-dd")),
-        this.getWeek();
+      // this.temp = "16/23°";
+      // this.weather = "多云转晴";
+      this.getLocal();
+      this.date = this._global.formatDate(new Date(), "yyyy-MM-dd");
+      this.getWeek();
       //console.log(this);
     },
     mouseover(evt) {
@@ -159,11 +159,27 @@ export default {
           map.setCenter(cityName);
           let para = { city: cityName };
           self.SETLOCALCITY(cityName);
+          self.getTempInfo(cityName);
           //self.localCity = cityName;
         }
         var myCity = new BMap.LocalCity();
         myCity.get(myFun);
       }
+    },
+    getTempInfo(cityName){
+      this.axios.get('DataService.svc/GetAirCityInfo',{
+        params:{
+          city:cityName
+        }
+      }).then(res=>{
+        let data=JSON.parse(res.data).data;
+        let today=data.forecast[0];
+        this.temp=today.low.split(' ')[1].split('℃')[0]+'/'+today.high.split(' ')[1];
+        this.weather=today.type;
+        console.log(data);
+      }).catch(res=>{
+        console.log(res);reject(res)
+      })
     },
     getWeek() {
       var mydate = new Date();

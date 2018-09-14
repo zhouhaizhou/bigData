@@ -90,10 +90,16 @@ export default {
   },
   LOGIN({commit,state},paramObj){
     return new Promise((resolve, reject) => {
+      let userName=paramObj.account;
+      let password=paramObj.password;
       axios({
         method: "get",
         url: "./static/login.json",
-        baseURL: ''
+        baseURL: '',
+        params:{
+          userName:userName,
+          Pwd:password
+        }
       }).then(res => {
         let data = res.data;
         commit('SETCOOKIES',data)
