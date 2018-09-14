@@ -40,7 +40,7 @@
                   <div class="comment-pic float-left icon-style1"></div>
                   <div class="comment-name float-left icon-font-style">评论</div>
                   <div class="comment-count">{{modalData[0].commentCount}}</div>
-                </div>
+                </div>  
                 <div class="likes-wrap padding-bottom border-bottom">
                   <div class="likes-pic float-left icon-style1"></div>
                   <div class="likes-name float-left icon-font-style">收藏</div>
@@ -261,6 +261,7 @@ export default {
     },
     getTime(time) {
       const start = new Date();
+      this.endTimes=this._global.formatDate(new Date(), "yyyy-MM-dd hh");
       switch (time) {
         case 'hour':
           start.setTime(start.getTime() - 3600 * 1000 * 1); //提前一小时
@@ -443,7 +444,7 @@ export default {
               a.click();
             });
             }else{
-              alert("后台返回Error");   
+              alert("没有数据！");   
             }
           
           })
