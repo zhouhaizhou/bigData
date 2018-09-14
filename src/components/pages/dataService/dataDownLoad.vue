@@ -130,7 +130,11 @@ export default {
       let entityName = val.meta.entityName;
       let toObj = document.querySelector("." + entityName);
       let top = document.documentElement.scrollTop;
-      this.scrollAnchor({ top: top, obj: toObj, isScroll: true });
+     // let top = document.documentElement.scrollTop;
+      //if(!Math.abs(toObj.offsetTop-top)<3){
+        this.scrollAnchor({ top: top, obj: toObj, isScroll: true });
+      //}
+      
     },
     clear: function() {
       var para1 = this.$refs.splitLine[this.$refs.splitLine.length - 1];
@@ -158,7 +162,7 @@ export default {
         .get("DataService.svc/GetModuleByParentModule", {
           params: {
             parentModule: "dataDownLoad",
-            roldId: ""
+            roldId: "2"
           }
         })
         .then(response => {

@@ -26,10 +26,10 @@ export default {
     };
   },
   mounted() {
-    // this.SETCOOKIES('wb');
+    this.SETCOOKIES('wb');
   },
   methods: {
-    // ...mapMutations(['SETCOOKIES']),
+    ...mapMutations(['SETCOOKIES']),
     ...mapActions(['scrollAnchor']),
     goAnchor() {
      // this.scrollAnchor({top:document.documentElement.scrollTop,obj:this.$refs.pro.$el})

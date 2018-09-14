@@ -32,8 +32,14 @@ module.exports = {
   SETPLAYINTERVAL(state,val){
     state.playInterval=val;
   },
-  // SETCOOKIES(state,val){
-  //   state.UserToken=val;
-  //   $cookies.set('UserToken',val,60 * 60 * 24 * 7)
-  // }
+  SETCOOKIES(state,val){
+    state.UserToken=val;
+    $cookies.set('UserToken',val,60 * 60 * 24 * 7)
+  },
+  GETCOOKIES(state){
+    if($cookies.isKey("UserToken")){
+      let UserToken = $cookies.get("UserToken");
+      state.UserToken=UserToken;
+    }
+  }
 }

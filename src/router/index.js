@@ -31,7 +31,9 @@ export default new Router({
         // }
     ],
     scrollBehavior (to, from, savedPosition) {
-      return { x: 0, y: 0 }
+      if(to.name.indexOf('home')>-1){
+        return { x: 0, y: 0 }
+      }
     }
 })
 export const DynamicRoutes = [
