@@ -162,7 +162,7 @@ export default {
         .get("DataService.svc/GetModuleByParentModule", {
           params: {
             parentModule: "dataDownLoad",
-            roldId: "2"
+            roldId: "2"//默认传2，即，以游客的方式进入
           }
         })
         .then(response => {

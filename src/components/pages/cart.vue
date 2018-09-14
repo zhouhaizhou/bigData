@@ -249,9 +249,9 @@ export default {
         .get("DataService.svc/BatchDownload", {
           params: {
             userName: "readearth",
-            ids: ids,
-            timeout: 1000 * 60 * 5
-          }
+            ids: ids
+          },
+          timeout: 1000 * 60 * 5
         })
         .then(res => {
           let data = res.data;
