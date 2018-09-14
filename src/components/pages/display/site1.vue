@@ -1,17 +1,7 @@
 <template>
   <div>
     <div id="map"></div>
-    <div id="popup" class="ol-popup" :class="{visible:!visible}">
-      <div id="popup-content" style="width:200px;">
-        <div>省份:{{province}}</div>
-        <div>城市:{{city}}</div>
-        <div>类型:{{siteType}}</div>
-        <div>名称:{{siteName}}</div>
-        <div>编号:{{siteId}}</div>
-        <div>经度:{{siteLon}}</div>
-        <div>纬度:{{siteLat}}</div>
-      </div>
-    </div>
+    <div id="popup" :class="{visible:!visible}" v-html="siteInfo"></div>
   </div>
 </template>
 
@@ -34,33 +24,16 @@ export default {
       siteInfo: "",
       map: {},
       url: [
+        "http://222.66.83.21:8282/arcgis/rest/services/ChinaProvince/MapServer",
         "http://222.66.83.21:8282/arcgis/rest/services/ChinaBoundary/MapServer",
-        "http://222.66.83.21:8282/arcgis/rest/services/ChinaProvince1/MapServer",
-        //"http://222.66.83.21:8282/arcgis/rest/services/ChinaProvince/MapServer",
         "http://222.66.83.21:8282/arcgis/rest/services/ChinaProvinceLabel/MapServer"
         //"http://139.196.174.214/arcgis/rest/services/WorldMap_Blue_Label/MapServer"
       ],
-      graphics : [],
       siteLayer: {},
       hoverLayer: {},
       popup: null,
-      visible: false,
-      province:"",
-      siteName:"",
-      city:"",
-      siteType:"",
-      siteLon:"",
-      siteLat:"",
-      siteId:""
+      visible: false
     };
-  },
-  watch:{
-    $route:{
-      handler(val){
-        this.getPoint();
-      },
-      deep:true
-    }
   },
   mounted() {
     this.init();
@@ -110,7 +83,7 @@ export default {
         element: document.getElementById("popup"),
         positioning: "bottom-center",
         offset: [0, -15],
-        // autoPan: true,
+       // autoPan: true,
         autoPanAnimation: {
           duration: 250
         }
@@ -134,8 +107,7 @@ export default {
         map: this.map
         //zIndex: 99
       });
-      this.map.on("click", evt => {this.visible=false})
-     // this.map.on("pointermove", evt => this.siteDataHover(evt));
+      //this.map.on("pointermove", evt => this.siteDataHover(evt));
     },
     siteDataHover(evt) {
       if (!this.siteLayer || evt.dragging) return;
@@ -143,7 +115,9 @@ export default {
       if (this.popup) {
         this.popup.setPosition(undefined);
       }
-      let feature = this.siteLayer.getSource().graphics;
+      let feature = this.siteLayer
+        .getSource()
+        .getClosestFeatureToCoordinate(evt.coordinate);
       let geometry = feature.getGeometry();
       let fPoint = this.map.getPixelFromCoordinate(geometry.flatCoordinates); //要素点的坐标
       let mousePoint = this.map.getPixelFromCoordinate(evt.coordinate); //鼠标的坐标
@@ -161,8 +135,8 @@ export default {
         this.popup = new ol.Overlay({
           element: document.getElementById("popup"),
           positioning: "bottom-center",
-          offset: [0, -15]
-          // autoPan: true,
+          offset: [0, -15],
+         // autoPan: true,
           // autoPanAnimation: {
           //   duration: 250
           // }
@@ -185,34 +159,40 @@ export default {
         })
         .then(res => {
           let self = this;
-          console.log(res.data)
-          this.map.removeLayer(this.siteLayer);
           let data = JSON.parse(res.data);
-          let randomCircleStyles = new ol.style.RegularShape({
-            radius: 6,
-            fill: new ol.style.Fill({
-              color: "#0045ff"
-            }),
-            stroke: new ol.style.Stroke({
-              color: "#fff"
-            }),
-            points: 10
-          });
+          var colorCount = 1;
+          var colors = ["#0045ff"];
+          var randomCircleStyles = [];
+          for (var i = 0; i < colorCount; i++) {
+            randomCircleStyles.push(
+              new ol.style.RegularShape({
+                radius: Math.floor(Math.random() * 10 + 1),
+                fill: new ol.style.Fill({
+                  color: colors[i]
+                }),
+                stroke: new ol.style.Stroke({
+                  color: colors[i]
+                }),
+                points: 10
+              })
+            );
+          }
+
           let graphics = [];
           var dataArr = {
             type: "FeatureCollection",
             features: []
           };
           data.forEach(element => {
-            // let ele = {
-            //   type: "Feature",
-            //   geometry: {
-            //     type: "Point",
-            //     coordinates: [Number(element.Lon), Number(element.Lat)]
-            //   },
-            //   properties: element
-            // };
-            // dataArr.features.push(ele);
+            let ele = {
+              type: "Feature",
+              geometry: {
+                type: "Point",
+                coordinates: [Number(element.Lon), Number(element.Lat)]
+              },
+              properties: element
+            };
+            dataArr.features.push(ele);
             var geometry = new ol.geom.Point(
               ol.proj.transform(
                 [Number(element.Lon), Number(element.Lat)],
@@ -221,7 +201,10 @@ export default {
               )
             );
             var graphic = new ol.Graphic(geometry, element);
-            graphic.setStyle(randomCircleStyles);
+
+            var imgStyle =
+              randomCircleStyles[Math.floor(Math.random() * colorCount)];
+            graphic.setStyle(imgStyle);
             graphics.push(graphic);
           });
           // var format = new GeoJSON({
@@ -240,17 +223,15 @@ export default {
             map: this.map,
             onClick: function(graphic) {
               if (graphic) {
-                //graphic.setStyle(clickRandomCircleStyles);
                 self.visible = true;
                 var attributes = graphic.getAttributes();
                 var coords = graphic.getGeometry().getCoordinates();
-                self.province=attributes.Province;
-                self.city=attributes.City;
-                self.siteType=attributes.Type;
-                self.siteLon=attributes.Lon ;
-                self.siteLat=attributes.Lat;
-                self.siteName=attributes.Station_Name;
-                self.siteId=attributes.Station_Id_C;
+                // coords = ol.proj.transform(coords, 'EPSG:3857', 'EPSG:4326');
+                //content.innerHTML = "attributes";
+                let str="省份:"+attributes.Province+"</br>城市:"+
+                  attributes.City+"</br>类型:"+attributes.Type+"</br>站点:"+
+                  attributes.Station_Name+"</br>经度:"+attributes.Lon+"</br>维度:"+attributes.Lat;
+                self.siteInfo = str;
                 self.popup.setPosition(coords);
                 return;
               }
@@ -285,21 +266,18 @@ export default {
   display: none;
 }
 /* hoverPopup */
-.ol-popup {
-  position: absolute;
+#popup {
+  position: relative;
   background-color: white;
   -webkit-filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.2));
   filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.2));
   padding: 15px;
   border-radius: 10px;
   border: 1px solid #cccccc;
-  bottom: 12px;
-  left: -50px;
-  min-width: 50px;
 }
 
-.ol-popup:after,
-.ol-popup:before {
+#popup:after,
+#popup:before {
   top: 100%;
   border: solid transparent;
   content: " ";
@@ -309,17 +287,17 @@ export default {
   pointer-events: none;
 }
 
-.ol-popup:after {
+#popup:after {
   border-top-color: white;
   border-width: 10px;
-  left: 48px;
+  left: 50%;
   margin-left: -10px;
 }
 
-.ol-popup:before {
+#popup:before {
   border-top-color: #cccccc;
   border-width: 11px;
-  left: 48px;
+  left: 50%;
   margin-left: -11px;
 }
 </style>

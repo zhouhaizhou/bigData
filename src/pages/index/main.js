@@ -3,18 +3,24 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
+// import  '../../utils/api'
 import ElementUI from 'element-ui';
 import App from './App'
 import router from '../../router'
 import store from '../../store'
 import _global from '../../global'
+import VueCookies from 'vue-cookies'
 import 'element-ui/lib/theme-chalk/index.css';
 import 'animate.css';
+
+Vue.use(ElementUI);
+Vue.use(VueCookies);
+
 var root = process.env.API_ROOT;
+axios.defaults.withCredentials=true
 axios.defaults.baseURL=root;
- Vue.use(ElementUI);
- Vue.prototype._global =_global;
- Vue.prototype.axios =axios;
+Vue.prototype._global =_global;
+Vue.prototype.axios =axios;
 router.beforeEach((to, from, next) => {
   if (!store.state.UserToken) {
     // if (to.matched.length > 0 &&!to.matched.some(record => record.meta.requiresAuth)) {
