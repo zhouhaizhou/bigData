@@ -95,7 +95,7 @@ export default {
           routeName:"dRadarDetec"
         },
         {
-          txt: "综合观测</br>数据",
+          txt: "综合观测</br>资料",
           top: 25.3,
           left: 21.95,
           hoverModule: false,

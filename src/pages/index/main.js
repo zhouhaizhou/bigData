@@ -3,54 +3,68 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
+import  '../../utils/api'
 import ElementUI from 'element-ui';
 import App from './App'
 import router from '../../router'
 import store from '../../store'
 import _global from '../../global'
+import VueCookies from 'vue-cookies'
 import 'element-ui/lib/theme-chalk/index.css';
 import 'animate.css';
-var root = process.env.API_ROOT;
-axios.defaults.baseURL=root;
- Vue.use(ElementUI);
- Vue.prototype._global =_global;
- Vue.prototype.axios =axios;
+
+Vue.use(ElementUI);
+Vue.use(VueCookies);
+
+// var root = process.env.API_ROOT;
+// axios.defaults.withCredentials=true
+// axios.defaults.baseURL=root;
+Vue.prototype._global =_global;
+Vue.prototype.axios =axios;
 router.beforeEach((to, from, next) => {
-  if (!store.state.UserToken) {
+  //if (!store.state.UserToken) {
     // if (to.matched.length > 0 &&!to.matched.some(record => record.meta.requiresAuth)) {
     //     next()
     // } 
-    let flag = false;
-    if ((to.meta.firstLoad == undefined && to.name==null) || to.meta.firstLoad == true) {
-      flag = true;
-      to.meta.firstLoad = false;
-    }
-    if (!store.state.permissionList) { 
-      store.dispatch('FETCH_PERMISSION', {
-        type: "top",
-        path: '/',
-        router: to,
-        flag:flag,
-      }).then(() => {
-        next({
-          path: to.path
-        })
-      })
-    } else { 
-      if (to.path !== '/') {
-        store.dispatch('FETCH_PERMISSION', {
-          type: "siderBar",
-          path: to.path,
-          router: to,
-          flag:flag
-        }).then(() => {
-          next()
-        })
-      } else {
-        next(from.fullPath)
+    store.commit('GETCOOKIES');
+    (async ()=>{
+      if(!store.state.UserToken){
+        await store.dispatch('LOGIN','')
       }
-    }
-  }
+    })().then(res=>{
+      let flag = false;
+      if ((to.meta.firstLoad == undefined && to.name==null) || to.meta.firstLoad == true) {
+        flag = true;
+        to.meta.firstLoad = false;
+      }
+      if (!store.state.permissionList) { 
+        store.dispatch('FETCH_PERMISSION', {
+          type: "top",
+          path: '/',
+          router: to,
+          flag:flag,
+        }).then(() => {
+          next({
+            path: to.path
+          })
+        })
+      } else { 
+        if (to.path !== '/') {
+          store.dispatch('FETCH_PERMISSION', {
+            type: "siderBar",
+            path: to.path,
+            router: to,
+            flag:flag
+          }).then(() => {
+            next()
+          })
+        } else {
+          next(from.fullPath)
+        }
+      }
+    }).catch()
+
+  //}
 })
 
 router.afterEach((to, from, next) => {

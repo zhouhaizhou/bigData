@@ -1,14 +1,9 @@
 import Router from 'vue-router'
 import { fetchPermission} from '@/utils/permission'
 import router, { DynamicRoutes} from '@/router/index'
-import {
-  recursionRouter,
-  setDefaultRoute,
-  getContainer,
-  joinRouter
-} from '@/utils/recursion-router'
+import {recursionRouter,setDefaultRoute, getContainer,joinRouter} from '@/utils/recursion-router'
 import dynamicRouter, {siderBarRouters} from '@/router/dynamic-router'
-
+import axios from 'axios'
 export default {
   scrollAnchor({context}, paramObj) {
     //Top 对象要从开始的位置移动到目标位置的距离
@@ -92,5 +87,27 @@ export default {
           }).catch(res => console.log(res));
       });
     }
+  },
+  LOGIN({commit,state},paramObj){
+    return new Promise((resolve, reject) => {
+      let userName=paramObj.account;
+      let password=paramObj.password;
+      axios({
+        method: "get",
+        url: "./static/login.json",
+        baseURL: '',
+        params:{
+          userName:userName,
+          Pwd:password
+        }
+      }).then(res => {
+        let data = res.data;
+        commit('SETCOOKIES',data)
+        resolve("ok");
+      }).catch(res => {
+        console.log(res);
+        reject(res)
+      })
+    })
   }
 }

@@ -5,14 +5,16 @@
       <div class="center">
         <div class="items-trs-wrap">
 
-          <div class="item-tr-wrap" v-for="item in items" :class="item.name.parentModule">
+          <!-- <div :class="{itemTrWrap:(item.lists).length>1?true:false,itemTrWrapOne:(item.lists).length>1?false:true}"  v-for="item in items"> -->
+          <div :class="itemChildrenArrLen(item)"  v-for="item in items">
             <div class="item-wrap">
-              <div class="sub-title-wrap">
+              <div class="sub-title-wrap">  
                 <div class="nav-marker"></div>
                 <div class="sub-title">{{item.name.parentModuleCnName}}</div>
               </div>
               <div class="lists-wrap">
-                <div class="list-wrap" v-for="(list,index) in item.lists" @mouseout="mouseout" @mouseover="mouseover">
+                <!-- <div :class="{listWrap:(item.lists).length>1?true:false,listWrapOne:(item.lists).length>1?false:true}" v-for="(list,index) in item.lists" @mouseout="mouseout" @mouseover="mouseover"> -->
+                  <div :class="listsLength(item.lists)" v-for="(list,index) in item.lists" @mouseout="mouseout" @mouseover="mouseover">
                   <div class="list-img" :style="{backgroundImage:'url('+list.imgUrl+')',backgroundRepeat:'no-repeat',backgroundPosition:'center center',backgroundSize:'cover'}" @mouseover="showContent(list)" @click="showModal(list)">
                     <div class="info-wrap">
                       <div class="info-font">{{list.imgInfo}}</div>
@@ -49,7 +51,7 @@
     </div>
     <div class="mymodal" v-show="isShow">
       <!-- 父组件传一个点击事件@hidden="hiddenShow"-->
-      <my-modal @hidden="hiddenShow" :moduleEnName="moduleEnName" :moduleCnName="moduleCnName" :isShow="isShow " ref="c1" ></my-modal>
+      <my-modal @hidden="hiddenShow" :moduleEnName="moduleEnName" :moduleCnName="moduleCnName" :isShow="isShow " ref="c1"></my-modal>
     </div>
   </div>
 </template>
@@ -81,8 +83,9 @@ export default {
       timeTypeValue: null,
       startTimes: null,
       endTimes: null,
-      moduleCnName:"",
-      moduleEnName:""
+      moduleCnName: "",
+      moduleEnName: "",
+      one: false
     };
   },
   mounted() {
@@ -92,16 +95,46 @@ export default {
     //监听路由变化
 
     $route(to) {
+      console.log(to);
       this.goAnchor(to);
     }
   },
   methods: {
+    itemChildrenArrLen(item) {
+      let p=item.name.parentModule;
+      // if (item.lists.length == 1) {
+      //   // this.one=false;
+      //   return {itemTrWrapOne:true,p:true};
+      // } else {
+      //   // this.one=true;
+      //   return {itemTrWrap:true,p:true};
+      // }
+
+            if (item.lists.length == 1) {
+        // this.one=false;
+        return "itemTrWrapOne "+p;
+      } else {
+        // this.one=true;
+        return "itemTrWrap "+p;
+      }
+    },
+    listsLength(listsArr){
+      if(listsArr.length==1){
+        return {listWrapOne:true,p:true};
+      }else{
+        return {listWrap:true,p:true};
+      }
+    },
     ...mapActions(["scrollAnchor"]),
     goAnchor(val) {
       let entityName = val.meta.entityName;
       let toObj = document.querySelector("." + entityName);
       let top = document.documentElement.scrollTop;
-      this.scrollAnchor({ top: top, obj: toObj, isScroll: true });
+     // let top = document.documentElement.scrollTop;
+      //if(!Math.abs(toObj.offsetTop-top)<3){
+        this.scrollAnchor({ top: top, obj: toObj, isScroll: true });
+      //}
+      
     },
     clear: function() {
       var para1 = this.$refs.splitLine[this.$refs.splitLine.length - 1];
@@ -128,81 +161,78 @@ export default {
       this.axios
         .get("DataService.svc/GetModuleByParentModule", {
           params: {
-           parentModule: "dataDownLoad",
-           roldId: ""
+            parentModule: "dataDownLoad",
+            roldId: "2"//默认传2，即，以游客的方式进入
           }
         })
         .then(response => {
           let data = eval("(" + response.data + ")");
-          var itemsArr=[];
-        for(var i=0;i<data.length;i++){
-          itemsArr[i]={
-            name:"",
-            lists:""
-          }
-          itemsArr[i].name={
-           parentModuleCnName:data[i].parentModuleCnName,
-           parentModule:data[i].parentModule
-          };
-        
-          var listData=data[i].listData;
-          var listsArr=[];
-          for(var j=0;j<listData.length;j++){
-            listsArr[j]={
-              moduleEnName:"",
-              moduleCnName:"",
-              parentModule:"",
-              imgUrl: "",
-              title: "",
-              viewCount: "",
-              commentCount: "",
-              likesCount: "",
-              imgInfo:""
+          var itemsArr = [];
+          for (var i = 0; i < data.length; i++) {
+            itemsArr[i] = {
+              name: "",
+              lists: ""
             };
-            listsArr[j].moduleEnName=listData[j].moduleEnName;
-            listsArr[j].moduleCnName=listData[j].moduleCnName;
-            listsArr[j].parentModule=listData[j].parentModule;
+            itemsArr[i].name = {
+              parentModuleCnName: data[i].parentModuleCnName,
+              parentModule: data[i].parentModule
+            };
 
-            listData[j].imgUrl = require("../../../assets/img" +listData[j].imgUrl);
-            listsArr[j].imgUrl=listData[j].imgUrl;
-            listsArr[j].title=listData[j].moduleCnName;
-            listsArr[j].viewCount=listData[j].viewCount;
-            listsArr[j].commentCount=listData[j].commentCount;
-            listsArr[j].likesCount=listData[j].likesCount;
-            listsArr[j].imgInfo=listData[j].content;
+            var listData = data[i].listData;
+            var listsArr = [];
+            for (var j = 0; j < listData.length; j++) {
+              listsArr[j] = {
+                moduleEnName: "",
+                moduleCnName: "",
+                parentModule: "",
+                imgUrl: "",
+                title: "",
+                viewCount: "",
+                commentCount: "",
+                likesCount: "",
+                imgInfo: ""
+              };
+              listsArr[j].moduleEnName = listData[j].moduleEnName;
+              listsArr[j].moduleCnName = listData[j].moduleCnName;
+              listsArr[j].parentModule = listData[j].parentModule;
+
+              listData[j].imgUrl = require("../../../assets/img" +
+                listData[j].imgUrl);
+              listsArr[j].imgUrl = listData[j].imgUrl;
+              listsArr[j].title = listData[j].moduleCnName;
+              listsArr[j].viewCount = listData[j].viewCount;
+              listsArr[j].commentCount = listData[j].commentCount;
+              listsArr[j].likesCount = listData[j].likesCount;
+              listsArr[j].imgInfo = listData[j].content;
+            }
+            itemsArr[i].lists = listsArr; //将解析过的数据赋值给items
           }
-          itemsArr[i].lists=listsArr;//将解析过的数据赋值给items
-        }
 
-        self.items=itemsArr;
+          self.items = itemsArr;
 
-        this.$nextTick(()=>{
+          this.$nextTick(() => {
             this.goAnchor(this.$route);
           });
         })
         .catch(response => {
           console.log(response);
-          
         });
-
-  
     },
 
     showModal(list, img, index) {
       var self = this;
       //获取当前路由的父名称
-      let pName = self.$route.meta.parentEntityName;//将此
+      let pName = self.$route.meta.parentEntityName; //将此
 
-      this.moduleEnName=list.moduleEnName;
-      this.moduleCnName=list.moduleCnName;//作为标题名
-     self.isShow = true; //显示弹出框
-   
+      this.moduleEnName = list.moduleEnName;
+      this.moduleCnName = list.moduleCnName; //作为标题名
+      self.isShow = true; //显示弹出框
     },
     hiddenShow() {
       //更改modal弹出框隐藏（传给子组件一个点击事件）
       let that = this; //为了避免this指向出现歧义，把vue实例的this赋值给另一个变量再使用
       that.isShow = false;
-      that.moduleEnName="";//将moduleEnName恢复至初始状态  防止重复点击时，watch监听不到moduleEnName变化
+      that.moduleEnName = ""; //将moduleEnName恢复至初始状态  防止重复点击时，watch监听不到moduleEnName变化
     }
   }
 };
@@ -217,18 +247,24 @@ export default {
 .items-trs-wrap {
   padding-bottom: 3vh;
 }
-.item-tr-wrap {
+.itemTrWrap {
   clear: both;
   padding-top: 2vh;
   margin-left: 1vw;
-  /* height: 45vh; */
+}
+.itemTrWrapOne {
+  padding-top: 2vh;
+  margin-left: 1vw;
+  width: auto;
+  float: left;
+  clear: none;
 }
 .item-wrap {
   /* height: 40vh; */
 }
 .sub-title-wrap {
 }
-.item-tr-wrap .list-wrap:last-child {
+.itemTrWrap .listWrap:last-child {
   margin-bottom: 3vh;
 }
 .nav-marker {
@@ -248,9 +284,23 @@ export default {
   text-align: center;
   width: 100%;
 }
-.list-wrap {
+.listWrap {
   float: left;
   width: 20%;
+  height: 34vh;
+  margin-right: 2vw;
+  /* border: solid 1px; */
+  border-radius: 3%;
+  box-shadow: 0px 0px 1px 1.5px #80808038;
+  background-color: #fffffd;
+  margin-top: 3vh;
+  display: inline-block;
+
+  transition: all 0.3s;
+}
+.listWrapOne {
+  float: left;
+  width: 96%;
   height: 34vh;
   margin-right: 2vw;
   /* border: solid 1px; */
@@ -307,56 +357,53 @@ export default {
 }
 .list-marker-wrap {
   height: 11%;
-    width: 94%;
+  width: 94%;
   margin-left: 6%;
   text-align: left;
   color: #bbbbbb;
 }
-.icon-text-wrap-com{
-      float: left;
-    width: 32%;
-    display: flex;
-    align-items: center;
+.icon-text-wrap-com {
+  float: left;
+  width: 32%;
+  display: flex;
+  align-items: center;
 }
-.icon-wrap-com{
-    width: 54%;
+.icon-wrap-com {
+  width: 54%;
 }
-.text-wrap-com{
-        width: 92%;
-    padding-left: 9%;
+.text-wrap-com {
+  width: 92%;
+  padding-left: 9%;
 }
 .view-wrap {
   float: left;
- 
 }
 .view-icon {
   background: url("../../../assets/img/dataDownLoad/view.png") no-repeat center
     center;
-  
+
   height: 2vh;
   float: left;
 }
 .view-count {
 }
 .comment-wrap {
-
 }
 .comment-icon {
   background: url("../../../assets/img/dataDownLoad/comment.png") no-repeat
     center center;
- 
+
   height: 2vh;
   float: left;
 }
 .comment-count {
 }
 .likes-wrap {
-
 }
 .likes-icon {
   background: url("../../../assets/img/dataDownLoad/likes.png") no-repeat center
     center;
- 
+
   height: 2vh;
   float: left;
 }
@@ -383,5 +430,4 @@ export default {
   z-index: 999;
   height: 100vh;
 }
-
 </style>

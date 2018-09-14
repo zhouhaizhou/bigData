@@ -29,7 +29,12 @@ export default new Router({
         //   name:'modalProvincesPan',
         //   component:modalProvincesPan
         // }
-    ]
+    ],
+    scrollBehavior (to, from, savedPosition) {
+      if(to.name.indexOf('home')>-1){
+        return { x: 0, y: 0 }
+      }
+    }
 })
 export const DynamicRoutes = [
   {
