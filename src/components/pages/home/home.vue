@@ -12,7 +12,7 @@ import myFooter from "../../common/foot.vue";
 import productService from "./productService.vue";
 import datahot from "./datahot.vue";
 import banner from "./banner";
-import {mapActions} from 'vuex'
+import {mapActions,mapMutations} from 'vuex'
 export default {
   components: {
     productService,
@@ -26,8 +26,10 @@ export default {
     };
   },
   mounted() {
+    // this.SETCOOKIES('wb');
   },
   methods: {
+    // ...mapMutations(['SETCOOKIES']),
     ...mapActions(['scrollAnchor']),
     goAnchor() {
      // this.scrollAnchor({top:document.documentElement.scrollTop,obj:this.$refs.pro.$el})

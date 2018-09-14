@@ -12,13 +12,3 @@ module.exports = {
   selectedTime:null,   //在线展示页面右边选择的时间索引
   playInterval:null
 }
-// var sidebarMenu=[
-//   {
-//     component:dataDownLoad,
-//     mate:{
-//       entityName:'dataDownLoad',
-//       name:'数据下载'
-//     },
-//     children:[],
-//   }
-// ];

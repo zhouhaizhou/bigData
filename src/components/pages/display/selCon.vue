@@ -18,9 +18,11 @@
         <span>时间：</span>
         <el-date-picker prefix-icon="1" value-format="yyyy-MM-dd HH:mm:ss" v-model="condition.startTime" clear-icon="close" type="datetime" align="left">
         </el-date-picker>
+        <span class="date-suffix"></span>
         <i class="icon" v-if="condition.endTime!=''"></i>
         <el-date-picker v-if="condition.endTime!=''" value-format="yyyy-MM-dd HH:mm:ss" prefix-icon="1" v-model="condition.endTime" clear-icon="close" type="datetime" align="left">
         </el-date-picker>
+        <span class="date-suffix"></span>
         <span style="margin-left: 10px;margin-right: 10px;vertical-align: middle;">间隔</span>
         <el-select v-model="selPlayInterval">
           <el-option v-for="(item,index) in condition.intervalOpt" :key="index" :label="item.val" :value="item.key"></el-option>
@@ -123,12 +125,23 @@ export default {
   margin-left: 10px;
   margin-right: 10px;
 }
-.con >>> .el-date-editor .el-input__suffix .el-input__icon:after {
+/* .con >>> .el-date-editor .el-input__suffix .el-input__icon:after {
   background: url("../../../assets/img/display/date-n.png") no-repeat center
     center;
   width: 1vw;
   height: 2vh;
   background-size: cover;
+} */
+.con >>> .date-suffix {
+  background: url("../../../assets/img/display/date-n.png") no-repeat center
+    center;
+  width: 1vw;
+  height: 2vh;
+  background-size: cover;
+  display:inline-block;
+  position: relative;
+  top: 5px;
+  left: -35px;
 }
 .con >>> .el-button:focus,
 .el-button:hover,
