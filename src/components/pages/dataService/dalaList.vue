@@ -225,7 +225,8 @@ div {
   cursor: default;
 }
 .title {
-  margin-top: 17px;
+  margin-top: 2vh;
+  height: 2vh;
 }
 .title_point {
   float: left;
@@ -266,7 +267,7 @@ div {
 .dataChoose_div {
   position: absolute;
   width: 25vw;
-  top: 6vh;
+  top: 10vh;
   height: 40vh;
   background: white;
   overflow-y: scroll;
