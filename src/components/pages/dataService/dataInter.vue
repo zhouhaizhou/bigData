@@ -11,7 +11,7 @@ export default {
   data() {
     return {
       name: "",
-      data: [],
+      data: []
     };
   },
   watch: {
@@ -53,19 +53,20 @@ export default {
   margin-top: 17px;
 }
 .title_point {
-  width: 10px;
-  background: #1cbda3;
-  height: 20px;
-  border-radius: 3px;
   float: left;
+  width: 0.5vw;
+  height: 2.5vh;
+  background-color: #1bbf9d;
 }
 .title_text {
   margin-left: 20px;
   font-weight: bold;
+  font-size: 20px;
 }
 .inter {
   background: white;
   padding: 15px;
   margin-top: 10px;
+  width: 76vw;
 }
 </style>
