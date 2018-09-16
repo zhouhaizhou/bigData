@@ -40,23 +40,17 @@
       <th>要素名称</th>
       <th>单位</th>
     </thead>
-    <tbody>
+    <tbody  v-if="columnPage.length>0" >
       <tr v-for="column in columnPage[pageNum].page">
          <td>{{column.RowNum}}</td>
          <td>{{column.columnName}}</td>
          <td>{{column.columnDetail}}</td>
          <td>{{column.unit}}</td>
       </tr>
-      <!-- <tr v-for="column in columnIntroduce">
-         <td>{{column.RowNum}}</td>
-         <td>{{column.columnName}}</td>
-         <td>{{column.columnDetail}}</td>
-         <td>{{column.unit}}</td>
-      </tr> -->
     </tbody>
   </table>
 
-    <div class="turnPage">
+    <div class="turnPage" v-if="columnPage.length>0" >
     <div @click="pageNum=0"><<</div>
     <div @click="pageNum-1>=0?pageNum-=1:pageNum=0"><</div>
     <div v-for="page in columnPage" @click="pageNum=columnPage.indexOf(page)" :class="pageNum==columnPage.indexOf(page)?'pageActive':''">{{columnPage.indexOf(page)+1}}</div>
@@ -205,11 +199,16 @@ export default {
         })
         .then(response => {
           var resData = eval("(" + response.data + ")");
-          that.columnIntroduce = resData;
-          var tableCount = that.columnIntroduce.length / 20;
-          for (var i = 0; i < tableCount; i++) {
-            var page = that.columnIntroduce.slice(i * 20, i * 20 + 20);
-            that.columnPage.push({ page });
+          if (resData.length > 0) {
+            that.columnIntroduce = resData;
+            var tableCount = that.columnIntroduce.length / 20;
+            for (var i = 0; i < tableCount; i++) {
+              var page = that.columnIntroduce.slice(i * 20, i * 20 + 20);
+              that.columnPage.push({ page });
+            }
+          } else {
+            that.columnIntroduce = [];
+            that.columnPage = [];
           }
         })
         .catch(response => {
