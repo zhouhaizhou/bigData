@@ -68,13 +68,13 @@
                 <div class="date-name font-style1">日期选择</div>
               </div>
               <div class="date-value">
-                <div class="start-time">
-                  <el-date-picker v-model="startTimes" type="datetime" format="yyyy-MM-dd HH" value-format="yyyy-MM-dd HH" clear-icon="close" prefix-icon="1">
+                <div class="start-time" >
+                  <el-date-picker v-model="startTimes" class="time-time"  type="datetime" format="yyyy-MM-dd HH" value-format="yyyy-MM-dd HH" clear-icon="close" prefix-icon="1">
                   </el-date-picker>
                 </div>
                 <div class="dao font-style1">到</div>
-                <div class="end-time">
-                  <el-date-picker v-model="endTimes" type="datetime" format="yyyy-MM-dd HH" value-format="yyyy-MM-dd HH" clear-icon="close" prefix-icon="1">
+                <div class="end-time" >
+                  <el-date-picker v-model="endTimes" class="time-time"  type="datetime" format="yyyy-MM-dd HH" value-format="yyyy-MM-dd HH" clear-icon="close" prefix-icon="1">
                   </el-date-picker>
                 </div>
               </div>
@@ -155,7 +155,7 @@
 
 <script>
 import myModalProvincesPan from "./modalProvincesPan";
-
+import {mapState} from 'vuex'
 export default {
   components: {
     myModalProvincesPan
@@ -217,6 +217,9 @@ export default {
   created() {
     // this.getTime();
   },
+  computed:{
+    ...mapState(['UserToken']),
+  },
   watch: {
     moduleEnName() {
       if (this.moduleEnName != "") {//更新页面
@@ -236,6 +239,7 @@ export default {
     }
   },
   methods: {
+
     defaultSetByModuleEnName(){
       let hour=(this.UpdateInterValue).indexOf('时');//注意：数据库中配置时，年月日时，的命名采用要包含此处对应的字符
       let day=(this.UpdateInterValue).indexOf('天');
@@ -350,6 +354,11 @@ export default {
         });
     },
     nowDownLoad() {
+      let account=this.UserToken.Account;
+      if(account=='readearth'){
+        alert('请登录后再下载数据！');
+        return;
+      }
       var data = this.getNowFormatDate();
       var nowTime = data.toString().replace(/[^0-9]/gi, "");
 
@@ -394,7 +403,7 @@ export default {
         return;
       } else {
         var obj = {
-          userName: "readearth",
+          userName: account,
           downTime: nowTime + "",
           moduleEnName: this.moduleEnName,
           date: startT + "0000-" + endT + "0000",
@@ -432,7 +441,7 @@ export default {
             let data = res.data;
             loading.close();  
             if(data!="ERROR"){  
-  let arr = JSON.parse(data);
+            let arr = JSON.parse(data);
             let a = document.createElement("a");
             let path = this._global.downPath;
             arr.result.forEach(element => {
@@ -515,6 +524,11 @@ export default {
       return currentdate;
     },
     insertCart() {
+      let account=this.UserToken.Account;
+      if(account=='readearth'){
+        alert('请登录后再加入清单！');
+        return;
+      }
       var data = this.getNowFormatDate();
       var nowTime = data.toString().replace(/[^0-9]/gi, "");
 
@@ -559,7 +573,7 @@ export default {
         return;
       } else {
         var obj = {
-          userName: "readearth",
+          userName: account,
           downTime: nowTime + "",
           moduleEnName: this.moduleEnName,
           date: startT + "0000-" + endT + "0000",
@@ -625,6 +639,7 @@ export default {
 </script>
 
 <style scoped>
+
 .body-background {
   width: 100vw;
   height: 100vh;

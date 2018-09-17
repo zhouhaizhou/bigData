@@ -111,14 +111,14 @@ width: 100%;
     line-height: 2.5;
 }
 .foot-title-wrap{
-font-size: 1.5em;
+    font-size: 1.5em;
     font-weight: bold;
-    padding-top: 3%;
-    padding-bottom: 2%;
+    padding-top: 18%;
+    padding-bottom: 18%;
 }
 .foot-text{
 color: #2c81D9;
-    padding-top: 8%;
+    padding-top: 4%;
     font-size: 1.2em;
 }
 .foot-right{

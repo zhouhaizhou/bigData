@@ -81,6 +81,7 @@
 <script>
 import myHeader from "../common/header.vue";
 import myFooter from "../common/foot.vue";
+import {mapState} from 'vuex'
 export default {
   components: {
     myHeader,
@@ -123,6 +124,7 @@ export default {
     }
   },
   computed: {
+    ...mapState(['UserToken']),
     counts() {
       let num = 0;
       this.items.filter(item => {
@@ -164,10 +166,11 @@ export default {
       this.all = flag;
     },
     getDownLoadData(status) {
+      let account=this.UserToken.Account;
       this.axios
         .get("DataService.svc/GetActiveList", {
           params: {
-            userName: "readearth"
+            userName: account
           }
         })
         .then(res => {
@@ -214,11 +217,12 @@ export default {
         alert("未选择数据，请选择后再进行此操作！");
         return;
       }
+       let account=this.UserToken.Account;
       let ids = this.getIds();
       this.axios
         .get("DataService.svc/deleteDownList", {
           params: {
-            userName: "readearth",
+            userName: account,
             ids: ids
           }
         })
@@ -238,6 +242,7 @@ export default {
         alert("未选择数据，请选择后再进行此操作！");
         return;
       }
+      let account=this.UserToken.Account;
       const loading = this.$loading({
         lock: true,
         text: "正在请求数据...",
@@ -248,7 +253,7 @@ export default {
       this.axios
         .get("DataService.svc/BatchDownload", {
           params: {
-            userName: "readearth",
+            userName:account,
             ids: ids
           },
           timeout: 1000 * 60 * 5

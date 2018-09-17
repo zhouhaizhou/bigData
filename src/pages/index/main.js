@@ -26,13 +26,20 @@ router.beforeEach((to, from, next) => {
     // if (to.matched.length > 0 &&!to.matched.some(record => record.meta.requiresAuth)) {
     //     next()
     // } 
+    if(from.path=='/'&& to.matched.length==0){
+      // alert();
+    }
     store.commit('GETCOOKIES');
     (async ()=>{
       if(!store.state.UserToken){
-        await store.dispatch('LOGIN','')
+        let params={"userName":"BIGDATA","password":"BIGDATA","expires":"-1D"};
+        await store.dispatch('LOGIN',params)
       }
     })().then(res=>{
       let flag = false;
+      if(store.state.changeUser&&to.meta.parentEntityName=='/'){
+        to.meta.firstLoad=true;   //重新拉去权限
+      }
       if ((to.meta.firstLoad == undefined && to.name==null) || to.meta.firstLoad == true) {
         flag = true;
         to.meta.firstLoad = false;
@@ -72,7 +79,6 @@ router.afterEach((to, from, next) => {
   store.commit('setCrumbList', routerList)
   store.commit('SET_CURRENT_MENU', to.name)
 })
- 
 var vm = new Vue({
   // el: '#app',
   store,

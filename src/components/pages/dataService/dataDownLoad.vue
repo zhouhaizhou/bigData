@@ -60,7 +60,7 @@
 import myHeader from "../../common/header";
 import myFooter from "../../common/foot";
 import myModal from "./modal";
-import { mapActions } from "vuex";
+import { mapActions,mapState } from "vuex";
 var moduleEnName = "",
   parentModule = "";
 export default {
@@ -90,6 +90,9 @@ export default {
   },
   mounted() {
     this.getAllData();
+  },
+  computed:{
+    ...mapState(['UserToken'])
   },
   watch: {
     //监听路由变化
@@ -157,12 +160,12 @@ export default {
       //获取当前路由的父名称
       let pName = self.$route.meta.parentEntityName; //当点击左侧子路由时，获取父路由名称给后台
       // console.log(list);
-
+      let roldId=this.UserToken.RoleID;
       this.axios
         .get("DataService.svc/GetModuleByParentModule", {
           params: {
             parentModule: "dataDownLoad",
-            roldId: "2"//默认传2，即，以游客的方式进入
+            roldId: roldId//默认传2，即，以游客的方式进入
           }
         })
         .then(response => {

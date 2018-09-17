@@ -4,20 +4,23 @@
  import content from '../components/common/content.vue'
  import axios from 'axios';
  import relateResults from '../components/pages/relateResult/relateResults.vue'
+ import store from '../store/index.js'
 
  function siderBarRouters(path) {
    return new Promise((resolve, reject) => {
+     let account=store.state.UserToken.Account;
+    //  alert(account);
      axios.get("GetImageProducts.svc/GetModules", {
          params: {
-           token: "readearth",
+           token: account,
            moduleName: path
          }
        }).then(function (response) {
          let data = response.data;
-         if(data.indexOf("失败")>0){
-           reject(data);
-           return;
-         }
+        //  if(data.indexOf("失败")>0){
+        //    reject(data);
+        //    return;
+        //  }
          data=JSON.parse(data);
          proRoutersObj(data);
          resolve(data);

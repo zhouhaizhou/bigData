@@ -34,7 +34,7 @@ export default {
             },
             {
                 CName:'数据接口',
-                routeName:"dataInterface",
+                routeName:"DMQXZLJK",
                 goPage:"dataService",
                 EName:'Data Interface',
                 img:require('../../../assets/img/dataProduct2.png'),

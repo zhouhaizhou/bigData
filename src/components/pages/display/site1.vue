@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import "ol/ol.css";
+// import "ol/ol.css";
 // import ol from "ol";
 // import Map from "ol/Map.js";
 // import View from "ol/View.js";

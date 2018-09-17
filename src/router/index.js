@@ -4,6 +4,7 @@ import home from '@/components/pages/home/home.vue'
 import layout from '@/components/common/layout.vue'
 import register from '@/components/pages/userRegister.vue'
 import cart from '@/components/pages/cart.vue'
+import userLogin from '@/components/pages/userLogin.vue'
 // import HelloWorld from '@/components/HelloWorld'
 
 import modalProvincesPan from '@/components/pages/dataService/modalProvincesPan.vue'
@@ -23,6 +24,10 @@ export default new Router({
           path:'/cart',
           component:cart
         }
+        ,{
+          path:'/userLogin',
+          component:userLogin
+        }
         // ,
         // {
         //   path:'/modalProvincesPan',
@@ -31,7 +36,7 @@ export default new Router({
         // }
     ],
     scrollBehavior (to, from, savedPosition) {
-      if(to.name.indexOf('home')>-1){
+      if(!(to.meta.parentEntityName.indexOf('dataDownLoad')>-1)){
         return { x: 0, y: 0 }
       }
     }

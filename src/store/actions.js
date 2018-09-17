@@ -90,23 +90,32 @@ export default {
   },
   LOGIN({commit,state},paramObj){
     return new Promise((resolve, reject) => {
-      let userName=paramObj.account;
+      let userName=paramObj.userName;
       let password=paramObj.password;
+      let expires=paramObj.expires;
       axios({
         method: "get",
-        url: "./static/login.json",
-        baseURL: '',
+        url: "DataService.svc/Login",
+        // baseURL: '',
         params:{
           userName:userName,
           Pwd:password
         }
       }).then(res => {
         let data = res.data;
-        commit('SETCOOKIES',data)
-        resolve("ok");
+        let dataArr=JSON.parse(data);
+        dataArr[0].expires=expires;
+        if(dataArr.length==0){
+          resolve("error");
+        }else{
+          let dataObj=JSON.stringify(dataArr[0]);
+          // dataObj.expires=expires;
+          commit('SETCOOKIES',dataObj)
+          resolve("ok");
+        }
       }).catch(res => {
         console.log(res);
-        reject(res)
+        resolve("error");
       })
     })
   }

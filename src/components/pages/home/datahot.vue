@@ -12,7 +12,7 @@
             <el-col class="line" :span="8" :pull="2" style="text-align:right;">MORE>></el-col>
           </el-row>
           <el-row style="line-height:30px;width:100%" v-for="(dataItem,index2) in data.item" :key="index2">
-            <el-col class="itemTxt" :span="(index==0?20:(index==1?13:8))" :offset="1">
+            <el-col class="itemTxt" :title="dataItem.txt" :span="(index==0?20:(index==1?13:8))" :offset="1">
               <span>·</span>
               <span class="item">{{dataItem.txt}}</span>
             </el-col>
@@ -186,7 +186,7 @@ export default {
   border: 1px solid #ccc;
   border-top: 5px solid #aaa;
   width: 31.5%;
-  cursor: pointer;
+  cursor: text;
 }
 .frame:hover{
   border-top:5px solid #3598DB;

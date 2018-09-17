@@ -27,7 +27,7 @@
             <span>我的下载清单</span>
           </span>
           <el-button type="primary" round size="mini" class="btn" @click="register">注册</el-button>
-          <el-button round class="btn" size="mini">登录</el-button>
+          <el-button round class="btn" @click="login" size="mini">{{loginTxt}}</el-button>
         </div>
       </el-col>
     </el-row>
@@ -70,11 +70,16 @@ export default {
       local: "",
       date: "",
       week: "",
-      inputKey: ""
+      inputKey: "",
+      loginTxt:'登录'
     };
   },
   computed: {
-    ...mapState(["topbarMenu", "permissionList", "sidebarMenu", "localCity"]),
+    ...mapState(["topbarMenu", "permissionList", "sidebarMenu", "localCity","UserToken"]),
+    account(){
+      return this.UserToken.Account;
+     // return this.UserToken.Account;
+    },
     nav() {
       if (this.page === "home") {
         return "navColorhome";
@@ -89,6 +94,9 @@ export default {
           this.page = val.path.split('/')[1];
       },
       deep: true
+    },
+    account(){
+      this.loginTxt=account=='readearth'?'登录':'退出'
     }
   },
   mounted() {
@@ -204,10 +212,13 @@ export default {
     register() {
       this.$router.push("/register");
     },
+    login(){
+      this.$router.push("/userLogin");
+    },
     goCart() {
       this.$router.push("/cart");
     }
-  }
+  },
 };
 </script>
 
