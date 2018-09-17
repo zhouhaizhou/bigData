@@ -363,7 +363,7 @@ div {
 }
 .dataIntroduce_table tr td {
   width: 50%;
-  height: 5vh;
+  height: 4vh;
   position: relative;
 }
 .dataIntroduce_table tr td span {

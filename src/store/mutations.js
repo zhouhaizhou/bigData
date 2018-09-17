@@ -50,5 +50,8 @@ module.exports = {
       let UserToken = $cookies.get("UserToken");
       state.UserToken=UserToken;
     }
+  },
+  REMOVECOOKIES(state){
+    $cookies.remove("UserToken");
   }
 }
