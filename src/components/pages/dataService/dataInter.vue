@@ -64,7 +64,7 @@ export default {
   font-size: 20px;
 }
 .inter {
-  background: white;
+  /* background: white; */
   padding: 15px;
   margin-top: 10px;
   width: 76vw;

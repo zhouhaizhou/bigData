@@ -27,6 +27,7 @@
             <span>我的下载清单</span>
           </span>
           <el-button type="primary" round size="mini" class="btn" @click="register">注册</el-button>
+          <span style="display:inline-block;" :class="{'welcome':loginTxt=='登录'}">欢迎{{userInfo.UserName}}登录</span>
           <el-button round class="btn" @click="login" size="mini">{{loginTxt}}</el-button>
         </div>
       </el-col>
@@ -59,7 +60,7 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapMutations } from "vuex";
+import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
 import { setDefaultRoute } from "../../utils/recursion-router.js";
 export default {
   data() {
@@ -71,15 +72,18 @@ export default {
       date: "",
       week: "",
       inputKey: "",
-      loginTxt:'登录'
+      loginTxt: "登录"
     };
   },
   computed: {
-    ...mapState(["topbarMenu", "permissionList", "sidebarMenu", "localCity","UserToken"]),
-    account(){
-      return this.UserToken.Account;
-     // return this.UserToken.Account;
-    },
+    ...mapState(["topbarMenu", "permissionList", "sidebarMenu", "localCity"]),
+    ...mapGetters({
+      userInfo: "userInfo"
+    }),
+    // account(){
+    //   return this.UserToken.Account;
+    //  // return this.UserToken.Account;
+    // },
     nav() {
       if (this.page === "home") {
         return "navColorhome";
@@ -91,15 +95,19 @@ export default {
   watch: {
     $route: {
       handler(val) {
-          this.page = val.path.split('/')[1];
+        this.page = val.path.split("/")[1];
       },
       deep: true
     },
-    account(){
-      this.loginTxt=account=='readearth'?'登录':'退出'
+    "userInfo.Account": {
+      handler(val, oldVal) {
+        this.calLoginTxt(val);
+      },
+      deep: true
     }
   },
   mounted() {
+    this.calLoginTxt(this.userInfo.Account);
     this.headerInit();
     this.page = this.$router.currentRoute.path.split("/")[1];
   },
@@ -112,6 +120,13 @@ export default {
         return false;
       } else {
         return true;
+      }
+    },
+    calLoginTxt(val) {
+      if (val != "readearth") {
+        this.loginTxt = "退出";
+      } else {
+        this.loginTxt = "登录";
       }
     },
     headerInit() {
@@ -174,20 +189,27 @@ export default {
         myCity.get(myFun);
       }
     },
-    getTempInfo(cityName){
-      this.axios.get('DataService.svc/GetAirCityInfo',{
-        params:{
-          city:cityName
-        }
-      }).then(res=>{
-        let data=JSON.parse(res.data).data;
-        let today=data.forecast[0];
-        this.temp=today.low.split(' ')[1].split('℃')[0]+'/'+today.high.split(' ')[1];
-        this.weather=today.type;
-        console.log(data);
-      }).catch(res=>{
-        console.log(res);reject(res)
-      })
+    getTempInfo(cityName) {
+      this.axios
+        .get("DataService.svc/GetAirCityInfo", {
+          params: {
+            city: cityName
+          }
+        })
+        .then(res => {
+          let data = JSON.parse(res.data).data;
+          let today = data.forecast[0];
+          this.temp =
+            today.low.split(" ")[1].split("℃")[0] +
+            "/" +
+            today.high.split(" ")[1];
+          this.weather = today.type;
+          console.log(data);
+        })
+        .catch(res => {
+          console.log(res);
+          reject(res);
+        });
     },
     getWeek() {
       var mydate = new Date();
@@ -212,17 +234,24 @@ export default {
     register() {
       this.$router.push("/register");
     },
-    login(){
-      this.$router.push("/userLogin");
+    login() {
+      if (this.loginTxt == "退出") {
+        this.$cookies.remove("UserToken");
+      } else {
+        this.$router.push("/userLogin");
+      }
     },
     goCart() {
       this.$router.push("/cart");
     }
-  },
+  }
 };
 </script>
 
 <style scoped>
+.welcome{
+  display:none !important;
+}
 .item {
   float: left;
   margin-left: 30px;

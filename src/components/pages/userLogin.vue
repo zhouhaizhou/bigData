@@ -3,49 +3,51 @@
     <my-header></my-header>
     <div class="user-login-wrap-center">
       <div class="user-login-wrap">
-      <div class="user-register">用户登录</div>
-      <div class="sub-img-wrap" style="">
-        <div class="sub-img"></div>
-      </div>
-      <div class="sub-wrap">
-
-        <div class="text-wrap">
-          <div class="text">
-            U&nbsp;S&nbsp;E&nbsp;R&nbsp;&nbsp; L&nbsp;O&nbsp;G&nbsp;I&nbsp;N&nbsp;</div>
+        <div class="user-register">用户登录</div>
+        <div class="sub-img-wrap" style="">
+          <div class="sub-img"></div>
         </div>
+        <div class="sub-wrap">
 
-      </div>
-      <div class="users-register-wrap">
-        <div>
-          <div class="element-ui-wrap">
-<el-form :model="ruleForm2" status-icon :rules="rules2" ref="ruleForm2" label-width="100px" class="demo-ruleForm">
-    <el-form-item label="用户名：" prop="userName">
-    <el-input v-model.number="ruleForm2.userName"></el-input>
-  </el-form-item>
-  <el-form-item label="密码：" prop="pass">
-    <el-input type="password" v-model="ruleForm2.pass" autocomplete="off"></el-input>
-  </el-form-item>
-
-
-  <el-form-item>
-    <el-button type="primary" @click="submitForm('ruleForm2')">登录</el-button>
-  </el-form-item>
-</el-form>
+          <div class="text-wrap">
+            <div class="text">
+              U&nbsp;S&nbsp;E&nbsp;R&nbsp;&nbsp; L&nbsp;O&nbsp;G&nbsp;I&nbsp;N&nbsp;</div>
           </div>
-          <div class="login-foot-wrap">
-            <div class="left-wrap">
-              <el-checkbox v-model="checked">下次自动登录</el-checkbox>
+
+        </div>
+        <div class="users-register-wrap">
+          <div class="users-register-wrap-center">
+            <div class="element-ui-wrap">
+              <el-form :model="ruleForm2" status-icon :rules="rules2" ref="ruleForm2" label-width="100px" class="demo-ruleForm">
+
+                <el-form-item label="" prop="userName" class="regi_form_input">
+                  <i class="icon IconPeople"></i>
+                  <el-input v-model.number="ruleForm2.userName" placeholder="用户名" class="user-ui"></el-input>
+                </el-form-item>
+                <el-form-item label="" prop="pass" class="regi_form_input noMargin">
+                  <i class="icon IconPwd"></i>
+                  <el-input type="password" v-model="ruleForm2.pass" autocomplete="off" placeholder="密码" class="user-ui"></el-input>
+                </el-form-item>
+
+                <el-form-item class="login-button">
+                  <el-button type="primary" @click="submitForm('ruleForm2')">登录</el-button>
+                </el-form-item>
+              </el-form>
             </div>
-            <div class="right-wrap">
-              <span>忘记密码</span>
-              <span>|</span>
-              <span>注册</span>
+            <div class="login-foot-wrap">
+              <div class="left-wrap">
+                <el-checkbox v-model="checked">下次自动登录</el-checkbox>
+              </div>
+              <div class="right-wrap">
+                <span class="cur-point">忘记密码</span>
+                <span>|</span>
+                <span class="cur-point" @click="register">注册</span>
+              </div>
             </div>
+            </el-form>
           </div>
-          </el-form>
         </div>
       </div>
-    </div>
     </div>
     <my-footer></my-footer>
   </div>
@@ -119,6 +121,12 @@ export default {
           }
         });
       },
+      register() {
+      this.$router.push("/register");
+    },
+     resetForm(formName) {
+        this.$refs[formName].resetFields();
+      },
       login(){
         let userName=this.ruleForm2.userName;
         let password=this.ruleForm2.pass;
@@ -128,6 +136,9 @@ export default {
         this.LOGIN(params).then(res=>{
           if(res=="ok"){
             this.$router.push("/home");
+          }else{
+            alert("登录失败！");
+            this.resetForm('ruleForm2');
           }
         }).catch(res=>{
          alert("错误！");
@@ -138,31 +149,125 @@ export default {
 </script>
 
 <style scoped>
-.user-login-wrap-center{
-      display: flex;
+.user-login-wrap-center {
+  display: flex;
+  justify-content: center;
+}
+.user-login-wrap {
+    width: 25%;
+    border: solid 1px #80808047;
+    margin-top: 2%;
+    margin-bottom: 3%;
+}
+.users-register-wrap{
+      width: 100%;
+    display: flex;
     justify-content: center;
 }
-.user-login-wrap{
-  width: 30%;
+.users-register-wrap-center{
+  width: 80%;
 }
-.element-ui-wrap >>> .el-input__inner{
+.element-ui-wrap >>> .el-input__inner {
   width: 70%;
 }
+
+.regi_form_input{
+  position: relative;
+  height: 42px;
+  line-height: 42px;
+  background: none;
+  margin-bottom: 7%;
+  font-size: 14px;
+  /* overflow: hidden; */
+  border:1px solid #ccc;
+  padding-bottom: 0;
+}
+.regi_form_input .icon.IconPeople {
+  display: inline-block;
+  float: left;
+  width: 25px;
+  height: 29px;
+  margin: 0px 5px 0 20px;
+
+  background-image: url("../../assets/img/user.png");
+  background-repeat: no-repeat;
+  /* background: url("../../assets/img/user.png") no-repeat center center; */
+}
+.regi_form_input .icon.IconPwd {
+  display: inline-block;
+  float: left;
+  width: 25px;
+  height: 29px;
+  margin: 0px 5px 0 20px;
+  background-image: url("../../assets/img/password.png");
+  background-repeat: no-repeat;
+  /* background: url("../../assets/img/user.png") no-repeat center center; */
+}
+.regi_form_input .regi_login_input{
+  position: absolute;
+  left:45px;
+  top:0;
+  padding: 9px 0 10px;
+  width: 270px;
+  font-size: 14px;
+  zoom: 1;
+  border: none;
+  color: #333;
+  /*height: 23px;*/
+  line-height: 23px;
+  background: 0 0!important;
+}
+.regi_form_input >>> .el-form-item__content{
+  margin-left: 0px !important;
+      display: flex;
+    align-items: center;
+    height: 100%;
+    background-color: #F4F4F4;
+}
+.login-button >>> .el-form-item__content{
+  margin-left: 0px !important;
+      display: flex;
+    align-items: center;
+    height: 100%;
+    
+}
+.login-button >>> .el-form-item__content button{
+width: 100%;
+    
+}
+.user-ui{
+  width:80%;
+}
+.user-ui >>> input{
+  border: none;
+      width: 100% !important;
+    background-color: #F4F4F4;
+}
+
 .login-foot-wrap {
   height: 4vh;
-  padding-left: 5%;
 }
 .left-wrap {
   float: left;
 }
+.left-wrap >>> .el-checkbox__label{
+  font-size: 16px;
+}
 .right-wrap {
   float: right;
 }
+.cur-point{
+  cursor: pointer;
+  color: #808080c9;
+}
+.cur-point:hover{
+  color: black;
+}
 .user-register {
-  margin-top: 3vh;
+  margin-top: 11%;
   height: 5vh;
   font-weight: bold;
-  font-size: 1.8em;
+  font-size: 1.4em;
   text-align: center;
 }
 .sub-img-wrap {
@@ -183,6 +288,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  padding-bottom: 6%;
 }
 .hr-wrap {
   width: 35%;
@@ -193,7 +299,7 @@ align-items: center; */
 
 .text-wrap {
   width: auto;
-  font-size: 1.8em;
+  font-size: 1.4em;
   text-align: center;
 }
 .text {

@@ -23,7 +23,7 @@
   </div>
 </div>
 <div class="dataIntroduce">
-<div><strong style="font-size:22px">1.基本资料：<br/><br/></strong><strong style="font-size:20px">·&nbsp;{{dataIntroduce[0].subTitle}}</strong></div>
+<div><strong>1.基本资料：<br/><br/></strong><strong>·&nbsp;{{dataIntroduce[0].subTitle}}</strong></div>
 <table class="dataIntroduce_table">
   <tr><td><div>数据起始时间：</div><span>{{dataIntroduce[0].startTime}}</span></td><td><div>数据终止时间：</div><span>{{dataIntroduce[0].endTime}}</span></td></tr>
   <tr><td><div>最近更新时间：</div><span>{{dataIntroduce[0].lstTime}}</span></td><td><div>更新频率：</div><span>{{dataIntroduce[0].UpdateInter}}</span></td></tr>
@@ -32,7 +32,7 @@
 </table>
 </div>
 <div class="columnIntroduce">
-  <div><strong style="font-size:22px">2.资料要素：<br/><br/></strong></div>
+  <div><strong>2.资料要素：<br/><br/></strong></div>
   <table class="columnTable">
     <thead>
       <th>序号</th>
@@ -234,13 +234,14 @@ div {
   background-color: #1bbf9d;
 }
 .title_text {
-  margin-left: 20px;
-  font-weight: bold;
-  font-size: 20px;
+  float: left;
+  margin-left: 0.8vw;
+  font-size: 1vw;
+  font-weight: 700;
 }
 .background {
   width: 77vw;
-  background: white;
+  /* background: white; */
   padding: 1vh;
   margin-top: 2vh;
   overflow: hidden;
@@ -319,12 +320,15 @@ div {
   width: 3vw;
   background: #3499db;
   height: 5vh;
-  border: 2px solid #3499db;
+  padding: 2px;
   cursor: pointer;
   background-image: url("../../../assets/img/search-w.png");
   background-repeat: no-repeat;
   background-position: center;
   background-size: 50%;
+}
+.dataChoose_searchbtn:hover {
+  background-color: rgba(52, 153, 219, 0.5);
 }
 .dataChoose_suggest {
   position: absolute;
@@ -366,13 +370,14 @@ div {
   position: absolute;
   left: 7vw;
   color: #3499db;
+  font-size: 0.8vw;
 }
 .dataIntroduce_table tr td div {
   width: 7vw;
   text-align: justify;
-  font-weight: bold;
   text-align-last: justify;
   position: absolute;
+  font-size: 0.8vw;
 }
 .dataChoose_div::-webkit-scrollbar {
   /*滚动条整体样式*/
@@ -421,6 +426,10 @@ div {
   text-align: center;
   cursor: pointer;
   border: 1px solid #e6e6e6;
+}
+.turnPage div:hover {
+  background-color: rgba(52, 153, 219, 0.5);
+  color: white;
 }
 .pageActive {
   background: #3499db;
