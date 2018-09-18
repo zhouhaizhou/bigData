@@ -42,26 +42,20 @@ export default {
       siteLat: "",
       siteId: "",
       mapZoom: 4,
-      center: [105, 35]
+      center: [110, 38]
     };
   },
   watch: {
     $route: {
       handler(val) {
         if (val.name == "emSite") {
-          this.mapZoom = 7;
-          this.center = [116, 31];
-          this.map.getView().setZoom(this.mapZoom);
-          this.map
-            .getView()
-            .setCenter(ol.proj.fromLonLat([this.center[0], this.center[1]]));
+          this.center = [110, 35]
+          this.map.getView().setZoom(5);
+          this.map.getView().setCenter(ol.proj.fromLonLat([this.center[0], this.center[1]]));
         } else {
-          this.mapZoom = 4;
-          this.center = [105, 35];
-          this.map.getView().setZoom(this.mapZoom);
-          this.map
-            .getView()
-            .setCenter(ol.proj.fromLonLat([this.center[0], this.center[1]]));
+          this.center = [110, 38]
+          this.map.getView().setZoom(4);
+          this.map.getView().setCenter(ol.proj.fromLonLat([this.center[0], this.center[1]]));
         }
         this.getPoint();
       },
@@ -70,8 +64,8 @@ export default {
   },
   mounted() {
     if (this.$route.name == "emSite") {
-      this.center = [116, 31];
-      this.mapZoom = 7;
+      this.center = [110, 35];
+      this.mapZoom = 5;
     }
     this.init();
   },
@@ -107,16 +101,6 @@ export default {
         });
         layers.push(l);
       });
-      // var layers = [
-      //   // new TileLayer({
-      //   //   source: new OSM()
-      //   // }),
-      //   new TileLayer({
-      //     source: new TileArcGISRest({
-      //       url: this.url[0]
-      //     })
-      //   })
-      // ];
       this.popup = new ol.Overlay({
         element: document.getElementById("popup"),
         positioning: "bottom-center",
@@ -131,7 +115,8 @@ export default {
         target: "map",
         view: new ol.View({
           center: ol.proj.fromLonLat([this.center[0], this.center[1]]),
-          zoom: this.mapZoom
+          zoom: this.mapZoom,
+          minZoom:3
         }),
         overlays: [this.popup]
       });
@@ -142,13 +127,13 @@ export default {
     listerEvent() {
       this.hoverLayer = new ol.layer.Vector({
         source: new ol.source.Vector(),
-        map: this.map
-        //zIndex: 99
+        map: this.map,
+        zIndex: 9
       });
-      this.map.on("click", evt => {
-        this.visible = false;
-      });
-      // this.map.on("pointermove", evt => this.siteDataHover(evt));
+      // this.map.on("click", evt => {
+      //   this.visible = false;
+      // });
+       this.map.on("pointermove", this.siteDataHover);
     },
     siteDataHover(evt) {
       if (!this.siteLayer || evt.dragging) return;
@@ -156,7 +141,7 @@ export default {
       if (this.popup) {
         this.popup.setPosition(undefined);
       }
-      let feature = this.siteLayer.getSource().graphics;
+      let feature = this.siteLayer.getSource().getClosestFeatureToCoordinate(evt.coordinate);
       let geometry = feature.getGeometry();
       let fPoint = this.map.getPixelFromCoordinate(geometry.flatCoordinates); //要素点的坐标
       let mousePoint = this.map.getPixelFromCoordinate(evt.coordinate); //鼠标的坐标
@@ -167,6 +152,13 @@ export default {
       let d = Math.sqrt(Math.pow(px2 - px1, 2) + Math.pow(py2 - py1, 2));
       if (feature && d < this.map.getView().getZoom() + 4) {
         this.visible = true;
+        this.province=feature.values_.features[0].get('Province');
+        this.city=feature.values_.features[0].get('City');
+        this.siteType=feature.values_.features[0].get('Type');
+        this.siteLon=feature.values_.features[0].get('Lon');
+        this.siteLat=feature.values_.features[0].get('Lat');
+        this.siteName=feature.values_.features[0].get('Station_Name');
+        this.siteId=feature.values_.features[0].get('Station_Id_C');
         let sf = this.siteLayer.getStyleFunction();
         let s = sf(feature);
         s.image_.setRadius(this.map.getView().getZoom() + 4);
@@ -203,6 +195,7 @@ export default {
     },
     getPoint() {
       let self = this;
+      this.map.removeLayer(this.siteLayer);
       this.axios
         .get("DataService.svc/GetSitebyName", {
           params: {
@@ -220,69 +213,42 @@ export default {
           //   features: []
           // };
           data.forEach(element => {
-            // let ele = {
-            //   type: "Feature",
-            //   geometry: {
-            //     type: "Point",
-            //     coordinates: [Number(element.Lon), Number(element.Lat)]
-            //   },
-            //   properties: element
-            // };
-            // dataArr.features.push(ele);
-            var geometry = new ol.geom.Point(
-              ol.proj.transform(
-                [Number(element.Lon), Number(element.Lat)],
-                "EPSG:4326",
-                "EPSG:3857"
-              )
-            );
-            var graphic = new ol.Graphic(geometry, element);
-            graphic.setStyle(this.getGeoStyle(element));
-            graphics.push(graphic);
+            let ele = {
+              type: "Feature",
+              geometry: {
+                type: "Point",
+                coordinates: [Number(element.Lon), Number(element.Lat)]
+              },
+              properties: element
+            };
+            dataArr.features.push(ele);
+            // var geometry = new ol.geom.Point(
+            //   ol.proj.transform(
+            //     [Number(element.Lon), Number(element.Lat)],
+            //     "EPSG:4326",
+            //     "EPSG:3857"
+            //   )
+            // );
+            // var graphic = new ol.Feature(geometry,element);
+            // //graphic.setStyle(randomCircleStyles);
+            // graphics.push(graphic);
           });
-          // var format = new GeoJSON({
-          //   defaultDataProjection: "EPSG:4326"
-          // });
-          // var f = format.readFeatures(dataArr, {
-          //   featureProjection: "EPSG:3857"
-          // });
-          // var vectorSource = new Vector({
-          //   features: f
-          // });
-
-          var vectorSource = new ol.source.Graphic({
-            graphics: graphics,
-            render: "canvas",
-            map: this.map,
-            onClick: function(graphic) {
-              if (graphic) {
-                //graphic.setStyle(clickRandomCircleStyles);
-                self.visible = true;
-                var attributes = graphic.getAttributes();
-                var coords = graphic.getGeometry().getCoordinates();
-                self.province = attributes.Province;
-                self.city = attributes.City;
-                self.siteType = attributes.Type;
-                self.siteLon = attributes.Lon;
-                self.siteLat = attributes.Lat;
-                self.siteName = attributes.Station_Name;
-                self.siteId = attributes.Station_Id_C;
-                self.popup.setPosition(coords);
-                return;
-              }
-              self.popup.setPosition(undefined);
-            }
+          var format = new ol.format.GeoJSON({
+            defaultDataProjection: "EPSG:4326"
           });
-          // var vectorLayer = new LayerVector({
-          //   source: vectorSource,
-          //   style: self.getMarkerStyle
-          // });
-           var clusterSource = new ol.source.Cluster({
-            distance: 50,
+          var f = format.readFeatures(dataArr, {
+            featureProjection: "EPSG:3857"
+          });
+          var vectorSource = new ol.source.Vector({
+            features: f
+          });
+          var clusterSource = new ol.source.Cluster({
+            distance: 20,
             source: vectorSource
           });
-          var vectorLayer = new ol.layer.Image({
-            source: vectorSource,
+          var vectorLayer = new ol.layer.Vector({
+            source: clusterSource,
+            style: this.getMarkerStyle,
             zIndex: 10
           });
          
