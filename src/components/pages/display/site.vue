@@ -16,6 +16,7 @@
 </template>
 
 <script>
+import "../../../../static/css/ol.css";
 export default {
   data() {
     return {
@@ -28,40 +29,49 @@ export default {
         "http://222.66.83.21:8282/arcgis/rest/services/ChinaProvinceLabel/MapServer"
         //"http://139.196.174.214/arcgis/rest/services/WorldMap_Blue_Label/MapServer"
       ],
-      graphics : [],
+      graphics: [],
       siteLayer: {},
       hoverLayer: {},
       popup: null,
       visible: false,
-      province:"",
-      siteName:"",
-      city:"",
-      siteType:"",
-      siteLon:"",
-      siteLat:"",
-      siteId:"",
-      mapZoom:4,
-      center:[110,31]
+      province: "",
+      siteName: "",
+      city: "",
+      siteType: "",
+      siteLon: "",
+      siteLat: "",
+      siteId: "",
+      mapZoom: 4,
+      center: [105, 35]
     };
   },
-  watch:{
-    $route:{
-      handler(val){
-        if(val.name=='emSite'){
-          this.map.getView().setZoom(5);
-          this.map.getView().setCenter(ol.proj.fromLonLat([this.center[0], this.center[1]]));
-        }else{
-          this.map.getView().setZoom(4);
+  watch: {
+    $route: {
+      handler(val) {
+        if (val.name == "emSite") {
+          this.mapZoom = 7;
+          this.center = [116, 31];
+          this.map.getView().setZoom(this.mapZoom);
+          this.map
+            .getView()
+            .setCenter(ol.proj.fromLonLat([this.center[0], this.center[1]]));
+        } else {
+          this.mapZoom = 4;
+          this.center = [105, 35];
+          this.map.getView().setZoom(this.mapZoom);
+          this.map
+            .getView()
+            .setCenter(ol.proj.fromLonLat([this.center[0], this.center[1]]));
         }
         this.getPoint();
       },
-      deep:true
+      deep: true
     }
   },
   mounted() {
-    if(this.$route.name=='emSite'){
-      this.center=[110,31]
-      this.mapZoom=5;
+    if (this.$route.name == "emSite") {
+      this.center = [116, 31];
+      this.mapZoom = 7;
     }
     this.init();
   },
@@ -88,7 +98,7 @@ export default {
     },
     init() {
       var layers = [];
-     // this.map.removeLayer(layers);
+      // this.map.removeLayer(layers);
       this.url.forEach(ele => {
         let l = new ol.layer.Tile({
           source: new ol.source.TileArcGISRest({
@@ -135,8 +145,10 @@ export default {
         map: this.map
         //zIndex: 99
       });
-      this.map.on("click", evt => {this.visible=false})
-     // this.map.on("pointermove", evt => this.siteDataHover(evt));
+      this.map.on("click", evt => {
+        this.visible = false;
+      });
+      // this.map.on("pointermove", evt => this.siteDataHover(evt));
     },
     siteDataHover(evt) {
       if (!this.siteLayer || evt.dragging) return;
@@ -176,6 +188,19 @@ export default {
         this.hoverLayer.getSource().addFeature(hf);
       }
     },
+    getGeoStyle(feature) {
+      let randomCircleStyles = new ol.style.RegularShape({
+        radius: 6,
+        fill: new ol.style.Fill({
+          color: "#0045ff"
+        }),
+        stroke: new ol.style.Stroke({
+          color: "#fff"
+        }),
+        points: 10
+      });
+      return randomCircleStyles;
+    },
     getPoint() {
       let self = this;
       this.axios
@@ -186,24 +211,14 @@ export default {
         })
         .then(res => {
           let self = this;
-          console.log(res.data)
+          console.log(res.data);
           this.map.removeLayer(this.siteLayer);
           let data = JSON.parse(res.data);
-          let randomCircleStyles = new ol.style.RegularShape({
-            radius: 6,
-            fill: new ol.style.Fill({
-              color: "#0045ff"
-            }),
-            stroke: new ol.style.Stroke({
-              color: "#fff"
-            }),
-            points: 10
-          });
           let graphics = [];
-          var dataArr = {
-            type: "FeatureCollection",
-            features: []
-          };
+          // var dataArr = {
+          //   type: "FeatureCollection",
+          //   features: []
+          // };
           data.forEach(element => {
             // let ele = {
             //   type: "Feature",
@@ -222,7 +237,7 @@ export default {
               )
             );
             var graphic = new ol.Graphic(geometry, element);
-            graphic.setStyle(randomCircleStyles);
+            graphic.setStyle(this.getGeoStyle(element));
             graphics.push(graphic);
           });
           // var format = new GeoJSON({
@@ -245,13 +260,13 @@ export default {
                 self.visible = true;
                 var attributes = graphic.getAttributes();
                 var coords = graphic.getGeometry().getCoordinates();
-                self.province=attributes.Province;
-                self.city=attributes.City;
-                self.siteType=attributes.Type;
-                self.siteLon=attributes.Lon ;
-                self.siteLat=attributes.Lat;
-                self.siteName=attributes.Station_Name;
-                self.siteId=attributes.Station_Id_C;
+                self.province = attributes.Province;
+                self.city = attributes.City;
+                self.siteType = attributes.Type;
+                self.siteLon = attributes.Lon;
+                self.siteLat = attributes.Lat;
+                self.siteName = attributes.Station_Name;
+                self.siteId = attributes.Station_Id_C;
                 self.popup.setPosition(coords);
                 return;
               }
@@ -262,10 +277,15 @@ export default {
           //   source: vectorSource,
           //   style: self.getMarkerStyle
           // });
+           var clusterSource = new ol.source.Cluster({
+            distance: 50,
+            source: vectorSource
+          });
           var vectorLayer = new ol.layer.Image({
             source: vectorSource,
             zIndex: 10
           });
+         
           self.siteLayer = vectorLayer;
           self.map.addLayer(self.siteLayer);
         })

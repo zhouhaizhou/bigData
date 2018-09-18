@@ -22,8 +22,8 @@
         <i class="icon" v-if="condition.endTime!=''"></i>
         <el-date-picker v-if="condition.endTime!=''" value-format="yyyy-MM-dd HH:mm:ss" prefix-icon="1" v-model="condition.endTime" clear-icon="close" type="datetime" align="left">
         </el-date-picker>
-        <span class="date-suffix"></span>
-        <span style="margin-left: 10px;margin-right: 10px;vertical-align: middle;">间隔</span>
+        <span class="date-suffix" v-if="condition.endTime!=''"></span>
+        <span style="margin-left: 10px;margin-right: 10px;vertical-align: middle;" >间隔</span>
         <el-select v-model="selPlayInterval">
           <el-option v-for="(item,index) in condition.intervalOpt" :key="index" :label="item.val" :value="item.key"></el-option>
         </el-select>
