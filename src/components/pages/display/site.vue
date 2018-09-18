@@ -16,7 +16,6 @@
 </template>
 
 <script>
-import "../../../../static/css/ol.css";
 export default {
   data() {
     return {
@@ -180,19 +179,6 @@ export default {
         this.hoverLayer.getSource().addFeature(hf);
       }
     },
-    getGeoStyle(feature) {
-      let randomCircleStyles = new ol.style.RegularShape({
-        radius: 6,
-        fill: new ol.style.Fill({
-          color: "#0045ff"
-        }),
-        stroke: new ol.style.Stroke({
-          color: "#fff"
-        }),
-        points: 10
-      });
-      return randomCircleStyles;
-    },
     getPoint() {
       let self = this;
       this.map.removeLayer(this.siteLayer);
@@ -207,11 +193,21 @@ export default {
           console.log(res.data);
           this.map.removeLayer(this.siteLayer);
           let data = JSON.parse(res.data);
+          let randomCircleStyles = new ol.style.RegularShape({
+            radius: 6,
+            fill: new ol.style.Fill({
+              color: "#0045ff"
+            }),
+            stroke: new ol.style.Stroke({
+              color: "#fff"
+            }),
+            points: 10
+          });
           let graphics = [];
-          // var dataArr = {
-          //   type: "FeatureCollection",
-          //   features: []
-          // };
+          var dataArr = {
+            type: "FeatureCollection",
+            features: []
+          };
           data.forEach(element => {
             let ele = {
               type: "Feature",
@@ -251,7 +247,6 @@ export default {
             style: this.getMarkerStyle,
             zIndex: 10
           });
-         
           self.siteLayer = vectorLayer;
           self.map.addLayer(self.siteLayer);
         })
