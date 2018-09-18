@@ -17,10 +17,10 @@
          }
        }).then(function (response) {
          let data = response.data;
-        //  if(data.indexOf("失败")>0){
-        //    reject(data);
-        //    return;
-        //  }
+         if(data.indexOf("失败")>-1||data.indexOf("没有")>-1){
+           reject(data);
+           return;
+         }
          data=JSON.parse(data);
          proRoutersObj(data);
          resolve(data);

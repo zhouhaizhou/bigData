@@ -4,7 +4,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
 import  '../../utils/api'
-import ElementUI from 'element-ui';
+import ElementUI, { Alert } from 'element-ui';
 import App from './App'
 import router from '../../router'
 import store from '../../store'
@@ -26,14 +26,16 @@ router.beforeEach((to, from, next) => {
     // if (to.matched.length > 0 &&!to.matched.some(record => record.meta.requiresAuth)) {
     //     next()
     // } 
-    if(from.path=='/'&& to.matched.length==0){
-      // alert();
-    }
+    
     store.commit('GETCOOKIES');
+    if(from.path=='/'&& to.matched.length==0){
+      //console.log(returnCitySN);
+      store.dispatch('UpdateVisit');
+    }
     (async ()=>{
       if(!store.state.UserToken){
         let params={"userName":"BIGDATA","password":"BIGDATA","expires":"-1D"};
-        await store.dispatch('LOGIN',params)
+        await store.dispatch('LOGIN',params);
       }
     })().then(res=>{
       let flag = false;

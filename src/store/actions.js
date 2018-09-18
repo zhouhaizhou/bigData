@@ -1,11 +1,24 @@
 import Router from 'vue-router'
-import { fetchPermission} from '@/utils/permission'
-import router, { DynamicRoutes} from '@/router/index'
-import {recursionRouter,setDefaultRoute, getContainer,joinRouter} from '@/utils/recursion-router'
-import dynamicRouter, {siderBarRouters} from '@/router/dynamic-router'
+import {
+  fetchPermission
+} from '@/utils/permission'
+import router, {
+  DynamicRoutes
+} from '@/router/index'
+import {
+  recursionRouter,
+  setDefaultRoute,
+  getContainer,
+  joinRouter
+} from '@/utils/recursion-router'
+import dynamicRouter, {
+  siderBarRouters
+} from '@/router/dynamic-router'
 import axios from 'axios'
 export default {
-  scrollAnchor({context}, paramObj) {
+  scrollAnchor({
+    context
+  }, paramObj) {
     //Top 对象要从开始的位置移动到目标位置的距离
     //obj 哪个对象要移动
     var Top = paramObj.top;
@@ -30,7 +43,10 @@ export default {
       });
     }, 15);
   },
-  FETCH_PERMISSION({commit,state}, paramObj) {
+  FETCH_PERMISSION({
+    commit,
+    state
+  }, paramObj) {
     let type = paramObj.type;
     let path = paramObj.path;
     path = ((path.charAt(path.length - 1) == "/") && path.length > 1) ? path.substring(0, path.length - 1) : path;
@@ -50,14 +66,14 @@ export default {
       } else {
         commit('SET_SIDERMENU', state.cacheSiderBar[path]);
         // setDefaultRoute(DynamicR, path.split('/')[1], defaultRouter);
-          setDefaultRoute(path.split('/')[1]).then(res => {
-            if(routeRed!=undefined){
-              res=routeRed;
-            }
-            router.push({
-              name: res
-            });
-          }).catch(res => console.log(res));
+        setDefaultRoute(path.split('/')[1]).then(res => {
+          if (routeRed != undefined) {
+            res = routeRed;
+          }
+          router.push({
+            name: res
+          });
+        }).catch(res => console.log(res));
       }
     }
     if (type == 'top') { //第一次获取一级菜单
@@ -77,40 +93,43 @@ export default {
         router.addRoutes(DynamicR);
         /* 完整的路由表 */
         commit('SET_PERMISSION', [...DynamicR]);
-          setDefaultRoute(path.split('/')[1]).then(res => {
-            if(routeRed!=undefined){
-              res=routeRed;
-            }
-            router.push({
-              name: res
-            });
-          }).catch(res => console.log(res));
-      });
+        setDefaultRoute(path.split('/')[1]).then(res => {
+          if (routeRed != undefined) {
+            res = routeRed;
+          }
+          router.push({
+            name: res
+          });
+        }).catch(res => console.log(res));
+      }).catch(res=>console.log(res));
     }
   },
-  LOGIN({commit,state},paramObj){
+  LOGIN({
+    commit,
+    state
+  }, paramObj) {
     return new Promise((resolve, reject) => {
-      let userName=paramObj.userName;
-      let password=paramObj.password;
-      let expires=paramObj.expires;
+      let userName = paramObj.userName;
+      let password = paramObj.password;
+      let expires = paramObj.expires;
       axios({
         method: "get",
         url: "DataService.svc/Login",
         // baseURL: '',
-        params:{
-          userName:userName,
-          Pwd:password
+        params: {
+          userName: userName,
+          Pwd: password
         }
       }).then(res => {
         let data = res.data;
-        let dataArr=JSON.parse(data);
-        dataArr[0].expires=expires;
-        if(dataArr.length==0){
+        let dataArr = JSON.parse(data);
+        dataArr[0].expires = expires;
+        if (dataArr.length == 0) {
           resolve("error");
-        }else{
-          let dataObj=JSON.stringify(dataArr[0]);
+        } else {
+          let dataObj = JSON.stringify(dataArr[0]);
           // dataObj.expires=expires;
-          commit('SETCOOKIES',dataObj)
+          commit('SETCOOKIES', dataObj)
           resolve("ok");
         }
       }).catch(res => {
@@ -118,5 +137,22 @@ export default {
         resolve("error");
       })
     })
+  },
+  UpdateVisit({commit,state}) {
+    let ip = returnCitySN.cip;
+    let access="readearth";
+    if(state.UserToken!=null){
+      access = state.UserToken.Account;
+    }
+    let location = returnCitySN.cname;
+    axios({
+      method: "get",
+      url: "DataService.svc/UpdateVisit",
+      params: {
+        access: access,
+        ip: ip,
+        location: location
+      }
+    }).then(res => console.log(res.data)).catch(res => console.log(res.log))
   }
 }

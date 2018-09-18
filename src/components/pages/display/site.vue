@@ -16,25 +16,13 @@
 </template>
 
 <script>
-// import "ol/ol.css";
-// import ol from "ol";
-// import Map from "ol/Map.js";
-// import View from "ol/View.js";
-// import TileLayer from "ol/layer/Tile.js";
-// import { OSM, TileArcGISRest, Vector } from "ol/source.js";
-// import { fromLonLat } from "ol/proj.js";
-// import LayerVector from "ol/layer/Vector.js";
-// import ImageVector from "ol/layer/Image.js";
-// import { GeoJSON } from "ol/format.js";
-// import { Style, Circle, Fill, Stroke } from "ol/style.js";
-// import Overlay from "ol/Overlay.js";
 export default {
   data() {
     return {
       siteInfo: "",
       map: {},
       url: [
-        "http://222.66.83.21:8282/arcgis/rest/services/ChinaBoundary/MapServer",
+        // "http://222.66.83.21:8282/arcgis/rest/services/ChinaBoundary/MapServer",
         "http://222.66.83.21:8282/arcgis/rest/services/ChinaProvince1/MapServer",
         //"http://222.66.83.21:8282/arcgis/rest/services/ChinaProvince/MapServer",
         "http://222.66.83.21:8282/arcgis/rest/services/ChinaProvinceLabel/MapServer"
@@ -51,18 +39,30 @@ export default {
       siteType:"",
       siteLon:"",
       siteLat:"",
-      siteId:""
+      siteId:"",
+      mapZoom:4,
+      center:[110,31]
     };
   },
   watch:{
     $route:{
       handler(val){
+        if(val.name=='emSite'){
+          this.map.getView().setZoom(5);
+          this.map.getView().setCenter(ol.proj.fromLonLat([this.center[0], this.center[1]]));
+        }else{
+          this.map.getView().setZoom(4);
+        }
         this.getPoint();
       },
       deep:true
     }
   },
   mounted() {
+    if(this.$route.name=='emSite'){
+      this.center=[110,31]
+      this.mapZoom=5;
+    }
     this.init();
   },
   methods: {
@@ -88,6 +88,7 @@ export default {
     },
     init() {
       var layers = [];
+     // this.map.removeLayer(layers);
       this.url.forEach(ele => {
         let l = new ol.layer.Tile({
           source: new ol.source.TileArcGISRest({
@@ -119,8 +120,8 @@ export default {
         layers: layers,
         target: "map",
         view: new ol.View({
-          center: ol.proj.fromLonLat([105, 31]),
-          zoom: 4
+          center: ol.proj.fromLonLat([this.center[0], this.center[1]]),
+          zoom: this.mapZoom
         }),
         overlays: [this.popup]
       });

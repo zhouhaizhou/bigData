@@ -41,7 +41,7 @@ export default {
                 hoverImg:false
             },
             {
-                CName:'检索订制',
+                CName:'检索定制',
                 routeName:"customizeSearch",
                 goPage:"dataService",
                 EName:'Retrieval and Order',
