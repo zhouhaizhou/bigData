@@ -8,6 +8,7 @@
         <div>类型:{{siteType}}</div>
         <div>名称:{{siteName}}</div>
         <div>编号:{{siteId}}</div>
+        <div v-if="siteLevel!=undefined">等级:{{siteLevel}}</div>
         <div>经度:{{siteLon}}</div>
         <div>纬度:{{siteLat}}</div>
       </div>
@@ -16,6 +17,7 @@
 </template>
 
 <script>
+import '../../../../static/css/ol.css';
 export default {
   data() {
     return {
@@ -40,21 +42,27 @@ export default {
       siteLon: "",
       siteLat: "",
       siteId: "",
+      siteLevel:"",
       mapZoom: 4,
-      center: [110, 38]
+      center: [110, 38],
+      siteData: null
     };
   },
   watch: {
     $route: {
       handler(val) {
         if (val.name == "emSite") {
-          this.center = [110, 35]
+          this.center = [110, 35];
           this.map.getView().setZoom(5);
-          this.map.getView().setCenter(ol.proj.fromLonLat([this.center[0], this.center[1]]));
+          this.map
+            .getView()
+            .setCenter(ol.proj.fromLonLat([this.center[0], this.center[1]]));
         } else {
-          this.center = [110, 38]
+          this.center = [110, 38];
           this.map.getView().setZoom(4);
-          this.map.getView().setCenter(ol.proj.fromLonLat([this.center[0], this.center[1]]));
+          this.map
+            .getView()
+            .setCenter(ol.proj.fromLonLat([this.center[0], this.center[1]]));
         }
         this.getPoint();
       },
@@ -70,6 +78,16 @@ export default {
   },
   methods: {
     getMarkerStyle(features) {
+      let type = features.values_.features[0].get("Type");
+      let level = features.values_.features[0].get("Station_levl");
+      let color = null;
+      if (type.indexOf("酸雨") >= 0 ||level=='11') {
+        color = [255, 165, 0, 1];
+      } else if (type.indexOf("气溶胶") >= 0||level=='12') {
+        color = [232, 122, 211, 1];
+      } else {
+        color = [0, 229, 0, 1];
+      }
       var zoom = this.map.getView().getZoom();
       var zoom = 2;
       if (zoom < 4) {
@@ -79,7 +97,7 @@ export default {
         image: new ol.style.Circle({
           radius: zoom,
           fill: new ol.style.Fill({
-            color: [234, 12, 233, 0.5]
+            color: color
           }),
           stroke: new ol.style.Stroke({
             color: [0, 0, 0, 0.5],
@@ -115,7 +133,8 @@ export default {
         view: new ol.View({
           center: ol.proj.fromLonLat([this.center[0], this.center[1]]),
           zoom: this.mapZoom,
-          minZoom:3
+          minZoom: 3,
+          maxZoom:8
         }),
         overlays: [this.popup]
       });
@@ -132,7 +151,36 @@ export default {
       // this.map.on("click", evt => {
       //   this.visible = false;
       // });
-       this.map.on("pointermove", this.siteDataHover);
+      this.map.on("pointermove", this.siteDataHover);
+      this.map.getView().on("change:resolution", this.zoomend);
+    },
+    zoomend(evt) {
+      if (this.$route.name != "emSite") {
+        return;
+      }
+      this.map.removeLayer(this.siteLayer);
+     // this.siteLayer=null;
+      this.siteLayer=null;
+      let data=[];
+      let zoom = this.map.getView().getZoom();
+      if(zoom<4 && zoom>=3){
+        data = this.filterSiteData(11);
+      }else if(zoom>=4&&zoom<5){
+        data = this.filterSiteData(12);
+      }else{
+        data = this.siteData;
+      }
+      this.proMap(data);
+    },
+    filterSiteData(grade){
+      let data=[];
+      this.siteData.filter((ele)=>{
+          let level=ele.Station_levl;
+          if(Number(level) <= grade){
+            data.push(ele);
+          }
+        })
+      return data;
     },
     siteDataHover(evt) {
       if (!this.siteLayer || evt.dragging) return;
@@ -140,7 +188,9 @@ export default {
       if (this.popup) {
         this.popup.setPosition(undefined);
       }
-      let feature = this.siteLayer.getSource().getClosestFeatureToCoordinate(evt.coordinate);
+      let feature = this.siteLayer
+        .getSource()
+        .getClosestFeatureToCoordinate(evt.coordinate);
       let geometry = feature.getGeometry();
       let fPoint = this.map.getPixelFromCoordinate(geometry.flatCoordinates); //要素点的坐标
       let mousePoint = this.map.getPixelFromCoordinate(evt.coordinate); //鼠标的坐标
@@ -151,13 +201,14 @@ export default {
       let d = Math.sqrt(Math.pow(px2 - px1, 2) + Math.pow(py2 - py1, 2));
       if (feature && d < this.map.getView().getZoom() + 4) {
         this.visible = true;
-        this.province=feature.values_.features[0].get('Province');
-        this.city=feature.values_.features[0].get('City');
-        this.siteType=feature.values_.features[0].get('Type');
-        this.siteLon=feature.values_.features[0].get('Lon');
-        this.siteLat=feature.values_.features[0].get('Lat');
-        this.siteName=feature.values_.features[0].get('Station_Name');
-        this.siteId=feature.values_.features[0].get('Station_Id_C');
+        this.province = feature.values_.features[0].get("Province");
+        this.city = feature.values_.features[0].get("City");
+        this.siteType = feature.values_.features[0].get("Type");
+        this.siteLon = feature.values_.features[0].get("Lon");
+        this.siteLat = feature.values_.features[0].get("Lat");
+        this.siteName = feature.values_.features[0].get("Station_Name");
+        this.siteId = feature.values_.features[0].get("Station_Id_C");
+        this.siteLevel = feature.values_.features[0].get("Station_levl");
         let sf = this.siteLayer.getStyleFunction();
         let s = sf(feature);
         s.image_.setRadius(this.map.getView().getZoom() + 4);
@@ -190,21 +241,19 @@ export default {
         })
         .then(res => {
           let self = this;
-          console.log(res.data);
+          // console.log(res.data);
           this.map.removeLayer(this.siteLayer);
           let data = JSON.parse(res.data);
-          let randomCircleStyles = new ol.style.RegularShape({
-            radius: 6,
-            fill: new ol.style.Fill({
-              color: "#0045ff"
-            }),
-            stroke: new ol.style.Stroke({
-              color: "#fff"
-            }),
-            points: 10
-          });
-          let graphics = [];
-          var dataArr = {
+          this.siteData = data;
+          this.zoomend();
+          //let graphics = [];
+          this.proMap(data);
+        })
+        .catch(res => console.log(res));
+    },
+    proMap(data){
+       this.map.removeLayer(this.siteLayer);
+      var dataArr = {
             type: "FeatureCollection",
             features: []
           };
@@ -247,10 +296,8 @@ export default {
             style: this.getMarkerStyle,
             zIndex: 10
           });
-          self.siteLayer = vectorLayer;
-          self.map.addLayer(self.siteLayer);
-        })
-        .catch(res => console.log(res));
+          this.siteLayer = vectorLayer;
+          this.map.addLayer(this.siteLayer);
     }
   }
 };

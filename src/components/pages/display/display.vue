@@ -9,6 +9,7 @@
       <div  class="img">
           <!-- <div class="img" :style="style"></div> -->
           <img :src="style" style="height:80vh"  class="loadImg" alt="">
+          <span :class="{tlogp:tlogp}"></span>
           <!-- <div class="img" @click="showImg" :style="style"></div> -->
       </div>
       <right class="right" :times="times" :selPlayInterval="selPlayInterval" v-on:selShowImg="selShowImg"></right>
@@ -31,6 +32,9 @@ export default {
   watch:{
     $route:{
       handler(val){
+        if(val.name=="qiya"){
+          this.tlogp=true;
+        }
         this.condition={},  //路由发生变化说明进入另一个页面，对应这些变量要初始化
         this.time=[],
         this.isFirst=true;
@@ -52,7 +56,8 @@ export default {
       times:[],
       playInterval: null,
       isFirst: true, //是否第一次请求后台数据
-      selPlayInterval:null
+      selPlayInterval:null,
+      tlogp:false
     };
   },
   mounted() {
@@ -76,7 +81,8 @@ export default {
           }
         })
         .then(response => {
-          let data = eval("(" + response.data + ")");
+          let str=response.data.replace(/PM25/g,'PM2.5').replace(/O3/g,'O₃').replace(/NO2/g,'NO₂').replace(/SO2/g,'SO₂').replace(/CO2/g,'CO₂')
+          let data = eval("(" + str + ")");
           self.times=data.times;
           self.SETSELECTEDTIME(self.times.length-1)
           if (self.isFirst) {
@@ -167,7 +173,16 @@ export default {
 .icon {
   float: left;
 }
-
+.tlogp{
+  background: url("../../../assets/img/display/Tlogp.png") no-repeat center center;
+  background-size: cover;
+  height: 13vh;
+  width: 9vw;
+  display: inline-block;
+  position: relative;
+  top: -32px;
+  right: -30px;
+}
 .img {
   width: 52vw;
   /* height: 85.5vh; */
