@@ -40,7 +40,7 @@
                   <div class="comment-pic float-left icon-style1"></div>
                   <div class="comment-name float-left icon-font-style">评论</div>
                   <div class="comment-count">{{modalData[0].commentCount}}</div>
-                </div>  
+                </div>
                 <div class="likes-wrap padding-bottom border-bottom">
                   <div class="likes-pic float-left icon-style1"></div>
                   <div class="likes-name float-left icon-font-style">收藏</div>
@@ -53,28 +53,28 @@
                 </div>
                 <div class="share-wrap padding-bottom border-bottom">
                   <div class="share-pic float-left icon-style1"></div>
-                  <div class="share-name ">分享</div>
+                  <div class=" icon-font-style share"  >分享</div>
                 </div>
               </div>
             </div>
           </div>
           <div class="foot-wrap">
-            <div class="file-download-font">
+              <div class="file-download-font">
               <span>资料下载</span>
             </div>
             <div class="date-all-wrap">
               <div class="date-wrap">
                 <div class="date-pic" src="../../../assets/img/modal/date.png"></div>
-                <div class="date-name font-style1">日期选择</div>
+                <div class="date-name font-style1">时间选择</div>
               </div>
               <div class="date-value">
-                <div class="start-time" >
-                  <el-date-picker v-model="startTimes" class="time-time"  type="datetime" format="yyyy-MM-dd HH" value-format="yyyy-MM-dd HH" clear-icon="close" prefix-icon="1">
+                <div class="start-time">
+                  <el-date-picker v-model="startTimes" class="time-time" type="datetime" format="yyyy-MM-dd HH" value-format="yyyy-MM-dd HH" clear-icon="close" prefix-icon="1" @focus="dateChange">
                   </el-date-picker>
                 </div>
                 <div class="dao font-style1">到</div>
-                <div class="end-time" >
-                  <el-date-picker v-model="endTimes" class="time-time"  type="datetime" format="yyyy-MM-dd HH" value-format="yyyy-MM-dd HH" clear-icon="close" prefix-icon="1">
+                <div class="end-time">
+                  <el-date-picker v-model="endTimes" class="time-time" type="datetime" format="yyyy-MM-dd HH" value-format="yyyy-MM-dd HH" clear-icon="close" prefix-icon="1" @focus="dateChange">
                   </el-date-picker>
                 </div>
               </div>
@@ -155,7 +155,7 @@
 
 <script>
 import myModalProvincesPan from "./modalProvincesPan";
-import {mapState} from 'vuex'
+import { mapState } from "vuex";
 export default {
   components: {
     myModalProvincesPan
@@ -165,14 +165,14 @@ export default {
     return {
       elementCnName: "",
       modalData: [],
-      UpdateInterValue:"",
+      UpdateInterValue: "",
       province: "",
       provinceData: "",
       citySite: "",
       citySiteDetail: "",
       checkAll: false,
       checkedElements: [],
-      isIndeterminate: true,
+      isIndeterminate: false,
       elements: [],
       elementCnNameArr: [],
       elementsIndexArr: [],
@@ -190,106 +190,161 @@ export default {
       timeInput: "1",
       timeValue: "天",
       timeType: [
-        {
-          value: "0",
-          label: "年"
-        },
-        {
-          value: "1",
-          label: "月"
-        },
-        {
-          value: "2",
-          label: "天"
-        }
+        // {
+        //   value: "0",
+        //   label: "年"
+        // },
+        // {
+        //   value: "1",
+        //   label: "月"
+        // },
+        // {
+        //   value: "2",
+        //   label: "天"
+        // }
       ],
       timeTypeValue: "",
       startTimes: "",
-      endTimes: this._global.formatDate(new Date(), "yyyy-MM-dd hh")
+      endTimes: "" //this._global.formatDate(new Date(), "yyyy-MM-dd hh")将GMT时间格式转化为字符串形式的正常时间格式
     };
   },
   mounted() {
-    // //初始请求加载页面数据
-    // this.getFileContentData();
-    // this.getElementData();
-    // this.getTime();
+
   },
   created() {
     // this.getTime();
   },
-  computed:{
-    ...mapState(['UserToken']),
+  computed: {
+    ...mapState(["UserToken"])
   },
   watch: {
     moduleEnName() {
-      if (this.moduleEnName != "") {//更新页面
+      if (this.moduleEnName != "") {
+        //更新页面
         this.getFileContentData();
-       this.elements="";
+        this.elements = "";
         this.getElementData();
-        //this.defaultSetByModuleEnName();//由于设置默认值方法中的变量需要axios异步执行完才能获取到，所以，此方法不能直接在变量没生成的情况下单独执行
+        this.getIntervalTime();//根据module的年月日设置时间间隔单位
       }
     },
-    isShow(){//监听
-      if(this.isShow==false){
-        // this.checkedElements=[];//弹框关闭时，清除选择的要素
-      }else{//弹框显示时，默认选中后台返回数据中的第一个要素
-
+    isShow() {
+      //监听
+      if (this.isShow == false) {
+        this.isIndeterminate = false; //弹框关闭时，全选按钮恢复初始状态
+      } else {
+        //弹框显示时，默认选中后台返回数据中的第一个要素
       }
-
     }
   },
   methods: {
-
-    defaultSetByModuleEnName(){
-      let hour=(this.UpdateInterValue).indexOf('时');//注意：数据库中配置时，年月日时，的命名采用要包含此处对应的字符
-      let day=(this.UpdateInterValue).indexOf('天');
-      let day1=(this.UpdateInterValue).indexOf('日');
-      let month=(this.UpdateInterValue).indexOf('月');
-      let year=(this.UpdateInterValue).indexOf('年');
-      if(hour!=-1){
-        this.getTime('hour');
-        this.timeValue="天";//去掉间隔单位“小时”，小时数据也用“天”单位
-      }else if(day!=-1||day1!=-1){
-        this.getTime('day');
-        this.timeValue="天";
-      }else if(month!=-1){
-        this.getTime('month');
-        this.timeValue="月";
-      }else if(year!=-1){
-        this.getTime('year');
-        this.timeValue="年";
-      }else{
-        this.getTime('day');
-        this.timeValue="天";
+    /**
+     * 修改elementUI中的样式，动态修改style
+     */
+        dateChange() {
+      setTimeout(()=>{
+          document.querySelectorAll(".has-time .el-time-spinner__wrapper")[1].style.display='none';
+      },100);//由于获取焦点时动态生成时的div还没出来，所以设置延迟执行
+      },
+     /**
+     *  获取资料对应的间隔时间
+     */
+    getIntervalTime() {
+      let self = this;
+      this.axios
+        .get("DataService.svc/GetDataIntelTime", {
+          params: {
+            dataType: this.moduleEnName
+            // moduleEnName: "hourData" //待修改为moduleEnName，先用固定值代替
+          }
+        })
+        .then(response => {
+          let resData = eval("(" + response.data + ")");
+          let str = resData[0].IntervalTime;
+          let Arr=str.split("、");
+          let timeTypeArr=[];
+        for(let i=0;i<Arr.length;i++){
+          let obj={
+          value: i,
+          label: Arr[i]
+        }
+        timeTypeArr.push(obj);
+        }
+          self.timeType=timeTypeArr;
+        })
+        .catch(response => {
+          console.log(response);
+        });
+    },
+    /**
+     *  获取数据表中的最新时间，赋值给结束时间
+     */
+    getLstTime() {
+      let self = this;
+      this.axios
+        .get("DataService.svc/GetDataLastTime", {
+          params: {
+            dataType: this.moduleEnName
+            // moduleEnName: "hourData" //待修改为moduleEnName，先用固定值代替
+          }
+        })
+        .then(response => {
+          let resData = eval("(" + response.data + ")");
+          self.endTimes = this._global.formatDate(new Date((resData[0].collect_time)), "yyyy-MM-dd hh");
+          self.defaultSetByModuleEnName();
+        })
+        .catch(response => {
+          console.log(response);
+        });
+    },
+     defaultSetByModuleEnName() {
+      let hour = this.UpdateInterValue.indexOf("时"); //注意：数据库中配置时，年月日时，的命名采用要包含此处对应的字符
+      let day = this.UpdateInterValue.indexOf("天");
+      let day1 = this.UpdateInterValue.indexOf("日");
+      let month = this.UpdateInterValue.indexOf("月");
+      let year = this.UpdateInterValue.indexOf("年");
+      if (hour != -1) {
+        this.getTime("hour");
+        this.timeValue = "天"; //去掉间隔单位“小时”，小时数据也用“天”单位
+      } else if (day != -1 || day1 != -1) {
+        this.getTime("day");
+        this.timeValue = "月";
+      } else if (month != -1) {
+        this.getTime("month");
+        this.timeValue = "年";
+      } else if (year != -1) {
+        this.getTime("year");
+        this.timeValue = "年";//下载的时间间隔先默认为年   （待）
+      } else {
+        this.getTime("day");
+        this.timeValue = "天";
       }
     },
     getTime(time) {
-      const start = new Date();
-      this.endTimes=this._global.formatDate(new Date(), "yyyy-MM-dd hh");
+      const start = new Date(this.endTimes+":00:00");//将正常的字符串时间格式转化为GMT时间格式
+      // this.endTimes = this._global.formatDate(new Date(), "yyyy-MM-dd hh");
       switch (time) {
-        case 'hour':
+        case "hour":
           start.setTime(start.getTime() - 3600 * 1000 * 1); //提前一小时
           this.startTimes = this._global.formatDate(start, "yyyy-MM-dd hh");
           break;
-          case 'day':
-          start.setTime(start.getTime() - 3600 * 1000 * 24);//提前一天
+        case "day":
+          start.setTime(start.getTime() - 3600 * 1000 * 24); //提前一天
           this.startTimes = this._global.formatDate(start, "yyyy-MM-dd hh");
           break;
-          case 'month':
-          start.setTime(start.getTime() - 3600 * 1000 * 24*30);//提前一个月
+        case "month":
+          start.setTime(start.getTime() - 3600 * 1000 * 24 * 30); //提前一个月
           this.startTimes = this._global.formatDate(start, "yyyy-MM-dd hh");
           break;
-          case 'year':
-          start.setTime(start.getTime() - 3600 * 1000 * 24*30*12);//提前一年
+        case "year":
+          start.setTime(start.getTime() - 3600 * 1000 * 24 * 30 * 12); //提前一年
           this.startTimes = this._global.formatDate(start, "yyyy-MM-dd hh");
           break;
-      
+
         default:
-        start.setTime(start.getTime() - 3600 * 1000 * 24);//提前一天    如果非年月日，就默认采用天
+          start.setTime(start.getTime() - 3600 * 1000 * 24); //提前一天    如果非年月日，就默认采用天
           this.startTimes = this._global.formatDate(start, "yyyy-MM-dd hh");
           break;
       }
-
     },
     getChildComProvinceParams(val) {
       this.province = val.province;
@@ -314,9 +369,10 @@ export default {
         .then(response => {
           let resData = eval("(" + response.data + ")");
           self.modalData = resData;
-          self.UpdateInterValue=self.modalData[0].UpdateInter;//将更新频率赋值给变量数据UpdateInterValue，用于设置默认时间
+          self.UpdateInterValue = self.modalData[0].UpdateInter; //将更新频率赋值给变量数据UpdateInterValue，用于设置默认时间
 
-          this.defaultSetByModuleEnName();//需要的变量生成后执行   解决axios不能同步
+          // this.defaultSetByModuleEnName();//需要的变量生成后执行   解决axios不能同步
+          self.getLstTime();
         })
         .catch(response => {
           console.log(response);
@@ -347,16 +403,16 @@ export default {
           }
           self.elements = elementsArr;
 
-          this.checkedElements=[self.elementsIndexArr[0]];//默认选中第一个要素
+          this.checkedElements = [self.elementsIndexArr[0]]; //默认选中第一个要素
         })
         .catch(response => {
           console.log(response);
         });
     },
     nowDownLoad() {
-      let account=this.UserToken.Account;
-      if(account=='readearth'){
-        alert('请登录后再下载数据！');
+      let account = this.UserToken.Account;
+      if (account == "readearth") {
+        alert("请登录后再下载数据！");
         return;
       }
       var data = this.getNowFormatDate();
@@ -389,6 +445,20 @@ export default {
       var timeIntervalStr = this.timeInput + this.timeValue;
 
       var comparTime = startT > endT;
+
+      let hour = this.UpdateInterValue.indexOf("时");
+      if (hour != -1) {
+        let end = new Date(this.endTimes + ":00:00");
+        let start = new Date(this.startTimes + ":00:00");
+        let disTime = end.getTime() - start.getTime();
+        if (disTime < 3600 * 1000 * 24 * 30 * 3) {
+          //时间间隔小于三个月就不做处理
+        } else {
+          alert("时间间隔大于三个月，请重新选择");
+          return;
+        }
+      }
+
       if (startT == "" || endT == "") {
         alert("选择的日期不能空！");
         return;
@@ -439,36 +509,35 @@ export default {
           })
           .then(res => {
             let data = res.data;
-            loading.close();  
-            if(data!="ERROR"){  
-            let arr = JSON.parse(data);
-            let a = document.createElement("a");
-            let path = this._global.downPath;
-            arr.result.forEach(element => {
-              let fileName = element.zipDownUrl;
-              let id = element.id;
-              let fullPath = path + id + "/" + fileName;
-              a.download = fileName;
-              a.href = fullPath;
-              a.click();
-            });
-            }else{
-              alert("没有数据！");   
+            loading.close();
+            if (data != "ERROR") {
+              let arr = JSON.parse(data);
+              let a = document.createElement("a");
+              let path = this._global.downPath;
+              arr.result.forEach(element => {
+                let fileName = element.zipDownUrl;
+                let id = element.id;
+                let fullPath = path + id + "/" + fileName;
+                a.download = fileName;
+                a.href = fullPath;
+                a.click();
+              });
+            } else {
+              alert("没有数据！");
             }
-          
           })
           .catch(error => {
             console.log(error.data);
             // alert("下载失败");
             // console.log(error)
-      var str = error + ''
-     
-        if (str.search('timeout') !== -1) {   // 超时error捕获
-          // self.showLoadMore = true
-          // self.showLoadMoreOk = false
-          alert("请求超时，起止时间过大，请缩小时间跨度")
-        }
-      
+            var str = error + "";
+
+            if (str.search("timeout") !== -1) {
+              // 超时error捕获
+              // self.showLoadMore = true
+              // self.showLoadMoreOk = false
+              alert("请求超时，起止时间过大，请缩小时间跨度");
+            }
           });
       }
     },
@@ -524,9 +593,9 @@ export default {
       return currentdate;
     },
     insertCart() {
-      let account=this.UserToken.Account;
-      if(account=='readearth'){
-        alert('请登录后再加入清单！');
+      let account = this.UserToken.Account;
+      if (account == "readearth") {
+        alert("请登录后再加入清单！");
         return;
       }
       var data = this.getNowFormatDate();
@@ -559,6 +628,20 @@ export default {
       var timeIntervalStr = this.timeInput + this.timeValue;
 
       var comparTime = startT > endT;
+
+      let hour = this.UpdateInterValue.indexOf("时");
+      if (hour != -1) {
+        let end = new Date(this.endTimes + ":00:00");
+        let start = new Date(this.startTimes + ":00:00");
+        let disTime = end.getTime() - start.getTime();
+        if (disTime < 3600 * 1000 * 24 * 30 * 3) {
+          //时间间隔小于三个月就不做处理
+        } else {
+          alert("时间间隔大于三个月，请重新选择");
+          return;
+        }
+      }
+
       if (startT == "" || endT == "") {
         alert("选择的日期不能空！");
         return;
@@ -639,7 +722,6 @@ export default {
 </script>
 
 <style scoped>
-
 .body-background {
   width: 100vw;
   height: 100vh;
@@ -667,7 +749,7 @@ export default {
   height: 3.5vh;
 }
 .top-font {
-  font-size: 1.1em;
+  font-size: 1.1vw;
   font-weight: bold;
 }
 .middle-wrap {
@@ -689,7 +771,7 @@ export default {
   left: 30%;
   background-color: white;
   color: #4fb9ed;
-  font-size: 1.1em;
+  font-size: 1.1vw;
   font-weight: bold;
   text-align: center;
   line-height: 1.5;
@@ -728,8 +810,7 @@ export default {
 }
 .share-wrap {
 }
-.share-name {
-}
+
 .share-value {
 }
 .data-soure-wrap {
@@ -774,8 +855,7 @@ export default {
 }
 .views-count {
 }
-.share-wrap {
-}
+
 .share-pic {
   background: url("../../../assets/img/modal/share.png") no-repeat center center;
   width: 16%;
@@ -784,12 +864,15 @@ export default {
 }
 .share-name {
 }
+.share{
+      padding-left: 28%;
+}
 .foot-wrap {
   margin-top: 2vh;
   /* border: solid red; */
   border: #80808038 solid 0.5px;
   height: 72%;
-  font-size: 0.5em;
+  font-size: 0.5vw;
 }
 .file-download-font {
   width: 5%;
@@ -821,7 +904,7 @@ export default {
   background-size: 49%;
 }
 .date-name {
-  font-size: 1.9em;
+  font-size: 0.8vw;
 }
 
 .provinces-position-wrap {
@@ -836,6 +919,9 @@ export default {
   float: right;
   width: 53px;
   height: 18px;
+}
+.all-select-wrap >>> .el-checkbox__label {
+  font-size: 0.8vw !important;
 }
 
 .radio-wrap {
@@ -891,7 +977,10 @@ export default {
 }
 .element-content >>> .el-checkbox {
   width: 20%;
-  padding-top: 2%;    
+  padding-top: 2%;
+}
+.element-content >>> .el-checkbox__label {
+font-size: 0.8vw;
 }
 .element-radio-font-wrap {
   width: 24%;
@@ -991,6 +1080,7 @@ export default {
 }
 .btns-wrap >>> .el-button {
   padding: 5px 20px;
+  font-size: 0.8vw !important;
 }
 .now-download-wrap {
   float: left;
@@ -1041,7 +1131,7 @@ export default {
   float: left;
 }
 .padding-bottom {
-  padding-top: 0.4vh;
+  padding-top: 0.4vw;
   /* padding-bottom: 0.7vh; */
 }
 .border-bottom {
@@ -1055,7 +1145,7 @@ export default {
 .font-style12 {
   color: #3d6b84;
   font-weight: bold;
-  font-size: 1.9em !important;
+  font-size: 0.8vw !important;
 }
 .font-style2 {
   color: #4bacf2;
@@ -1067,7 +1157,7 @@ export default {
 .icon-font-style {
   padding-left: 8%;
   width: 49%;
-  font-size: 14px !important;
+  font-size: 0.8vw !important;
 }
 #date {
   line-height: 22px;
@@ -1126,6 +1216,9 @@ export default {
   padding-left: 8.5%;
   padding-right: 0px;
   /* width: 77%; */
+}
+body >>> .el-time-spinner .el-time-spinner__wrapper:nth-child(1) {
+  display: none;
 }
 </style>
 

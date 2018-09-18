@@ -22,10 +22,12 @@
       </el-col>
       <el-col :span='8' class="right" offset='0'>
         <div class="item">
-          <span style="display:inline-block;margin-right:25px;">{{interview}}</span>
+          <span style="display:inline-block;margin-right:10px;">{{interview}}</span>
+          <el-rate style="display:inline-block;vertical-align:text-bottom;" v-model="grade" disabled show-score text-color="#ff9900" score-template="{value}">
+          </el-rate>
           <span style="cursor:pointer;margin-right:20px;" @click="goCart">
             <img src="../../assets/img/xiazai.png" style="vertical-align: sub;" alt="">
-            <span>我的清单</span>
+            <span>我的下载清单</span>
           </span>
           <el-button type="primary" :class="{'welcome':loginTxt!='登录'}" round size="mini" class="btn" @click="register">注册</el-button>
           <el-button round class="btn" @click="login" size="mini">{{loginTxt}}</el-button>
@@ -72,7 +74,8 @@ export default {
       date: "",
       week: "",
       inputKey: "",
-      loginTxt: "登录"
+      loginTxt: "登录",
+      grade:0
     };
   },
   computed: {
@@ -80,8 +83,8 @@ export default {
     ...mapGetters({
       userInfo: "userInfo"
     }),
-    interview(){
-      return "欢迎您:  "+this.userInfo.UserName;
+    interview() {
+      return "欢迎您:  " + this.userInfo.UserName;
     },
     // account(){
     //   return this.UserToken.Account;
@@ -115,8 +118,8 @@ export default {
     this.page = this.$router.currentRoute.path.split("/")[1];
   },
   methods: {
-    ...mapActions(["FETCH_PERMISSION","LOGIN"]),
-    ...mapMutations(["SETLOCALCITY","REMOVECOOKIES"]),
+    ...mapActions(["FETCH_PERMISSION", "LOGIN"]),
+    ...mapMutations(["SETLOCALCITY", "REMOVECOOKIES"]),
     brforeLeave(activeName, oldActiveName) {
       if (activeName == "statistics") {
         window.open("statistics.html");
@@ -202,10 +205,10 @@ export default {
         .then(res => {
           let data = JSON.parse(res.data).results;
           let today = data[0];
-          this.temp =today.weather_data[0].temperature;
-            // today.low.split(" ")[1].split("℃")[0] +
-            // "/" +
-            // today.high.split(" ")[1];
+          this.temp = today.weather_data[0].temperature;
+          // today.low.split(" ")[1].split("℃")[0] +
+          // "/" +
+          // today.high.split(" ")[1];
           this.weather = today.weather_data[0].weather;
           console.log(data);
         })
@@ -240,7 +243,11 @@ export default {
     login() {
       if (this.loginTxt == "退出") {
         this.REMOVECOOKIES();
-        let params={"userName":"BIGDATA","password":"BIGDATA","expires":"-1D"};
+        let params = {
+          userName: "BIGDATA",
+          password: "BIGDATA",
+          expires: "-1D"
+        };
         this.LOGIN(params);
         this.$router.push("/home");
       } else {
@@ -255,8 +262,8 @@ export default {
 </script>
 
 <style scoped>
-.welcome{
-  display:none !important;
+.welcome {
+  display: none !important;
 }
 .item {
   float: left;

@@ -356,7 +356,7 @@ export default {
   text-align: left;
   font-weight: bold;
   margin-bottom: 1vh;
-  font-size: 1em;
+  font-size: 1vw;
 }
 .list-marker-wrap {
   height: 11%;
