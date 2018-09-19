@@ -53,7 +53,7 @@
                 </div>
                 <div class="share-wrap padding-bottom border-bottom">
                   <div class="share-pic float-left icon-style1"></div>
-                  <div class=" icon-font-style share"  >分享</div>
+                  <div class=" icon-font-style share" style="padding-left: 28%;" >分享</div>
                 </div>
               </div>
             </div>
