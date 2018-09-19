@@ -81,7 +81,7 @@
             </div>
             <div class="provinces-position-wrap">
 
-              <my-modal-provinces-pan ref="c1" v-on:getParams="getChildComProvinceParams" v-on:getCityParams="getChildComCityParams" :style="{height:'100%'}" :moduleEnName="moduleEnName"></my-modal-provinces-pan>
+              <my-modal-provinces-pan ref="c1" v-on:getParams="getChildComProvinceParams" v-on:getCityParams="getChildComCityParams" :style="{height:'100%'}" :moduleEnName="moduleEnName" :isShow="isShow "></my-modal-provinces-pan>
 
             </div>
             <div class="elements-select-wrap">
@@ -190,18 +190,7 @@ export default {
       timeInput: "1",
       timeValue: "天",
       timeType: [
-        // {
-        //   value: "0",
-        //   label: "年"
-        // },
-        // {
-        //   value: "1",
-        //   label: "月"
-        // },
-        // {
-        //   value: "2",
-        //   label: "天"
-        // }
+
       ],
       timeTypeValue: "",
       startTimes: "",
@@ -231,8 +220,10 @@ export default {
       //监听
       if (this.isShow == false) {
         this.isIndeterminate = false; //弹框关闭时，全选按钮恢复初始状态
+        this.checkAll=false;//刚进来时，将上次勾选的全选对勾去掉
+
       } else {
-        //弹框显示时，默认选中后台返回数据中的第一个要素
+        //  this.isIndeterminate = false;//弹框显示时，默认选中后台返回数据中的第一个要素
       }
     }
   },
@@ -714,8 +705,8 @@ export default {
     handleCheckedCitiesChange(value) {
       let checkedCount = value.length;
       this.checkAll = checkedCount === this.elements.length;
-      this.isIndeterminate =
-        checkedCount > 0 && checkedCount < this.elements.length;
+      // this.isIndeterminate =
+      //   checkedCount > 0 && checkedCount < this.elements.length;
     }
   }
 };
