@@ -28,7 +28,7 @@
   <tr><td><div>数据起始时间：</div><span>{{dataIntroduce[0].startTime}}</span></td><td><div>数据终止时间：</div><span>{{dataIntroduce[0].endTime}}</span></td></tr>
   <tr><td><div>最近更新时间：</div><span>{{dataIntroduce[0].lstTime}}</span></td><td><div>更新频率：</div><span>{{dataIntroduce[0].UpdateInter}}</span></td></tr>
   <tr><td><div>数据源：</div><span>{{dataIntroduce[0].dataSource}}</span></td><td><div>共享级别：</div><span>{{dataIntroduce[0].shareClassID}}</span></td></tr>
-  <tr><td><div>站点总数：</div><span>{{dataIntroduce[0].siteCount}}个</span></td><td><div>数据总量：</div><span>{{(dataIntroduce[0].dbSize/1024/1024).toFixed(2)}}GB</span></td></tr>
+  <tr><td><div>站点总数：</div><span>{{dataIntroduce[0].siteCount}}个</span></td><td><div>数据总量：</div><span>{{dataIntroduce[0].dbSize}}</span></td></tr>
 </table>
 </div>
 <div class="columnIntroduce">

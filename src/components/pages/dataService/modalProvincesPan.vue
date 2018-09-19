@@ -49,7 +49,7 @@
 
 <script>
 export default {
-  props: ["moduleEnName"],
+  props: ["moduleEnName","isShow"],
   data() {
     return {
       provinces: [],
@@ -82,6 +82,16 @@ export default {
           isFirst: true
         }); //暂时隐藏
         this.deafultProvince(); //更新默认城市
+      }
+    },
+    isShow() {
+      //监听
+      if (this.isShow == false) {
+        this.isIndeterminate = false; //弹框关闭时，全选按钮恢复初始状态
+        this.checkAll=false;//刚进来时，将上次勾选的全选对勾去掉
+
+      } else {
+        //  this.isIndeterminate = false;//弹框显示时，默认选中后台返回数据中的第一个要素
       }
     }
   },
@@ -209,8 +219,8 @@ export default {
     handleCheckedCitiesChange(value) {
       let checkedCount = value.length;
       this.checkAll = checkedCount === this.cities.length;
-      this.isIndeterminate =
-        checkedCount > 0 && checkedCount < this.cities.length;
+      // this.isIndeterminate =
+      //   checkedCount > 0 && checkedCount < this.cities.length;
 
       this.getCheckedCitiesParams(); //更新选中的站点
     }
