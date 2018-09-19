@@ -12,7 +12,7 @@
                 <span>资料内容</span>
               </div>
               <div class="middle-left-wrap">
-                <div class="data-content padding-bottom">{{modalData[0].subTitle}}</div>
+                <!-- <div class="data-content padding-bottom">{{modalData[0].subTitle}}</div> -->
                 <div class="data-start-time-wrap padding-bottom">
                   <div class="data-start-time-name float-left font-style1">数据起始时间：</div>
                   <div class="data-start-time-value font-style2">{{modalData[0].startTime}}</div>
