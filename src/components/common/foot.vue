@@ -41,25 +41,25 @@ export default {
     return {
       links: [
         {
-          name: "中国气象局",
+          name: "中央气象台",
           splitLine: "&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;",
-          url: "http://www.cma.gov.cn/"
+          url: "http://www.nmc.cn/"
         },
         {
-          name: "国家气象信息中心",
+          name: "中国环境监测总站",
           splitLine: "&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;",
           url:
-            "http://www.cma.gov.cn/2011xzt/2018zt/20180502/2018050202/201805/t20180502_467520.html"
+            "http://www.cnemc.cn/"
         },
         {
-          name: "中国科技资源网",
+          name: "大气超级观测站SCAN联盟",
           splitLine: "&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;",
-          url: "https://www.escience.org.cn/"
+          url: "#"
         },
         {
-          name: "中国工程科技知识中心",
+          name: "全国城市空气质量实时发布平台",
           splitLine: "",
-          url: "http://www.ckcest.cn/dsp/app/details/applist"
+          url: "http://106.37.208.233:20035/"
         }
       ],
       units: [
@@ -69,7 +69,7 @@ export default {
         },
         {
           name: "京津冀环境气象预报预警中心",
-          url: "http://www.bidcenter.com.cn/newssearchyz-19850122.html"
+          url: ""
         },
         {
           name: "中国气象局广州热带海洋气象研究所",
@@ -89,14 +89,11 @@ export default {
       ],
       fLinks: [
         {
-          name: "国家标本共享资源平台",
-          url: "http://www.nsii.org.cn/home-old.php"
+          name: "中国气象局",
+          url: "http://www.cma.gov.cn/"
         },
-        { name: "国家农作物种质资源平台", url: "http://www.cgris.net/pt/" },
-        { name: "水产种质资源平台", url: "" },
-        { name: "林业科学数据平台", url: "" },
-        { name: "国家微生物资源平台", url: "" },
-        { name: "家养动物种质资源平台", url: "" }
+        { name: "资源环境数据云平台", url: "http://www.resdc.cn/" },
+        { name: "国家人口与健康科学数据共享平台气象环境与健康专题服务", url: "http://www.meaph.com/" }
       ]
     };
   },
@@ -186,7 +183,7 @@ export default {
 }
 .friendly-link {
   float: left;
-  width: 11vw;
+  width: 18vw;
   font-size: 0.8em;
   color: #a4a4a6;
   line-height: 1.6;

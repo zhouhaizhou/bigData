@@ -27,7 +27,7 @@
           </el-rate>
           <span style="cursor:pointer;margin-right:20px;" @click="goCart">
             <img src="../../assets/img/xiazai.png" style="vertical-align: sub;" alt="">
-            <span>我的清单</span>
+            <span>我的下载清单</span>
           </span>
           <el-button type="primary" :class="{'invisible':loginTxt!='登录'}" round size="mini" class="btn" @click="register">注册</el-button>
           <el-button round class="btn" @click="login" size="mini">{{loginTxt}}</el-button>

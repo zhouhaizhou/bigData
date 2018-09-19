@@ -44,22 +44,25 @@ export default {
       siteId: "",
       siteLevel:"",
       mapZoom: 4,
-      center: [105, 35],
+      center: [110, 38],
       siteData: null
     };
   },
   watch: {
     $route: {
       handler(val) {
-       // this.siteLayer=null;
         if (val.name == "emSite") {
-          this.center = [105, 35];
+          this.center = [110, 35];
           this.map.getView().setZoom(5);
-          this.map.getView().setCenter(ol.proj.fromLonLat([this.center[0], this.center[1]]));
+          this.map
+            .getView()
+            .setCenter(ol.proj.fromLonLat([this.center[0], this.center[1]]));
         } else {
-          this.center = [105, 35];
+          this.center = [110, 38];
           this.map.getView().setZoom(4);
-          this.map.getView().setCenter(ol.proj.fromLonLat([this.center[0], this.center[1]]));
+          this.map
+            .getView()
+            .setCenter(ol.proj.fromLonLat([this.center[0], this.center[1]]));
         }
         this.getPoint();
       },
@@ -68,7 +71,7 @@ export default {
   },
   mounted() {
     if (this.$route.name == "emSite") {
-      this.center = [105, 35];
+      this.center = [110, 35];
       this.mapZoom = 5;
     }
     this.init();
@@ -160,9 +163,9 @@ export default {
       this.siteLayer=null;
       let data=[];
       let zoom = this.map.getView().getZoom();
-      if(zoom<5 && zoom>=3){
+      if(zoom<4 && zoom>=3){
         data = this.filterSiteData(11);
-      }else if(zoom>=5 && zoom<6){
+      }else if(zoom>=4&&zoom<5){
         data = this.filterSiteData(12);
       }else{
         data = this.siteData;
@@ -242,16 +245,14 @@ export default {
           this.map.removeLayer(this.siteLayer);
           let data = JSON.parse(res.data);
           this.siteData = data;
-           if (self.$route.name == "emSite") {
-            this.zoomend();
-          }else{
-            this.proMap(data);
-          }
+          this.zoomend();
+          //let graphics = [];
+          this.proMap(data);
         })
         .catch(res => console.log(res));
     },
     proMap(data){
-      this.map.removeLayer(this.siteLayer);
+       this.map.removeLayer(this.siteLayer);
       var dataArr = {
             type: "FeatureCollection",
             features: []
@@ -286,10 +287,10 @@ export default {
           var vectorSource = new ol.source.Vector({
             features: f
           });
-          var clusterSource = new ol.source.Cluster({
-            distance: 0,
-            source: vectorSource
-          });
+          // var clusterSource = new ol.source.Cluster({
+          //   distance: 20,
+          //   source: vectorSource
+          // });
           var vectorLayer = new ol.layer.Vector({
             source: vectorSource,
             style: this.getMarkerStyle,

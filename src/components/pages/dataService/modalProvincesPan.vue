@@ -62,7 +62,7 @@ export default {
       checkAll: false,
       checkedCities: [],
       cities: [],
-      isIndeterminate: true,
+      isIndeterminate: false,//默认去掉蓝色横杠
       provinceChecked: "310000",
       cityOptions: [],
       province: "",
@@ -256,13 +256,14 @@ export default {
      padding-left: 20%;
     color: #3d6b84;
     font-weight: bold;
-    font-size: 1.9em;
+    font-size: 0.8vw;
 }
 .all-select-wrap {
   float: right;
   width: 53px;
   height: 18px;
 }
+
 .all-select-wrap input {
   float: left;
   margin-right: 7px;
@@ -346,8 +347,11 @@ export default {
   float: right;
   height: 15%;
 }
+.checkAll >>> .el-checkbox__label {
+  font-size: 0.8vw;
+}
 .sites-wrap {
-  width: 90%;
+  width: 89%;
   height: 73%;
   padding: 3% 5% 4% 5%;
   float: left;
@@ -388,7 +392,7 @@ export default {
   display: inline-block;
   padding-left: 10px;
   line-height: 19px;
-  font-size: 14px;
+  font-size: 0.8vw;
   width: 76%;
   overflow: hidden;
   white-space: nowrap;

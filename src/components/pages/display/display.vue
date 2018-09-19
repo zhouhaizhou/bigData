@@ -34,6 +34,8 @@ export default {
       handler(val){
         if(val.name=="qiya"){
           this.tlogp=true;
+        }else{
+          this.tlogp=false;
         }
         this.condition={},  //路由发生变化说明进入另一个页面，对应这些变量要初始化
         this.time=[],
