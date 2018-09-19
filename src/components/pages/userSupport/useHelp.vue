@@ -1,5 +1,5 @@
 <template>
-<div>
+<div class="useHelp-body">
 	<div class="useHelp-wrap">
 		<div class="img-font-wrap"><div class="img"></div><div class="font">使用帮助</div></div>
 
@@ -39,8 +39,15 @@
 </script>
 
 <style scoped>
+.useHelp-body{
+	    width: 65%;
+    padding-top: 3%;
+    padding-left: 7%;
+}
 .useHelp-wrap{
-	padding-top: 2%;
+    padding-top: 0%;
+    background-color: white;
+    padding-left: 8%;
 }
 .img-font-wrap{
 width: 88%;
@@ -61,8 +68,11 @@ height: 6vh;
     background-size: 88%;
 }
 .font{
-        font-size: 2em;
-    padding-bottom: 1%;
+font-size: 1.5em;
+    padding-bottom: 0.5%;
+    padding-left: 2%;
+	    width: 15%;
+
 }
 .content-wrap{
 	padding-bottom: 2.5%;

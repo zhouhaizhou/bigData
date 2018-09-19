@@ -72,7 +72,7 @@ export default {
           subtitle: "教育科研实名注册",
           content:
             "通过网络在线方式申请和注册。教育科研注册用户可在污染天气大数据平台浏览、查询和下载中国气象最新公布的《基本气象资料和产品开放清单》",
-          enter: "立即进入"
+          enter: "立即加入"
         },
         {
           img: require("../../assets/img/dwsmzc-n.png"),
@@ -80,7 +80,7 @@ export default {
           subtitle: "单位实名注册",
           content:
             "通过网络在线方式申请和注册。单位实名祖册用户可在污染天气大数据平台浏览、查询和下载指定气象数据和产品",
-          enter: "立即进入"
+          enter: "立即加入"
         }
       ]
     };
