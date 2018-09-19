@@ -177,7 +177,7 @@ export default {
     margin-top: 2vh;
 }
 .friendly-link-title {
-  margin-left: 7vw;
+  margin-left: 4vw;
   margin-bottom: 0.5vh;
   color: #7d8089;
 }

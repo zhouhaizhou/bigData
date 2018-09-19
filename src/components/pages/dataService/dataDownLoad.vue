@@ -246,6 +246,8 @@ export default {
   background-color: #f3f8fc;
   /* margin-left: 20vw; */
   /* width: 80vw; */
+  overflow: hidden;
+  padding-bottom: 1.5%;
 }
 .items-trs-wrap {
   padding-bottom: 3vh;
@@ -261,6 +263,7 @@ export default {
   width: auto;
   float: left;
   clear: none;
+  padding-bottom: 2%
 }
 .item-wrap {
   /* height: 40vh; */

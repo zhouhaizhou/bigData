@@ -183,11 +183,17 @@ width: 63%;
 .img{
   background: url("../../../assets/img/userSupport/yhfk.png") no-repeat center center;  
     height: 5vh;
-    width: 10%;
+    width: 6%;
     float: left;
+    margin-left: 4%;
+    background-size: 57%;
 }
 .font{
-    font-size: 1.5em;
+font-size: 1.5em;
+    padding-bottom: 0.5%;
+    padding-left: 2%;
+        width: 15%;
+
 }
 </style>
 

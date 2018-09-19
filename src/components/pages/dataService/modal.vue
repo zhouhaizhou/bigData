@@ -12,7 +12,7 @@
                 <span>资料内容</span>
               </div>
               <div class="middle-left-wrap">
-                <div class="data-content padding-bottom">{{modalData[0].subTitle}}</div>
+                <!-- <div class="data-content padding-bottom">{{modalData[0].subTitle}}</div> -->
                 <div class="data-start-time-wrap padding-bottom">
                   <div class="data-start-time-name float-left font-style1">数据起始时间：</div>
                   <div class="data-start-time-value font-style2">{{modalData[0].startTime}}</div>
@@ -971,12 +971,34 @@ export default {
   border: solid #8080802b 0.5px;
   padding-top: 1.5%;
   padding-left: 2%;
+  overflow:auto;
+}
+/*定义滚动条高宽及背景
+ 高宽分别对应横竖滚动条的尺寸*/
+.element-content::-webkit-scrollbar {
+  width: 5px;
+
+  background-color: #f5f5f5;
+}
+/*定义滚动条轨道
+ 内阴影+圆角*/
+.element-content::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  border-radius: 5px;
+  background-color: #f5f5f5;
+}
+/*定义滑块
+ 内阴影+圆角*/
+.element-content::-webkit-scrollbar-thumb {
+  background-color: #099ad7;
+  /* background-image: -webkit-gradient(linear, 40% 0%, 75% 84%, from(rgb(77, 156, 65)), color-stop(0.6, rgb(84, 222, 93)), to(rgb(25, 145, 29))); */
+  border-radius: 5px;
 }
 .element-content >>> .el-checkbox + .el-checkbox {
   margin-left: 0px;
 }
 .element-content >>> .el-checkbox {
-  width: 20%;
+  width: 25%;
   padding-top: 2%;
 }
 .element-content >>> .el-checkbox__label {

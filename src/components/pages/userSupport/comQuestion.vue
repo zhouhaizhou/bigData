@@ -56,12 +56,12 @@
     width: 85%;
 }
 .bodyWrap{
- background-color: #FFFFFF;
-    width: 78%;
+    background-color: #FFFFFF;
+    width: 70%;
     margin-bottom: 3%;
-    padding-left: 3%;
-    padding-right: 3%;
-    margin-top: 3%;
+    padding-left: 7%;
+    padding-right: 7%;
+    margin-top: 4%;
 
 }
 .bodyWrapH{
@@ -88,8 +88,11 @@ height: 6vh;
     background-size: 88%;
 }
 .font{
-        font-size: 2em;
-    padding-bottom: 1%;
+font-size: 1.5em;
+    padding-bottom: 0.5%;
+    padding-left: 2%;
+        width: 15%;
+
 }
 .content-wrap{
 	padding-bottom: 1%;
