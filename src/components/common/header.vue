@@ -75,7 +75,7 @@ export default {
       week: "",
       inputKey: "",
       loginTxt: "登录",
-      grade:0
+      grade: 0
     };
   },
   computed: {
@@ -84,7 +84,7 @@ export default {
       userInfo: "userInfo"
     }),
     interview() {
-      this.grade=this.userInfo.starLevel;
+      this.grade = this.userInfo.starLevel;
       return "欢迎您:  " + this.userInfo.UserName;
     },
     // account(){
@@ -212,7 +212,6 @@ export default {
           // "/" +
           // today.high.split(" ")[1];
           this.weather = today.weather_data[0].weather;
-          // console.log(data);
         })
         .catch(res => {
           console.log(res);
