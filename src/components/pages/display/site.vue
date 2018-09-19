@@ -8,7 +8,7 @@
         <div>类型:{{siteType}}</div>
         <div>名称:{{siteName}}</div>
         <div>编号:{{siteId}}</div>
-        <div v-if="siteLevel!=undefined">等级:{{siteLevel}}</div>
+        <div v-if="siteLevel!=undefined">等级:{{siteLevelZH}}</div>
         <div>经度:{{siteLon}}</div>
         <div>纬度:{{siteLat}}</div>
       </div>
@@ -64,6 +64,17 @@ export default {
         this.getPoint();
       },
       deep: true
+    }
+  },
+  computed:{
+    siteLevelZH(){
+      if(this.siteLevel==11){
+        return '基准站';
+      }else if(this.siteLevel==12){
+        return '基本站';
+      }else if(this.siteLevel==13){
+        return '一般站';
+      }
     }
   },
   mounted() {

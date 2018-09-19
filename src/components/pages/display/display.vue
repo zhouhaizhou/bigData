@@ -1,16 +1,16 @@
 <template>
   <div class="wrap">
-    <sel-con  :condition="condition" :isFirst="isFirst" v-on:selPlayInterval="selPlayIntervalFun" :playInterval="playInterval" v-on:selectedCon="selectedCon"></sel-con>
+    <sel-con :condition="condition" :isFirst="isFirst" v-on:selPlayInterval="selPlayIntervalFun" :playInterval="playInterval" v-on:selectedCon="selectedCon"></sel-con>
     <div class="main">
       <div class="icon">
         <div class="print" @click="print"></div>
         <div class="download" @click="download"></div>
       </div>
-      <div  class="img">
-          <!-- <div class="img" :style="style"></div> -->
-          <img :src="style" style="height:80vh"  class="loadImg" alt="">
-          <span :class="{tlogp:tlogp}"></span>
-          <!-- <div class="img" @click="showImg" :style="style"></div> -->
+      <div class="img">
+        <!-- <div class="img" :style="style"></div> -->
+        <img :src="style" style="height:80vh" class="loadImg" alt="">
+        <span :class="{tlogp:tlogp}"></span>
+        <!-- <div class="img" @click="showImg" :style="style"></div> -->
       </div>
       <right class="right" :times="times" :selPlayInterval="selPlayInterval" v-on:selShowImg="selShowImg"></right>
     </div>
@@ -22,29 +22,29 @@
 import selCon from "./selCon.vue";
 import right from "./right";
 import dialogImg from "./dialogImg";
-import {mapMutations} from 'vuex'
+import { mapMutations } from "vuex";
 export default {
   components: {
     selCon,
     right,
     dialogImg
   },
-  watch:{
-    $route:{
-      handler(val){
-        if(val.name=="qiya"){
-          this.tlogp=true;
-        }else{
-          this.tlogp=false;
+  watch: {
+    $route: {
+      handler(val) {
+        if (val.name == "qiya") {
+          this.tlogp = true;
+        } else {
+          this.tlogp = false;
         }
-        this.condition={},  //路由发生变化说明进入另一个页面，对应这些变量要初始化
-        this.time=[],
-        this.isFirst=true;
-        this.selPlayInterval=null;
-        this.playInterval=null;
+        (this.condition = {}), //路由发生变化说明进入另一个页面，对应这些变量要初始化
+          (this.time = []),
+          (this.isFirst = true);
+        this.selPlayInterval = null;
+        this.playInterval = null;
         this.getData("", "", "", "", "");
       },
-      deep:true
+      deep: true
     }
   },
   data() {
@@ -55,11 +55,11 @@ export default {
       height: "",
       style: null,
       condition: {},
-      times:[],
+      times: [],
       playInterval: null,
       isFirst: true, //是否第一次请求后台数据
-      selPlayInterval:null,
-      tlogp:false
+      selPlayInterval: null,
+      tlogp: false
     };
   },
   mounted() {
@@ -69,7 +69,7 @@ export default {
     ...mapMutations(["SETSELECTEDTIME"]),
     getData(Station, type, startTime, endTime, interTime) {
       let self = this;
-      let entityName=this.$route.name;
+      let entityName = this.$route.name;
       this.SETSELECTEDTIME(-1);
       this.axios
         .get("GetImageProducts.svc/GetImageProducts", {
@@ -83,15 +83,28 @@ export default {
           }
         })
         .then(response => {
-          let str=response.data.replace(/PM25/g,'PM2.5').replace(/O3/g,'O₃').replace(/NO2/g,'NO₂').replace(/SO2/g,'SO₂').replace(/CO2/g,'CO₂')
+          let str = response.data
+            .replace(/PM25/g, "PM<sub>2.5</sub>")
+            .replace(/O3/g, "O₃")
+            .replace(/NO2/g, "NO₂")
+            .replace(/SO2/g, "SO₂")
+            .replace(/CO2/g, "CO₂")
+            .replace(/PM10/g, "PM<sub>10</sub>")
           let data = eval("(" + str + ")");
-          self.times=data.times;
-          self.SETSELECTEDTIME(self.times.length-1)
+          self.times = data.times;
+          if (this.$route.name == "qiya") {
+            if (self.times.length == 0) {
+              this.tlogp = false;
+            } else {
+              this.tlogp = true;
+            }
+          }
+          self.SETSELECTEDTIME(self.times.length - 1);
           if (self.isFirst) {
-            self.isFirst=false;
-            if(data.endTime=='WRF'){
-              data.endTime="";
-              data.area=["华东"];
+            self.isFirst = false;
+            if (data.endTime == "WRF") {
+              data.endTime = "";
+              data.area = ["华东"];
             }
             self.condition = data;
             self.playInterval = self.condition.intervalOpt[0]["key"];
@@ -128,8 +141,8 @@ export default {
     },
     download() {
       let img = document.querySelector(".loadImg").src;
-      let temp=img.split('/');
-      let filename=temp[temp.length-1].split('?')[0];
+      let temp = img.split("/");
+      let filename = temp[temp.length - 1].split("?")[0];
       let a = document.createElement("a");
       a.download = filename;
       a.href = img;
@@ -150,7 +163,7 @@ export default {
       // this.style = {
       //   background: "url(" + url + ") no-repeat top center"
       // };
-      this.style=url;
+      this.style = url;
     },
     selectedCon(con) {
       let area = con.area;
@@ -159,8 +172,8 @@ export default {
       let endTime = con.endTime;
       this.getData(area, type, startTime, endTime, "");
     },
-    selPlayIntervalFun(val){
-      this.selPlayInterval=val;
+    selPlayIntervalFun(val) {
+      this.selPlayInterval = val;
     }
   }
 };
@@ -175,8 +188,9 @@ export default {
 .icon {
   float: left;
 }
-.tlogp{
-  background: url("../../../assets/img/display/Tlogp.png") no-repeat center center;
+.tlogp {
+  background: url("../../../assets/img/display/Tlogp.png") no-repeat center
+    center;
   background-size: cover;
   height: 13vh;
   width: 9vw;

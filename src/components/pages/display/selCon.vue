@@ -10,7 +10,7 @@
       <el-col :span="24">
         <span>类型：</span>
         <div style="display:none;">{{selectCon}}</div>
-        <el-button v-model="typeActive" @click="typeClickActive(index)" :class="{active:index===typeActive}" size="medium" v-for="(item,index) in condition.type" :key="index+'_type'">{{item}}</el-button>
+        <el-button v-model="typeActive" @click="typeClickActive(index)" :class="{active:index===typeActive}" size="medium" v-for="(item,index) in condition.type" :key="index+'_type'" v-html='item'></el-button>
       </el-col>
     </el-row>
     <el-row>
