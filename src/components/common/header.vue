@@ -1,7 +1,7 @@
 <template>
   <div class="header">
     <el-row>
-      <el-col :span='10' :offset='3' class="left">
+      <el-col :span='10' offset=3 class="left">
         <div class="item">
           <img src="../../assets/img/tianqi.png" style="vertical-align:-1px;" alt="天气">
           <span class="temp">{{temp}}</span>
@@ -20,30 +20,30 @@
           <span class="week">{{week}}</span>
         </div>
       </el-col>
-      <el-col :span='8' class="right" offset='0'>
+      <el-col :span='8' class="right" offset=0>
         <div class="item">
           <span style="display:inline-block;margin-right:10px;">{{interview}}</span>
-          <el-rate style="display:inline-block;vertical-align:text-bottom;" v-model="grade" disabled show-score text-color="#ff9900" score-template="{value}">
+          <el-rate :class="{'invisible':loginTxt=='登录'}" style="display:inline-block;vertical-align:text-bottom;" v-model="grade" disabled text-color="#ff9900">
           </el-rate>
           <span style="cursor:pointer;margin-right:20px;" @click="goCart">
             <img src="../../assets/img/xiazai.png" style="vertical-align: sub;" alt="">
             <span>我的下载清单</span>
           </span>
-          <el-button type="primary" :class="{'welcome':loginTxt!='登录'}" round size="mini" class="btn" @click="register">注册</el-button>
+          <el-button type="primary" :class="{'invisible':loginTxt!='登录'}" round size="mini" class="btn" @click="register">注册</el-button>
           <el-button round class="btn" @click="login" size="mini">{{loginTxt}}</el-button>
         </div>
       </el-col>
     </el-row>
     <el-row>
-      <el-col :offset='4' :span='4' class="left">
+      <el-col offset=4 :span='4' class="left">
         <img src="../../assets/img/title.png" style="vertical-align:-25px;margin-left:-24px;" alt="标题">
       </el-col>
-      <el-col :span='4' class="right" offset='8'>
+      <el-col :span='4' class="right" offset=8>
         <el-input type='text' v-model="inputKey" placeholder="输入关键字" suffix-icon="el-icon-search"></el-input>
       </el-col>
     </el-row>
     <el-row>
-      <el-col :span="21" :offset="2">
+      <el-col :span="21" offset=2>
         <el-tabs v-model="page" @tab-click="handleClick($event)" :before-leave="brforeLeave" @mouseover.native="mouseover" @mouseout.native="mouseout">
           <el-tab-pane :label="option.meta.name" :name="option.name" v-for="(option,index) in topbarMenu" :key='index'>
           </el-tab-pane>
@@ -84,6 +84,7 @@ export default {
       userInfo: "userInfo"
     }),
     interview() {
+      this.grade=this.userInfo.starLevel;
       return "欢迎您:  " + this.userInfo.UserName;
     },
     // account(){
@@ -205,12 +206,12 @@ export default {
         .then(res => {
           let data = JSON.parse(res.data).results;
           let today = data[0];
-          this.temp = today.weather_data[0].temperature;
+          this.temp = today.weather_data[0].temperature.replace(' ~ ','/');
           // today.low.split(" ")[1].split("℃")[0] +
           // "/" +
           // today.high.split(" ")[1];
           this.weather = today.weather_data[0].weather;
-          console.log(data);
+          // console.log(data);
         })
         .catch(res => {
           console.log(res);
@@ -262,7 +263,7 @@ export default {
 </script>
 
 <style scoped>
-.welcome {
+.invisible {
   display: none !important;
 }
 .item {
