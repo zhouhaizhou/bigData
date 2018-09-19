@@ -68,6 +68,8 @@ export default {
   methods: {
     ...mapMutations(["SETSELECTEDTIME"]),
     getData(Station, type, startTime, endTime, interTime) {
+      type=type.replace(/O₃/g,'O3').replace(/NO₂/g,'NO2').replace(/SO₂/g,'SO2').replace(/CO₂/g,'CO2')
+      .replace(/PM<sub>2.5<\/sub>/g,'PM25').replace(/PM<sub>10<\/sub>/g,'PM10').replace(/PM<sub>1<\/sub>/g,'PM1');
       let self = this;
       let entityName = this.$route.name;
       this.SETSELECTEDTIME(-1);
@@ -90,6 +92,8 @@ export default {
             .replace(/SO2/g, "SO₂")
             .replace(/CO2/g, "CO₂")
             .replace(/PM10/g, "PM<sub>10</sub>")
+            .replace(/PM1/g, "PM<sub>1</sub>")
+            
           let data = eval("(" + str + ")");
           self.times = data.times;
           if (this.$route.name == "qiya") {
