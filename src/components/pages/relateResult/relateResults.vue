@@ -109,7 +109,7 @@ export default {
     width: 5%;
     height: 4vh;
     float: left;
-    background-size: 56%;
+    background-size: 65%;
 }
 .article {
   cursor: pointer;

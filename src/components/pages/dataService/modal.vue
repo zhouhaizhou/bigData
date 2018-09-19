@@ -53,7 +53,7 @@
                 </div>
                 <div class="share-wrap padding-bottom border-bottom">
                   <div class="share-pic float-left icon-style1"></div>
-                  <div class=" icon-font-style share"  >分享</div>
+                  <div class=" icon-font-style share" style="padding-left: 28%;" >分享</div>
                 </div>
               </div>
             </div>
@@ -971,6 +971,7 @@ export default {
   border: solid #8080802b 0.5px;
   padding-top: 1.5%;
   padding-left: 2%;
+  padding-bottom: 2%;
   overflow:auto;
 }
 /*定义滚动条高宽及背景
@@ -998,8 +999,9 @@ export default {
   margin-left: 0px;
 }
 .element-content >>> .el-checkbox {
-  width: 25%;
-  padding-top: 2%;
+    width: 25%;
+    padding-top: 0.5%;
+    padding-bottom: 0.5%;
 }
 .element-content >>> .el-checkbox__label {
 font-size: 0.8vw;

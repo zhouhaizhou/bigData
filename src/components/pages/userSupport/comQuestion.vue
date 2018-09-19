@@ -101,14 +101,14 @@ font-size: 1.5em;
 	margin-left: 1%;
 }
 .Question{
-    font-size: 1.4em;
+    font-size: 1.1em;
     color: #418422;
 }
 .Answer-wrap{
       padding-left: 4%;
       padding-right: 4%;
       line-height: 2;
-      font-size: 1.1em;
+      font-size: 1.0em;
 }
 .Answer{
 	   text-indent: 2em;
