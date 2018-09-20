@@ -85,15 +85,7 @@ export default {
           }
         })
         .then(response => {
-          let str = response.data
-            .replace(/PM25/g, "PM<sub>2.5</sub>")
-            .replace(/O3/g, "O₃")
-            .replace(/NO2/g, "NO₂")
-            .replace(/SO2/g, "SO₂")
-            .replace(/CO2/g, "CO₂")
-            .replace(/PM10/g, "PM<sub>10</sub>")
-            .replace(/PM1/g, "PM<sub>1</sub>")
-            
+           let str = response.data
           let data = eval("(" + str + ")");
           self.times = data.times;
           if (this.$route.name == "qiya") {
@@ -110,6 +102,7 @@ export default {
               data.endTime = "";
               data.area = ["华东"];
             }
+            this.proEleType(data.type);
             self.condition = data;
             self.playInterval = self.condition.intervalOpt[0]["key"];
             self.calImgWidth();
@@ -119,6 +112,27 @@ export default {
           console.log(response);
           this.calImgWidth();
         });
+    },
+    proEleType(data){
+      //let typeArr = data.type;
+      data.forEach((element,i) => {
+        if(element=='PM25'){
+          data[i]='PM<sub>2.5</sub>';
+        }else if(element=='PM10'){
+          data[i]='PM<sub>10</sub>'
+        }else if(element=='PM1'){
+          data[i]='PM<sub>1</sub>'
+        }else if(element=='O3'){
+          data[i]='O₃'
+        }else if(element=='NO2'){
+          data[i]='NO₂'
+        }else if(element=='SO₂'){
+          data[i]='SO₂'
+        }else if(element=='CO2'){
+          data[i]='CO₂'
+        }
+      });
+       
     },
     calImgWidth() {
       let main = document.querySelector(".wrap").offsetWidth;

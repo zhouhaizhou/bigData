@@ -69,12 +69,12 @@
               </div>
               <div class="date-value">
                 <div class="start-time">
-                  <el-date-picker v-model="startTimes" class="time-time" type="datetime" format="yyyy-MM-dd HH" value-format="yyyy-MM-dd HH" clear-icon="close" prefix-icon="1" @focus="dateChange">
+                  <el-date-picker v-model="startTimes" class="time-time" :type="dateType" :format="dateFormat" value-format="yyyy-MM-dd HH" clear-icon="close" prefix-icon="1" @focus="dateChange">
                   </el-date-picker>
                 </div>
                 <div class="dao font-style1">到</div>
                 <div class="end-time">
-                  <el-date-picker v-model="endTimes" class="time-time" type="datetime" format="yyyy-MM-dd HH" value-format="yyyy-MM-dd HH" clear-icon="close" prefix-icon="1" @focus="dateChange">
+                  <el-date-picker v-model="endTimes" class="time-time" :type="dateType" :format="dateFormat" value-format="yyyy-MM-dd HH" clear-icon="close" prefix-icon="1" @focus="dateChange">
                   </el-date-picker>
                 </div>
               </div>
@@ -163,6 +163,7 @@ export default {
   props: ["moduleEnName", "moduleCnName", "isShow"],
   data() {
     return {
+      dateFormat:'',
       elementCnName: "",
       modalData: [],
       UpdateInterValue: "",
@@ -204,7 +205,23 @@ export default {
     // this.getTime();
   },
   computed: {
-    ...mapState(["UserToken"])
+    ...mapState(["UserToken"]),
+    dateType(){
+      let str = this.modalData[0].UpdateInter;
+      if(str.indexOf('小时')>=0){
+        this.dateFormat='yyyy-MM-dd HH';
+        return 'datetime';
+      }else if(str.indexOf('天')>=0||str.indexOf('日')>=0){
+        this.dateFormat='yyyy-MM-dd';
+        return 'date';
+      }else if(str.indexOf('月')>=0){
+        this.dateFormat='yyyy-MM';
+        return 'month';
+      }else if(str.indexOf('年')>=0){
+        this.dateFormat='yyyy';
+        return 'year';
+      }
+    }
   },
   watch: {
     moduleEnName() {

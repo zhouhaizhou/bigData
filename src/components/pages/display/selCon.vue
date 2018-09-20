@@ -54,7 +54,7 @@ export default {
         startTime: startTime,
         endTime: endTime
       });
-    }
+    },
   },
   watch: {
      $route:{
