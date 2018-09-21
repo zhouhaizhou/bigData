@@ -210,7 +210,7 @@ export default {
   background: url("../../../assets/img/display/Tlogp.png") no-repeat center
     center;
   background-size: cover;
-  height: 13vh;
+  height: 14vh;
   width: 9vw;
   display: inline-block;
   position: relative;
