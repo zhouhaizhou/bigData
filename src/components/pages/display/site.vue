@@ -1,7 +1,16 @@
 <template>
   <div>
     <div id="map">
-      <div class="legend" :style="{backgroundImage:'url('+legend+')'}"></div>
+      <!-- <div class="legend" :style="{backgroundImage:'url('+legend+')'}"></div> -->
+      <div class="legend">
+        <div class="tuli" v-show='legend[2].show'>
+          <div class="txt" style="margin-left:0;padding-bottom:5px">图例：</div>
+          <div class="type" v-show='item.show' v-for='(item,index) in legend'>
+            <span class="circle" :style="{backgroundColor:item.color}"></span>
+            <span class="txt">{{item.txt}}</span>
+          </div>
+        </div>
+      </div>
     </div>
     <div id="popup" class="ol-popup" :class="{visible:!visible}">
       <div id="popup-content" style="width:200px;">
@@ -23,8 +32,23 @@ import '../../../../static/css/ol.css';
 export default {
   data() {
     return {
-      siteInfo: "",
-      legend:'',
+      siteInfo: "一般站",
+      legend:[
+        {
+          txt:'基准站',
+          color:'rgb(0, 229, 0)',
+          show:false
+        },
+        {
+          txt:'基本站',
+          color:'rgb(232, 122, 211)',
+          show:false
+        },{
+          txt:'一般站',
+          color:'rgb(255, 165, 0)',
+          show:false
+        },
+      ],
       map: {},
       url: [
         // "http://222.66.83.21:8282/arcgis/rest/services/ChinaBoundary/MapServer",
@@ -67,21 +91,23 @@ export default {
           tx: 115,
           ty: 22
         }
-      };
+      }
   },
   watch: {
     $route: {
       handler(val) {
-       // this.siteLayer=null;
         if(val.name == "airSite"){
-          this.legend=require('../../../assets/img/display/Tlogp.png');
+          this.legend[1].txt='酸雨';
+          this.legend[2].txt='气溶胶';
+          this.isShow(false,true,true);
         }else if (val.name == "emSite") {
-          this.legend=require('../../../assets/img/display/jizhunjiben.png');
+          this.showTxt();
+          this.isShow(false,true,true);
           this.center = [105, 35];
           this.map.getView().setZoom(5);
           this.map.getView().setCenter(ol.proj.fromLonLat([this.center[0], this.center[1]]));
         } else {
-          this.legend="";
+          this.isShow(false,false,false);
           this.center = [105, 35];
           this.map.getView().setZoom(4);
           this.map.getView().setCenter(ol.proj.fromLonLat([this.center[0], this.center[1]]));
@@ -105,12 +131,15 @@ export default {
   mounted() {
     this.canvas=document.createElement('canvas');
     if (this.$route.name == "emSite") {
-      this.legend=require('../../../assets/img/display/jizhunjiben.png');
       this.center = [105, 35];
       this.mapZoom = 5;
+      this.showTxt();
+      this.isShow(false,true,true);
     }
     if(this.$route.name == "airSite"){
-      this.legend=require('../../../assets/img/display/Tlogp.png');
+      this.legend[1].txt='酸雨';
+      this.legend[2].txt='气溶胶';
+      this.isShow(false,true,true);
     }
     this.init();
   },
@@ -119,9 +148,9 @@ export default {
       let type = features.get("Type");
       let level = features.get("Station_levl");
       let color = null;
-      if (type.indexOf("酸雨") >= 0 ||level=='11') {
+      if (type.indexOf("气溶胶") >= 0 ||level=='11') {
         color = [255, 165, 0, 1];
-      } else if (type.indexOf("气溶胶") >= 0||level=='12') {
+      } else if (type.indexOf("酸雨") >= 0||level=='12') {
         color = [232, 122, 211, 1];
       } else {
         color = [0, 229, 0, 1];
@@ -166,7 +195,6 @@ export default {
           maxZoom:8
         })
       });
-
       this.getPoint();
       this.listerEvent();
     },
@@ -187,21 +215,30 @@ export default {
         return;
       }
       this.map.removeLayer(this.siteLayer);
-     // this.siteLayer=null;
       this.siteLayer=null;
       let data=[];
       let zoom = this.map.getView().getZoom();
       if(zoom<5 && zoom>=3){
-        this.legend=require('../../../assets/img/display/jizhun.png');
+        this.isShow(false,false,true);
         data = this.filterSiteData(11);
       }else if(zoom>=5 && zoom<6){
-        this.legend=require('../../../assets/img/display/jizhunjiben.png');
+        this.isShow(false,true,true);
         data = this.filterSiteData(12);
       }else{
-         this.legend=require('../../../assets/img/display/jizhunjibenyiban.png')
+        this.isShow(true,true,true);
         data = this.siteData;
       }
       this.proMap(data);
+    },
+    isShow(val1,val2,val3){
+      this.legend[0].show=val1;
+      this.legend[1].show=val2;
+      this.legend[2].show=val3;
+    },
+    showTxt(){
+      this.legend[0].txt='一般站';
+      this.legend[1].txt='基本站';
+      this.legend[2].txt='基准站';
     },
     filterSiteData(grade){
       let data=[];
@@ -219,9 +256,9 @@ export default {
       if (this.popup) {
         this.popup.setPosition(undefined);
       }
-      let feature = this.siteLayer
-        .getSource()
-        .getClosestFeatureToCoordinate(evt.coordinate);
+      let s=this.siteLayer.getSource();
+      if(s==undefined) return;
+      let feature = s.getClosestFeatureToCoordinate(evt.coordinate);
       let geometry = feature.getGeometry();
       let fPoint = this.map.getPixelFromCoordinate(geometry.flatCoordinates); //要素点的坐标
       let mousePoint = this.map.getPixelFromCoordinate(evt.coordinate); //鼠标的坐标
@@ -455,15 +492,32 @@ export default {
   margin-left: -11px;
 }
 .legend{
-  width: 11vw;
-  height: 8vh;
-  background-size: contain;
-  /* background: url("../../../assets/img/display/Tlogp.png") no-repeat center center; */
-  background-position: center center;
-  background-repeat: no-repeat;
+  width: 150px;
+  /* height: 95px; */
   position: absolute;
-  bottom: 20px;
+  bottom: 0;
   right: 0;
   z-index: 99;
+  /* padding-top: 20px; */
+}
+.legend .tuli{
+  bottom: 50px;
+  position: absolute;
+  background-color: white;
+  right: 20px;
+  padding: 10px 20px;
+  border: 1px solid #bbb;
+}
+.legend .type .circle{
+  width: 15px;
+  height: 15px;
+  /* border: 5px; */
+  border-radius: 50%;
+  display: inline-block;
+}
+.legend .txt{
+  font-size: 18px;
+  line-height: 30px;
+  margin-left: 10px;
 }
 </style>
