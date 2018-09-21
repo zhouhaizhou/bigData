@@ -118,7 +118,7 @@ width: 100%;
 }
 .foot-text{
 color: #2c81D9;
-    padding-top: 4%;
+    padding-top: 3.8%;
     font-size: 1.2em;
 }
 .foot-right{
