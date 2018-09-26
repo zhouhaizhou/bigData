@@ -161,6 +161,7 @@ export default {
   props: ["moduleEnName", "moduleCnName", "isShow"],
   data() {
     return {
+      dateFormat:'',
       elementCnName: "",
       modalData: [],
       UpdateInterValue: "",
@@ -202,7 +203,23 @@ export default {
     // this.getTime();
   },
   computed: {
-    ...mapState(["UserToken"])
+    ...mapState(["UserToken"]),
+    dateType(){
+      let str = this.modalData[0].UpdateInter;
+      if(str.indexOf('小时')>=0){
+        this.dateFormat='yyyy-MM-dd HH';
+        return 'datetime';
+      }else if(str.indexOf('天')>=0||str.indexOf('日')>=0){
+        this.dateFormat='yyyy-MM-dd';
+        return 'date';
+      }else if(str.indexOf('月')>=0){
+        this.dateFormat='yyyy-MM';
+        return 'month';
+      }else if(str.indexOf('年')>=0){
+        this.dateFormat='yyyy';
+        return 'year';
+      }
+    }
   },
   watch: {
     moduleEnName() {

@@ -42,26 +42,23 @@ export default {
       siteLat: "",
       siteId: "",
       mapZoom: 4,
-      center: [105, 35]
+      center: [105, 35],
+      siteData: null
     };
   },
   watch: {
     $route: {
       handler(val) {
         if (val.name == "emSite") {
-          this.mapZoom = 7;
-          this.center = [116, 31];
+          this.mapZoom = 5;
+          this.center = [105, 35];
           this.map.getView().setZoom(this.mapZoom);
-          this.map
-            .getView()
-            .setCenter(ol.proj.fromLonLat([this.center[0], this.center[1]]));
+          this.map.getView().setCenter(ol.proj.fromLonLat([this.center[0], this.center[1]]));
         } else {
           this.mapZoom = 4;
           this.center = [105, 35];
           this.map.getView().setZoom(this.mapZoom);
-          this.map
-            .getView()
-            .setCenter(ol.proj.fromLonLat([this.center[0], this.center[1]]));
+          this.map.getView().setCenter(ol.proj.fromLonLat([this.center[0], this.center[1]]));
         }
         this.getPoint();
       },
@@ -70,32 +67,12 @@ export default {
   },
   mounted() {
     if (this.$route.name == "emSite") {
-      this.center = [116, 31];
-      this.mapZoom = 7;
+      this.center = [105, 35];
+      this.mapZoom = 5;
     }
     this.init();
   },
   methods: {
-    getMarkerStyle(features) {
-      var zoom = this.map.getView().getZoom();
-      var zoom = 2;
-      if (zoom < 4) {
-        zoom = 4;
-      }
-      return new ol.style.Style({
-        image: new ol.style.Circle({
-          radius: zoom,
-          fill: new ol.style.Fill({
-            color: [234, 12, 233, 0.5]
-          }),
-          stroke: new ol.style.Stroke({
-            color: [0, 0, 0, 0.5],
-            width: 1
-          })
-        }),
-        zIndex: 3
-      });
-    },
     init() {
       var layers = [];
       // this.map.removeLayer(layers);
@@ -107,16 +84,6 @@ export default {
         });
         layers.push(l);
       });
-      // var layers = [
-      //   // new TileLayer({
-      //   //   source: new OSM()
-      //   // }),
-      //   new TileLayer({
-      //     source: new TileArcGISRest({
-      //       url: this.url[0]
-      //     })
-      //   })
-      // ];
       this.popup = new ol.Overlay({
         element: document.getElementById("popup"),
         positioning: "bottom-center",
@@ -145,61 +112,113 @@ export default {
         map: this.map
         //zIndex: 99
       });
-      this.map.on("click", evt => {
-        this.visible = false;
-      });
+      this.map.on("click", evt => {this.visible = false;});
       // this.map.on("pointermove", evt => this.siteDataHover(evt));
+      this.map.getView().on("change:resolution", this.zoomend);
     },
-    siteDataHover(evt) {
-      if (!this.siteLayer || evt.dragging) return;
-      this.hoverLayer.getSource().clear();
-      if (this.popup) {
-        this.popup.setPosition(undefined);
+    zoomend(){
+      if (this.$route.name != "emSite") {
+        return;
       }
-      let feature = this.siteLayer.getSource().graphics;
-      let geometry = feature.getGeometry();
-      let fPoint = this.map.getPixelFromCoordinate(geometry.flatCoordinates); //要素点的坐标
-      let mousePoint = this.map.getPixelFromCoordinate(evt.coordinate); //鼠标的坐标
-      let px1 = fPoint[0];
-      let py1 = fPoint[1];
-      let px2 = mousePoint[0];
-      let py2 = mousePoint[1];
-      let d = Math.sqrt(Math.pow(px2 - px1, 2) + Math.pow(py2 - py1, 2));
-      if (feature && d < this.map.getView().getZoom() + 4) {
-        this.visible = true;
-        let sf = this.siteLayer.getStyleFunction();
-        let s = sf(feature);
-        s.image_.setRadius(this.map.getView().getZoom() + 4);
-        //this.siteName = feature.get("Station_Name");
-        this.popup = new ol.Overlay({
-          element: document.getElementById("popup"),
-          positioning: "bottom-center",
-          offset: [0, -15]
-          // autoPan: true,
-          // autoPanAnimation: {
-          //   duration: 250
-          // }
-        });
-        this.popup.setPosition(geometry.flatCoordinates);
-        this.map.addOverlay(this.popup);
-        s.zIndex_ += 1;
-        let hf = feature.clone();
-        hf.setStyle(s);
-        this.hoverLayer.getSource().addFeature(hf);
+      this.map.removeLayer(this.siteLayer);
+     // this.siteLayer=null;
+      this.siteLayer=null;
+      let data=[];
+      let zoom = this.map.getView().getZoom();
+      if(zoom<4 && zoom>=3){
+        data = this.filterSiteData(11);
+      }else if(zoom>=4&&zoom<5){
+        data = this.filterSiteData(12);
+      }else{
+        data = this.siteData;
       }
+      this.proMap(data);
+    },
+     filterSiteData(grade){
+      let data=[];
+      this.siteData.filter((ele)=>{
+          let level=ele.Station_levl;
+          if(Number(level) <= grade){
+            data.push(ele);
+          }
+        })
+      return data;
     },
     getGeoStyle(feature) {
+      let type = feature.Type;
+      let level = feature.Station_levl;
+      let color = null;
+      if (type.indexOf("酸雨") >= 0 ||level=='11') {
+        color = [255, 165, 0, 1];
+      } else if (type.indexOf("气溶胶") >= 0||level=='12') {
+        color = [232, 122, 211, 1];
+      } else {
+        color = [0, 229, 0, 1];
+      }
+      var zoom = this.map.getView().getZoom();
+      var zoom = 2;
+      if (zoom < 4) {
+        zoom = 4;
+      }
       let randomCircleStyles = new ol.style.RegularShape({
-        radius: 6,
+        radius: zoom,
         fill: new ol.style.Fill({
-          color: "#0045ff"
+          color: color
         }),
         stroke: new ol.style.Stroke({
-          color: "#fff"
+          color:[0, 0, 0, 0.5],
+          width: 1
         }),
         points: 10
       });
       return randomCircleStyles;
+    },
+    proMap(data){
+      let self=this;
+      this.map.removeLayer(this.siteLayer);
+      let graphics = [];
+        data.forEach(element => {
+          let geometry = new ol.geom.Point(
+            ol.proj.transform(
+              [Number(element.Lon), Number(element.Lat)],
+              "EPSG:4326",
+              "EPSG:3857"
+            )
+          );
+          let graphic = new ol.Graphic(geometry, element);
+          graphic.setStyle(this.getGeoStyle(element));
+          graphics.push(graphic);
+        });
+        let vectorSource = new ol.source.Graphic({
+          graphics: graphics,
+          render: "canvas",
+          map: this.map,
+          onClick: function(graphic) {
+            if (graphic) {
+              graphic.style_.radius_=6;
+              //graphic.setStyle(clickRandomCircleStyles);
+              self.visible = true;
+              let attributes = graphic.getAttributes();
+              let coords = graphic.getGeometry().getCoordinates();
+              self.province = attributes.Province;
+              self.city = attributes.City;
+              self.siteType = attributes.Type;
+              self.siteLon = attributes.Lon;
+              self.siteLat = attributes.Lat;
+              self.siteName = attributes.Station_Name;
+              self.siteId = attributes.Station_Id_C;
+              self.popup.setPosition(coords);
+              return;
+            }
+            self.popup.setPosition(undefined);
+          }
+        });
+        let vectorLayer = new ol.layer.Image({
+          source: vectorSource,
+          zIndex: 10
+        });
+        self.siteLayer = vectorLayer;
+        self.map.addLayer(self.siteLayer);
     },
     getPoint() {
       let self = this;
@@ -214,80 +233,12 @@ export default {
           console.log(res.data);
           this.map.removeLayer(this.siteLayer);
           let data = JSON.parse(res.data);
-          let graphics = [];
-          // var dataArr = {
-          //   type: "FeatureCollection",
-          //   features: []
-          // };
-          data.forEach(element => {
-            // let ele = {
-            //   type: "Feature",
-            //   geometry: {
-            //     type: "Point",
-            //     coordinates: [Number(element.Lon), Number(element.Lat)]
-            //   },
-            //   properties: element
-            // };
-            // dataArr.features.push(ele);
-            var geometry = new ol.geom.Point(
-              ol.proj.transform(
-                [Number(element.Lon), Number(element.Lat)],
-                "EPSG:4326",
-                "EPSG:3857"
-              )
-            );
-            var graphic = new ol.Graphic(geometry, element);
-            graphic.setStyle(this.getGeoStyle(element));
-            graphics.push(graphic);
-          });
-          // var format = new GeoJSON({
-          //   defaultDataProjection: "EPSG:4326"
-          // });
-          // var f = format.readFeatures(dataArr, {
-          //   featureProjection: "EPSG:3857"
-          // });
-          // var vectorSource = new Vector({
-          //   features: f
-          // });
-
-          var vectorSource = new ol.source.Graphic({
-            graphics: graphics,
-            render: "canvas",
-            map: this.map,
-            onClick: function(graphic) {
-              if (graphic) {
-                //graphic.setStyle(clickRandomCircleStyles);
-                self.visible = true;
-                var attributes = graphic.getAttributes();
-                var coords = graphic.getGeometry().getCoordinates();
-                self.province = attributes.Province;
-                self.city = attributes.City;
-                self.siteType = attributes.Type;
-                self.siteLon = attributes.Lon;
-                self.siteLat = attributes.Lat;
-                self.siteName = attributes.Station_Name;
-                self.siteId = attributes.Station_Id_C;
-                self.popup.setPosition(coords);
-                return;
-              }
-              self.popup.setPosition(undefined);
-            }
-          });
-          // var vectorLayer = new LayerVector({
-          //   source: vectorSource,
-          //   style: self.getMarkerStyle
-          // });
-           var clusterSource = new ol.source.Cluster({
-            distance: 50,
-            source: vectorSource
-          });
-          var vectorLayer = new ol.layer.Image({
-            source: vectorSource,
-            zIndex: 10
-          });
-         
-          self.siteLayer = vectorLayer;
-          self.map.addLayer(self.siteLayer);
+          this.siteData = data;
+          if (this.$route.name == "emSite") {
+            this.zoomend();
+          }else{
+            this.proMap(data);
+          }
         })
         .catch(res => console.log(res));
     }

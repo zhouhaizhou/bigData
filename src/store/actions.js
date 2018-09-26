@@ -16,11 +16,10 @@ import dynamicRouter, {
 } from '@/router/dynamic-router'
 import axios from 'axios'
 export default {
-  scrollAnchor({
-    context
-  }, paramObj) {
+  scrollAnchor({commit,state}, paramObj) {
     //Top 对象要从开始的位置移动到目标位置的距离
     //obj 哪个对象要移动
+    //commit('SETFUNRETURN',true);
     var Top = paramObj.top;
     var obj = paramObj.obj;
     var self = this;
@@ -33,8 +32,8 @@ export default {
     if (!isScroll && Math.abs(isBottom) <= 1) { //判断如果到底部了就退出
       return;
     }
-    var timer = setInterval(function () {
-      clearInterval(timer);
+    state.anchorTimer = setInterval(function () {
+      clearInterval(state.anchorTimer);
       let distance = (obj.offsetTop - document.documentElement.scrollTop) / 10 //步长
       self.dispatch('scrollAnchor', {
         top: distance + Top,

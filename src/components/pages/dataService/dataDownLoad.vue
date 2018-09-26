@@ -60,7 +60,7 @@
 import myHeader from "../../common/header";
 import myFooter from "../../common/foot";
 import myModal from "./modal";
-import { mapActions,mapState } from "vuex";
+import { mapActions,mapState, mapMutations } from "vuex";
 var moduleEnName = "",
   parentModule = "";
 export default {
@@ -92,7 +92,7 @@ export default {
     this.getAllData();
   },
   computed:{
-    ...mapState(['UserToken'])
+    ...mapState(['UserToken','anchorTimer'])
   },
   watch: {
     //监听路由变化
@@ -103,6 +103,8 @@ export default {
     }
   },
   methods: {
+    ...mapActions(["scrollAnchor"]),
+    ...mapMutations(['SETFUNRETURN']),
     itemChildrenArrLen(item) {
       let p=item.name.parentModule;
       // if (item.lists.length == 1) {
@@ -128,16 +130,16 @@ export default {
         return {listWrap:true,p:true};
       }
     },
-    ...mapActions(["scrollAnchor"]),
+    stop(){
+      clearInterval(this.anchorTimer);
+    },
     goAnchor(val) {
+      this.stop();
+      //this.SETFUNRETURN(true);//停止上次还未完成的动画
       let entityName = val.meta.entityName;
       let toObj = document.querySelector("." + entityName);
       let top = document.documentElement.scrollTop;
-     // let top = document.documentElement.scrollTop;
-      //if(!Math.abs(toObj.offsetTop-top)<3){
-        this.scrollAnchor({ top: top, obj: toObj, isScroll: true });
-      //}
-      
+      this.scrollAnchor({ top: top, obj: toObj, isScroll: true });
     },
     clear: function() {
       var para1 = this.$refs.splitLine[this.$refs.splitLine.length - 1];

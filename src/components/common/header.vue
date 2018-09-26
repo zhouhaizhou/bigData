@@ -206,8 +206,8 @@ export default {
         .then(res => {
           let data = JSON.parse(res.data).results;
           let today = data[0];
-          let t = today.weather_data[0].temperature.replace("℃", "");
-          this.temp = t.split(" ~ ")[1] + "/" + t.split(" ~ ")[0] + "℃";
+          let t=today.weather_data[0].temperature.replace('℃','');
+          this.temp = t.split(' ~ ')[1]+'/'+t.split(' ~ ')[0]+'℃';
           // today.low.split(" ")[1].split("℃")[0] +
           // "/" +
           // today.high.split(" ")[1];

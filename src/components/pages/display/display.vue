@@ -1,15 +1,16 @@
 <template>
   <div class="wrap">
-    <sel-con  :condition="condition" :isFirst="isFirst" v-on:selPlayInterval="selPlayIntervalFun" :playInterval="playInterval" v-on:selectedCon="selectedCon"></sel-con>
+    <sel-con :condition="condition" :isFirst="isFirst" v-on:selPlayInterval="selPlayIntervalFun" :playInterval="playInterval" v-on:selectedCon="selectedCon"></sel-con>
     <div class="main">
       <div class="icon">
         <div class="print" @click="print"></div>
         <div class="download" @click="download"></div>
       </div>
-      <div  class="img">
-          <!-- <div class="img" :style="style"></div> -->
-          <img :src="style" style="height:80vh"  class="loadImg" alt="">
-          <!-- <div class="img" @click="showImg" :style="style"></div> -->
+      <div class="img">
+        <!-- <div class="img" :style="style"></div> -->
+        <img :src="style" style="height:80vh" class="loadImg" alt="">
+        <span :class="{tlogp:tlogp}"></span>
+        <!-- <div class="img" @click="showImg" :style="style"></div> -->
       </div>
       <right class="right" :times="times" :selPlayInterval="selPlayInterval" v-on:selShowImg="selShowImg"></right>
     </div>
@@ -21,24 +22,29 @@
 import selCon from "./selCon.vue";
 import right from "./right";
 import dialogImg from "./dialogImg";
-import {mapMutations} from 'vuex'
+import { mapMutations } from "vuex";
 export default {
   components: {
     selCon,
     right,
     dialogImg
   },
-  watch:{
-    $route:{
-      handler(val){
-        this.condition={},  //路由发生变化说明进入另一个页面，对应这些变量要初始化
-        this.time=[],
-        this.isFirst=true;
-        this.selPlayInterval=null;
-        this.playInterval=null;
+  watch: {
+    $route: {
+      handler(val) {
+        if (val.name == "qiya") {
+          this.tlogp = true;
+        } else {
+          this.tlogp = false;
+        }
+        (this.condition = {}), //路由发生变化说明进入另一个页面，对应这些变量要初始化
+          (this.time = []),
+          (this.isFirst = true);
+        this.selPlayInterval = null;
+        this.playInterval = null;
         this.getData("", "", "", "", "");
       },
-      deep:true
+      deep: true
     }
   },
   data() {
@@ -49,10 +55,11 @@ export default {
       height: "",
       style: null,
       condition: {},
-      times:[],
+      times: [],
       playInterval: null,
       isFirst: true, //是否第一次请求后台数据
-      selPlayInterval:null
+      selPlayInterval: null,
+      tlogp: false
     };
   },
   mounted() {
@@ -61,8 +68,10 @@ export default {
   methods: {
     ...mapMutations(["SETSELECTEDTIME"]),
     getData(Station, type, startTime, endTime, interTime) {
+      type=type.replace(/O₃/g,'O3').replace(/NO₂/g,'NO2').replace(/SO₂/g,'SO2').replace(/CO₂/g,'CO2')
+      .replace(/PM<sub>2.5<\/sub>/g,'PM25').replace(/PM<sub>10<\/sub>/g,'PM10').replace(/PM<sub>1<\/sub>/g,'PM1');
       let self = this;
-      let entityName=this.$route.name;
+      let entityName = this.$route.name;
       this.SETSELECTEDTIME(-1);
       this.axios
         .get("GetImageProducts.svc/GetImageProducts", {
@@ -76,15 +85,24 @@ export default {
           }
         })
         .then(response => {
-          let data = eval("(" + response.data + ")");
-          self.times=data.times;
-          self.SETSELECTEDTIME(self.times.length-1)
-          if (self.isFirst) {
-            self.isFirst=false;
-            if(data.endTime=='WRF'){
-              data.endTime="";
-              data.area=["华东"];
+           let str = response.data
+          let data = eval("(" + str + ")");
+          self.times = data.times;
+          if (this.$route.name == "qiya") {
+            if (self.times.length == 0) {
+              this.tlogp = false;
+            } else {
+              this.tlogp = true;
             }
+          }
+          self.SETSELECTEDTIME(self.times.length - 1);
+          if (self.isFirst) {
+            self.isFirst = false;
+            if (data.endTime == "WRF") {
+              data.endTime = "";
+              data.area = ["华东"];
+            }
+            this.proEleType(data.type);
             self.condition = data;
             self.playInterval = self.condition.intervalOpt[0]["key"];
             self.calImgWidth();
@@ -94,6 +112,27 @@ export default {
           console.log(response);
           this.calImgWidth();
         });
+    },
+    proEleType(data){
+      //let typeArr = data.type;
+      data.forEach((element,i) => {
+        if(element=='PM25'){
+          data[i]='PM<sub>2.5</sub>';
+        }else if(element=='PM10'){
+          data[i]='PM<sub>10</sub>'
+        }else if(element=='PM1'){
+          data[i]='PM<sub>1</sub>'
+        }else if(element=='O3'){
+          data[i]='O₃'
+        }else if(element=='NO2'){
+          data[i]='NO₂'
+        }else if(element=='SO₂'){
+          data[i]='SO₂'
+        }else if(element=='CO2'){
+          data[i]='CO₂'
+        }
+      });
+       
     },
     calImgWidth() {
       let main = document.querySelector(".wrap").offsetWidth;
@@ -120,8 +159,8 @@ export default {
     },
     download() {
       let img = document.querySelector(".loadImg").src;
-      let temp=img.split('/');
-      let filename=temp[temp.length-1].split('?')[0];
+      let temp = img.split("/");
+      let filename = temp[temp.length - 1].split("?")[0];
       let a = document.createElement("a");
       a.download = filename;
       a.href = img;
@@ -142,7 +181,7 @@ export default {
       // this.style = {
       //   background: "url(" + url + ") no-repeat top center"
       // };
-      this.style=url;
+      this.style = url;
     },
     selectedCon(con) {
       let area = con.area;
@@ -151,8 +190,8 @@ export default {
       let endTime = con.endTime;
       this.getData(area, type, startTime, endTime, "");
     },
-    selPlayIntervalFun(val){
-      this.selPlayInterval=val;
+    selPlayIntervalFun(val) {
+      this.selPlayInterval = val;
     }
   }
 };
@@ -167,7 +206,17 @@ export default {
 .icon {
   float: left;
 }
-
+.tlogp {
+  background: url("../../../assets/img/display/Tlogp.png") no-repeat center
+    center;
+  background-size: cover;
+  height: 14vh;
+  width: 9vw;
+  display: inline-block;
+  position: relative;
+  top: -32px;
+  right: -30px;
+}
 .img {
   width: 52vw;
   /* height: 85.5vh; */
