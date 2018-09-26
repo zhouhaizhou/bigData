@@ -7,59 +7,57 @@
             <div class="top-font">{{moduleCnName}}</div>
           </div>
           <div class="middle-wrap">
-            <div class="middle">
-              <div class="middle-name-wrap">
-                <span>资料内容</span>
+            <div class="middle-name-wrap">
+              <span>资料内容</span>
+            </div>
+            <div class="middle-left-wrap">
+              <!-- <div class="data-content padding-bottom">{{modalData[0].subTitle}}</div> -->
+              <div class="data-start-time-wrap padding-bottom">
+                <div class="data-start-time-name float-left font-style1">数据起始时间：</div>
+                <div class="data-start-time-value font-style2">{{modalData[0].startTime}}</div>
               </div>
-              <div class="middle-left-wrap">
-                <!-- <div class="data-content padding-bottom">{{modalData[0].subTitle}}</div> -->
-                <div class="data-start-time-wrap padding-bottom">
-                  <div class="data-start-time-name float-left font-style1">数据起始时间：</div>
-                  <div class="data-start-time-value font-style2">{{modalData[0].startTime}}</div>
-                </div>
-                <div class="data-end-time-wrap padding-bottom">
-                  <div class="data-end-time-wrap-name float-left font-style1">数据终止时间：</div>
-                  <div class="data-end-time-wrap-value font-style2">{{modalData[0].endTime}}</div>
-                </div>
-                <div class="update-wrap padding-bottom">
-                  <div class="update-name float-left font-style1">更新频率：</div>
-                  <div class="update-value font-style2">{{modalData[0].UpdateInter}}</div>
-                </div>
-                <div class="data-soure-wrap padding-bottom">
-                  <div class="data-soure-name float-left font-style1">数据源：</div>
-                  <div class="data-soure-value font-style2">{{modalData[0].dataSource}}</div>
-                </div>
-                <div class="share-wrap padding-bottom">
-                  <div class="share-name float-left font-style1">共享级别：</div>
-                  <div class="share-value font-style2">{{modalData[0].shareClassID}}</div>
-                </div>
+              <div class="data-end-time-wrap padding-bottom">
+                <div class="data-end-time-wrap-name float-left font-style1">数据终止时间：</div>
+                <div class="data-end-time-wrap-value font-style2">{{modalData[0].endTime}}</div>
+              </div>
+              <div class="update-wrap padding-bottom">
+                <div class="update-name float-left font-style1">更新频率：</div>
+                <div class="update-value font-style2">{{modalData[0].UpdateInter}}</div>
+              </div>
+              <div class="data-soure-wrap padding-bottom">
+                <div class="data-soure-name float-left font-style1">数据源：</div>
+                <div class="data-soure-value font-style2">{{modalData[0].dataSource}}</div>
+              </div>
+              <div class="share-wrap padding-bottom">
+                <div class="share-name float-left font-style1">共享级别：</div>
+                <div class="share-value font-style2">{{modalData[0].shareClassID}}</div>
+              </div>
 
+            </div>
+            <div class="middle-right-wrap ">
+              <div class="comments-wrap padding-bottom border-bottom">
+                <div class="comment-pic float-left icon-style1"></div>
+                <div class="comment-name float-left icon-font-style">评论</div>
+                <div class="comment-count">{{modalData[0].commentCount}}</div>
               </div>
-              <div class="middle-right-wrap ">
-                <div class="comments-wrap padding-bottom border-bottom">
-                  <div class="comment-pic float-left icon-style1"></div>
-                  <div class="comment-name float-left icon-font-style">评论</div>
-                  <div class="comment-count">{{modalData[0].commentCount}}</div>
-                </div>
-                <div class="likes-wrap padding-bottom border-bottom">
-                  <div class="likes-pic float-left icon-style1"></div>
-                  <div class="likes-name float-left icon-font-style">收藏</div>
-                  <div class="likes-count ">{{modalData[0].likesCount}}</div>
-                </div>
-                <div class="views-wrap padding-bottom border-bottom">
-                  <div class="views-pic float-left icon-style1"></div>
-                  <div class="views-name float-left icon-font-style">浏览量</div>
-                  <div class="views-count ">{{modalData[0].viewCount}}</div>
-                </div>
-                <div class="share-wrap padding-bottom border-bottom">
-                  <div class="share-pic float-left icon-style1"></div>
-                  <div class=" icon-font-style share" style="padding-left: 28%;" >分享</div>
-                </div>
+              <div class="likes-wrap padding-bottom border-bottom">
+                <div class="likes-pic float-left icon-style1"></div>
+                <div class="likes-name float-left icon-font-style">收藏</div>
+                <div class="likes-count ">{{modalData[0].likesCount}}</div>
+              </div>
+              <div class="views-wrap padding-bottom border-bottom">
+                <div class="views-pic float-left icon-style1"></div>
+                <div class="views-name float-left icon-font-style">浏览量</div>
+                <div class="views-count ">{{modalData[0].viewCount}}</div>
+              </div>
+              <div class="share-wrap padding-bottom border-bottom">
+                <div class="share-pic float-left icon-style1"></div>
+                <div class=" icon-font-style share" style="padding-left: 28%;">分享</div>
               </div>
             </div>
           </div>
           <div class="foot-wrap">
-              <div class="file-download-font">
+            <div class="file-download-font">
               <span>资料下载</span>
             </div>
             <div class="date-all-wrap">
@@ -69,12 +67,12 @@
               </div>
               <div class="date-value">
                 <div class="start-time">
-                  <el-date-picker v-model="startTimes" class="time-time" :type="dateType" :format="dateFormat" value-format="yyyy-MM-dd HH" clear-icon="close" prefix-icon="1" @focus="dateChange">
+                  <el-date-picker v-model="startTimes" class="time-time" :type="dateTimeType" :format="dateTimeFormat" value-format="yyyy-MM-dd HH" clear-icon="close" prefix-icon="1" @focus="dateChange">
                   </el-date-picker>
                 </div>
                 <div class="dao font-style1">到</div>
                 <div class="end-time">
-                  <el-date-picker v-model="endTimes" class="time-time" :type="dateType" :format="dateFormat" value-format="yyyy-MM-dd HH" clear-icon="close" prefix-icon="1" @focus="dateChange">
+                  <el-date-picker v-model="endTimes" class="time-time" :type="dateTimeType" :format="dateTimeFormat" value-format="yyyy-MM-dd HH" clear-icon="close" prefix-icon="1" @focus="dateChange">
                   </el-date-picker>
                 </div>
               </div>
@@ -190,17 +188,17 @@ export default {
       famatValue: "csv",
       timeInput: "1",
       timeValue: "天",
-      timeType: [
-
-      ],
+      timeType: [],
       timeTypeValue: "",
       startTimes: "",
-      endTimes: "" //this._global.formatDate(new Date(), "yyyy-MM-dd hh")将GMT时间格式转化为字符串形式的正常时间格式
+      endTimes: "", //this._global.formatDate(new Date(), "yyyy-MM-dd hh")将GMT时间格式转化为字符串形式的正常时间格式
+
+      dateTimeType: "",
+      dateTimeFormat: "",
+      lstTime: "" //数据库中数据的最新时间
     };
   },
-  mounted() {
-
-  },
+  mounted() {},
   created() {
     // this.getTime();
   },
@@ -230,15 +228,18 @@ export default {
         this.getFileContentData();
         this.elements = "";
         this.getElementData();
-        this.getIntervalTime();//根据module的年月日设置时间间隔单位
+        this.getIntervalTime(); //根据module的年月日设置时间间隔单位
       }
     },
     isShow() {
       //监听
       if (this.isShow == false) {
         this.isIndeterminate = false; //弹框关闭时，全选按钮恢复初始状态
-        this.checkAll=false;//刚进来时，将上次勾选的全选对勾去掉
-
+        this.checkAll = false; //刚进来时，将上次勾选的全选对勾去掉
+        document.querySelector("html").style.overflow = "auto";
+        //关闭modal时，将时间清空，解决因网络慢造成时间显示还是上个模块选过的时间
+        this.startTimes="";
+        this.endTimes="";
       } else {
         //  this.isIndeterminate = false;//弹框显示时，默认选中后台返回数据中的第一个要素
       }
@@ -246,14 +247,76 @@ export default {
   },
   methods: {
     /**
+     * 将GTM格式的时间转化为指定的普通时间格式
+     * @param {new Date()} date  GMT格式的时间
+     * @param {String} fmt  想要转化的时间格式
+     */
+    formatDate1(date, fmt) {
+      //author: meizz
+      var o = {
+        "M+": date.getMonth() + 1, //月份
+        "d+": date.getDate(), //日
+        "H+": date.getHours(), //小时
+        "m+": date.getMinutes(), //分
+        "s+": date.getSeconds(), //秒
+        "q+": Math.floor((date.getMonth() + 3) / 3), //季度
+        S: date.getMilliseconds() //毫秒
+      };
+      if (/(y+)/.test(fmt))
+        fmt = fmt.replace(
+          RegExp.$1,
+          (date.getFullYear() + "").substr(4 - RegExp.$1.length)
+        );
+      for (var k in o) {
+        if (new RegExp("(" + k + ")").test(fmt)) {
+          fmt = fmt.replace(
+            RegExp.$1,
+            RegExp.$1.length == 1
+              ? o[k]
+              : ("00" + o[k]).substr(("" + o[k]).length)
+          );
+        }
+      }
+      return fmt;
+    },
+    /**
+     * 根据更新频率中的“小时、日、月、年”来动态改变elementUI的时间空间类型
+     */
+    changeDateTimeTypeFormat() {
+      let hour = this.UpdateInterValue.indexOf("时"); //注意：数据库中配置时，年月日时，的命名采用要包含此处对应的字符
+      let day = this.UpdateInterValue.indexOf("天");
+      let day1 = this.UpdateInterValue.indexOf("日");
+      let month = this.UpdateInterValue.indexOf("月");
+      let year = this.UpdateInterValue.indexOf("年");
+      if (hour != -1) {
+        this.dateTimeType = "datetime";
+        this.dateTimeFormat = "yyyy-MM-dd HH";
+      } else if (day != -1 || day1 != -1) {
+        this.dateTimeType = "date";
+        this.dateTimeFormat = "yyyy-MM-dd";
+      } else if (month != -1) {
+        this.dateTimeType = "month";
+        this.dateTimeFormat = "yyyy-MM";
+      } else if (year != -1) {
+        this.dateTimeType = "year";
+        this.dateTimeFormat = "yyyy";
+      } else {
+        this.dateTimeType = "datetime";
+        this.dateTimeFormat = "yyyy-MM-dd HH";
+      }
+    },
+    /**
      * 修改elementUI中的样式，动态修改style
      */
-        dateChange() {
-      setTimeout(()=>{
-          document.querySelectorAll(".has-time .el-time-spinner__wrapper")[1].style.display='none';
-      },100);//由于获取焦点时动态生成时的div还没出来，所以设置延迟执行
-      },
-     /**
+    dateChange() {
+      setTimeout(() => {
+        document.querySelectorAll(
+          ".has-time .el-time-spinner__wrapper"
+        )[1].style.display =
+          "none";
+      }, 100); //由于获取焦点时动态生成时的div还没出来，所以设置延迟执行
+    },
+    /**
      *  获取资料对应的间隔时间
      */
     getIntervalTime() {
@@ -268,16 +331,16 @@ export default {
         .then(response => {
           let resData = eval("(" + response.data + ")");
           let str = resData[0].IntervalTime;
-          let Arr=str.split("、");
-          let timeTypeArr=[];
-        for(let i=0;i<Arr.length;i++){
-          let obj={
-          value: i,
-          label: Arr[i]
-        }
-        timeTypeArr.push(obj);
-        }
-          self.timeType=timeTypeArr;
+          let Arr = str.split("、");
+          let timeTypeArr = [];
+          for (let i = 0; i < Arr.length; i++) {
+            let obj = {
+              value: i,
+              label: Arr[i]
+            };
+            timeTypeArr.push(obj);
+          }
+          self.timeType = timeTypeArr;
         })
         .catch(response => {
           console.log(response);
@@ -297,14 +360,18 @@ export default {
         })
         .then(response => {
           let resData = eval("(" + response.data + ")");
-          self.endTimes = this._global.formatDate(new Date((resData[0].collect_time)), "yyyy-MM-dd hh");
+          self.lstTime = resData[0].collect_time; //将数据的最新时间保留下来（保存为GMT时间格式），用作对比用户选的起始时间
+          self.endTimes = this._global.formatDate(
+            new Date(resData[0].collect_time),
+            "yyyy-MM-dd hh"
+          );
           self.defaultSetByModuleEnName();
         })
         .catch(response => {
           console.log(response);
         });
     },
-     defaultSetByModuleEnName() {
+    defaultSetByModuleEnName() {
       let hour = this.UpdateInterValue.indexOf("时"); //注意：数据库中配置时，年月日时，的命名采用要包含此处对应的字符
       let day = this.UpdateInterValue.indexOf("天");
       let day1 = this.UpdateInterValue.indexOf("日");
@@ -321,14 +388,14 @@ export default {
         this.timeValue = "年";
       } else if (year != -1) {
         this.getTime("year");
-        this.timeValue = "年";//下载的时间间隔先默认为年   （待）
+        this.timeValue = "年"; //下载的时间间隔先默认为年   （待）
       } else {
         this.getTime("day");
         this.timeValue = "天";
       }
     },
     getTime(time) {
-      const start = new Date(this.endTimes+":00:00");//将正常的字符串时间格式转化为GMT时间格式
+      const start = new Date(this.endTimes + ":00:00"); //将正常的字符串时间格式转化为GMT时间格式
       // this.endTimes = this._global.formatDate(new Date(), "yyyy-MM-dd hh");
       switch (time) {
         case "hour":
@@ -381,6 +448,7 @@ export default {
 
           // this.defaultSetByModuleEnName();//需要的变量生成后执行   解决axios不能同步
           self.getLstTime();
+          this.changeDateTimeTypeFormat();
         })
         .catch(response => {
           console.log(response);
@@ -429,7 +497,80 @@ export default {
       //处理时间为数字字符串
       var startT = this.startTimes.replace(/[^0-9]/gi, "");
       var endT = this.endTimes.replace(/[^0-9]/gi, "");
-      // alert(this.checkedElements);
+      let startDate = "";
+      let endDate = "";
+      let str = this.UpdateInterValue;
+
+      //结束时间不能大于数据的最新时间
+      let lst = new Date(this.lstTime); //数据的最新时间
+      let end = new Date(this.endTimes + "00:00");
+      if (str.indexOf("时") != -1) {
+        startDate = startT + "0000";
+        endDate = endT + "0000";
+
+        // let lstNormalFomat=this._global.formatDate(lst, "yyyy-MM-dd hh");//将数据的最新时间GMT时间格式化为对应的正常格式
+        let lstNormalFomat = this.formatDate1(lst, "yyyy-MM-dd HH"); //将数据的最新时间GMT时间格式化为对应的正常格式
+        if (end.getTime() - lst.getTime() > 0) {
+          alert("结束时间不能大于" + lstNormalFomat);
+          return;
+        }
+      } else if (str.indexOf("天") != -1 || str.indexOf("日") != -1) {
+        startDate = startT + "000000";
+        endDate = endT + "000000";
+
+        // let lstNormalFomat=this._global.formatDate(lst, "yyyy-MM-dd");//将数据的最新时间GMT时间格式化为对应的正常格式
+        let lstNormalFomat = this.formatDate1(lst, "yyyy-MM-dd"); //将数据的最新时间GMT时间格式化为对应的正常格式
+        if (end.getTime() - lst.getTime() > 0) {
+          alert("结束时间不能大于" + lstNormalFomat);
+          return;
+        }
+      } else if (str.indexOf("月") != -1) {
+        startDate = startT + "00000000";
+        endDate = endT + "00000000";
+
+        // let lstNormalFomat=this._global.formatDate(lst, "yyyy-MM");//将数据的最新时间GMT时间格式化为对应的正常格式
+        let lstNormalFomat = this.formatDate1(lst, "yyyy-MM"); //将数据的最新时间GMT时间格式化为对应的正常格式
+        if (end.getTime() - lst.getTime() > 0) {
+          alert("结束时间不能大于" + lstNormalFomat);
+          return;
+        }
+      } else if (str.indexOf("年") != -1) {
+        startDate = startT + "0000000000";
+        endDate = endT + "0000000000";
+
+        // let lstNormalFomat=this._global.formatDate(lst, "yyyy");//将数据的最新时间GMT时间格式化为对应的正常格式
+        let lstNormalFomat = this.formatDate1(lst, "yyyy"); //将数据的最新时间GMT时间格式化为对应的正常格式
+        if (end.getTime() - lst.getTime() > 0) {
+          alert("结束时间不能大于" + lstNormalFomat);
+          return;
+        }
+      } else {
+        //非年月日的起止时间按小时
+        startDate = startT + "0000";
+        endDate = endT + "0000";
+
+        // let lstNormalFomat=this._global.formatDate(lst, "yyyy-MM-dd hh");//将数据的最新时间GMT时间格式化为对应的正常格式
+        let lstNormalFomat = this.formatDate1(lst, "yyyy-MM-dd hh"); //将数据的最新时间GMT时间格式化为对应的正常格式
+        if (end.getTime() - lst.getTime() > 0) {
+          alert("结束时间不能大于" + lstNormalFomat);
+          return;
+        }
+      }
+
+      //起止时间间隔不能大于三个月
+      let hour = this.UpdateInterValue.indexOf("时");
+      if (hour != -1) {
+        let end = new Date(this.endTimes + ":00:00");
+        let start = new Date(this.startTimes + ":00:00");
+        let disTime = end.getTime() - start.getTime();
+        if (disTime < 3600 * 1000 * 24 * 30 * 3) {
+          //时间间隔小于三个月就不做处理
+        } else {
+          alert("时间间隔大于三个月，请重新选择");
+          return;
+        }
+      }
+
       var checkedIndex = this.checkedElements;
       var eleObj = {
         eleEn: [],
@@ -454,19 +595,6 @@ export default {
 
       var comparTime = startT > endT;
 
-      let hour = this.UpdateInterValue.indexOf("时");
-      if (hour != -1) {
-        let end = new Date(this.endTimes + ":00:00");
-        let start = new Date(this.startTimes + ":00:00");
-        let disTime = end.getTime() - start.getTime();
-        if (disTime < 3600 * 1000 * 24 * 30 * 3) {
-          //时间间隔小于三个月就不做处理
-        } else {
-          alert("时间间隔大于三个月，请重新选择");
-          return;
-        }
-      }
-
       if (startT == "" || endT == "") {
         alert("选择的日期不能空！");
         return;
@@ -484,7 +612,7 @@ export default {
           userName: account,
           downTime: nowTime + "",
           moduleEnName: this.moduleEnName,
-          date: startT + "0000-" + endT + "0000",
+          date: startDate + "-" + endDate,
           province: this.province,
           provinceData: this.provinceData,
           citySite: this.citySite,
@@ -731,8 +859,8 @@ export default {
 
 <style scoped>
 .body-background {
-  width: 100vw;
-  height: 100vh;
+  width: 1920px;
+  height: 942px;
   background-color: #00000085;
   display: flex;
   justify-content: center;
@@ -749,37 +877,37 @@ export default {
   padding-top: 2%;
   padding-left: 3%;
   width: 91%;
-  height: 89vh;
+  height: 89%;
   float: left;
 }
 .top-wrap {
   border-bottom: solid 0.05em #80808045;
-  height: 3.5vh;
+  height: 4.5%;
 }
 .top-font {
-  font-size: 1.1vw;
+  font-size: 21px;
   font-weight: bold;
 }
 .middle-wrap {
-  margin-top: 1vh;
+  margin-top: 3%;
   border: #80808038 solid 0.5px;
-  padding-top: 3%;
+  padding-top: 2.5%;
   padding-left: 6%;
   padding-right: 5%;
   padding-bottom: 0%;
-  height: 20vh;
+  height: 19%;
 }
 .middle {
 }
 .middle-name-wrap {
-  width: 5%;
-  height: 2.7vh;
-  position: absolute;
-  top: 7vh;
-  left: 30%;
+  width: 13%;
+  height: 0;
+  position: relative;
+  top: -23%;
+  left: -3%;
   background-color: white;
   color: #4fb9ed;
-  font-size: 1.1vw;
+  font-size: 21px;
   font-weight: bold;
   text-align: center;
   line-height: 1.5;
@@ -788,7 +916,7 @@ export default {
   width: 70%;
   height: 100%;
   float: left;
-  font-size: 0.95em;
+  font-size: 15.5px;
 }
 
 .data-content {
@@ -830,7 +958,7 @@ export default {
 .middle-right-wrap {
   float: left;
   width: 25%;
-  font-size: 0.8em;
+  font-size: 15px;
   padding-left: 5%;
 }
 .comments-wrap {
@@ -872,25 +1000,25 @@ export default {
 }
 .share-name {
 }
-.share{
-      padding-left: 28%;
+.share {
+  padding-left: 28%;
 }
 .foot-wrap {
-  margin-top: 2vh;
+  margin-top: 4%;
   /* border: solid red; */
   border: #80808038 solid 0.5px;
-  height: 72%;
-  font-size: 0.5vw;
+  height: 75%;
+  font-size: 8px;
 }
 .file-download-font {
-  width: 5%;
-  height: 2.7vh;
-  position: absolute;
-  top: 31vh;
-  left: 30%;
+  width: 13%;
+  height: 0%;
+  position: relative;
+  top: -3%;
+  left: 3%;
   background-color: white;
   color: #4fb9ed;
-  font-size: 2.2em;
+  font-size: 21px;
   font-weight: bold;
   text-align: center;
   line-height: 1.5;
@@ -912,7 +1040,7 @@ export default {
   background-size: 49%;
 }
 .date-name {
-  font-size: 0.8vw;
+  font-size: 14.5px;
 }
 
 .provinces-position-wrap {
@@ -929,7 +1057,7 @@ export default {
   height: 18px;
 }
 .all-select-wrap >>> .el-checkbox__label {
-  font-size: 0.8vw !important;
+  font-size: 14.5px !important;
 }
 
 .radio-wrap {
@@ -980,13 +1108,13 @@ export default {
   padding-top: 1.5%;
   padding-left: 2%;
   padding-bottom: 2%;
-  overflow:auto;
+  overflow: auto;
 }
 /*定义滚动条高宽及背景
  高宽分别对应横竖滚动条的尺寸*/
 .element-content::-webkit-scrollbar {
   width: 5px;
-
+  height: 5px;
   background-color: #f5f5f5;
 }
 /*定义滚动条轨道
@@ -1007,12 +1135,12 @@ export default {
   margin-left: 0px;
 }
 .element-content >>> .el-checkbox {
-    width: 25%;
-    padding-top: 0.5%;
-    padding-bottom: 0.5%;
+  width: 25%;
+  padding-top: 0.5%;
+  padding-bottom: 2%;
 }
 .element-content >>> .el-checkbox__label {
-font-size: 0.8vw;
+  font-size: 14.5px;
 }
 .element-radio-font-wrap {
   width: 24%;
@@ -1177,7 +1305,7 @@ font-size: 0.8vw;
 .font-style12 {
   color: #3d6b84;
   font-weight: bold;
-  font-size: 0.8vw !important;
+  font-size: 14.5px !important;
 }
 .font-style2 {
   color: #4bacf2;

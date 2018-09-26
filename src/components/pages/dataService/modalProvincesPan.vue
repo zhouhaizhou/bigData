@@ -266,7 +266,7 @@ export default {
      padding-left: 20%;
     color: #3d6b84;
     font-weight: bold;
-    font-size: 0.8vw;
+    font-size: 14.5px;
 }
 .all-select-wrap {
   float: right;
@@ -358,7 +358,7 @@ export default {
   height: 15%;
 }
 .checkAll >>> .el-checkbox__label {
-  font-size: 0.8vw;
+  font-size: 14.5px;
 }
 .sites-wrap {
   width: 89%;
@@ -402,7 +402,7 @@ export default {
   display: inline-block;
   padding-left: 10px;
   line-height: 19px;
-  font-size: 0.8vw;
+  font-size: 14.5px;
   width: 76%;
   overflow: hidden;
   white-space: nowrap;

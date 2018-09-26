@@ -232,6 +232,7 @@ export default {
       this.moduleEnName = list.moduleEnName;
       this.moduleCnName = list.moduleCnName; //作为标题名
       self.isShow = true; //显示弹出框
+      document.querySelector("html").style.overflow="hidden";
     },
     hiddenShow() {
       //更改modal弹出框隐藏（传给子组件一个点击事件）
@@ -437,5 +438,27 @@ export default {
   left: 0;
   z-index: 999;
   height: 100vh;
+  overflow: auto;
+}
+/*定义滚动条高宽及背景
+ 高宽分别对应横竖滚动条的尺寸*/
+.mymodal::-webkit-scrollbar {
+  width: 9px;
+  height: 9px;
+  background-color: #f5f5f5;
+}
+/*定义滚动条轨道
+ 内阴影+圆角*/
+.mymodal::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  border-radius: 5px;
+  background-color: #f5f5f5;
+}
+/*定义滑块
+ 内阴影+圆角*/
+.mymodal::-webkit-scrollbar-thumb {
+  background-color: #099ad7;
+  /* background-image: -webkit-gradient(linear, 40% 0%, 75% 84%, from(rgb(77, 156, 65)), color-stop(0.6, rgb(84, 222, 93)), to(rgb(25, 145, 29))); */
+  border-radius: 5px;
 }
 </style>
