@@ -883,23 +883,25 @@ export default {
 .middle {
 }
 .middle-name-wrap {
-  width: 13%;
-  height: 0;
-  position: relative;
-  top: -23%;
-  left: -3%;
-  background-color: white;
-  color: #4fb9ed;
-  font-size: 21px;
-  font-weight: bold;
-  text-align: center;
-  line-height: 1.5;
+    width: 14%;
+    height: 20%;
+    position: relative;
+    top: -23%;
+    left: -3%;
+    background-color: white;
+    color: #4fb9ed;
+    font-size: 21px;
+    font-weight: bold;
+    text-align: center;
+    line-height: 1.5;
 }
 .middle-left-wrap {
   width: 70%;
   height: 100%;
   float: left;
   font-size: 15.5px;
+      position: relative;
+    top: -21%;
 }
 
 .data-content {
@@ -943,6 +945,8 @@ export default {
   width: 25%;
   font-size: 15px;
   padding-left: 5%;
+      position: relative;
+    top: -21%;
 }
 .comments-wrap {
 }
@@ -994,23 +998,25 @@ export default {
   font-size: 8px;
 }
 .file-download-font {
-  width: 13%;
-  height: 0%;
-  position: relative;
-  top: -3%;
-  left: 3%;
-  background-color: white;
-  color: #4fb9ed;
-  font-size: 21px;
-  font-weight: bold;
-  text-align: center;
-  line-height: 1.5;
+    width: 13%;
+    height: 5%;
+    position: relative;
+    top: -3%;
+    left: 3%;
+    background-color: white;
+    color: #4fb9ed;
+    font-size: 21px;
+    font-weight: bold;
+    text-align: center;
+    line-height: 1.5;
 }
 .date-all-wrap {
-  height: 11.1%;
-  padding-left: 5%;
-  padding-right: 4%;
-  padding-top: 2%;
+    height: 11.1%;
+    padding-left: 5%;
+    padding-right: 4%;
+    padding-top: 2%;
+    position: relative;
+    top: -4.2%;
 }
 .date-wrap {
   padding-bottom: 1.5%;
@@ -1027,11 +1033,13 @@ export default {
 }
 
 .provinces-position-wrap {
-  float: left;
-  height: 40%;
-  padding-left: 5%;
-  padding-right: 4%;
-  padding-top: 0.5%;
+    float: left;
+    height: 40%;
+    padding-left: 5%;
+    padding-right: 4%;
+    padding-top: 0.5%;
+    position: relative;
+    top: -6%;
 }
 
 .all-select-wrap {
@@ -1048,11 +1056,13 @@ export default {
   margin-right: 3%;
 }
 .elements-select-wrap {
-  float: left;
-  height: 25%;
-  width: 91%;
-  padding-left: 5%;
-  padding-right: 4%;
+    float: left;
+    height: 25%;
+    width: 91%;
+    padding-left: 5%;
+    padding-right: 4%;
+    position: relative;
+    top: -6.5%;
 }
 .element-select-title {
   width: 100%;
@@ -1084,13 +1094,11 @@ export default {
 .element-all-select-wrap-postion {
 }
 .element-content {
-  height: 65%;
+  height: 70%;
   width: 98%;
   float: left;
   border: solid #8080802b 0.5px;
-  padding-top: 1.5%;
   padding-left: 2%;
-  padding-bottom: 2%;
   overflow: auto;
 }
 /*定义滚动条高宽及背景
@@ -1120,10 +1128,14 @@ export default {
 .element-content >>> .el-checkbox {
   width: 25%;
   padding-top: 0.5%;
-  padding-bottom: 2%;
+  padding-bottom: 1%;
 }
 .element-content >>> .el-checkbox__label {
   font-size: 14.5px;
+}
+.el-checkbox-group{
+      margin-top: 1.5%;
+    margin-bottom: 1%;
 }
 .element-radio-font-wrap {
   width: 24%;
@@ -1133,11 +1145,13 @@ export default {
   padding-top: 0.3%;
 }
 .files-wrap {
-  float: left;
-  height: 11%;
-  padding-left: 5%;
-  padding-right: 4%;
-  padding-top: 1.5%;
+    float: left;
+    height: 11%;
+    padding-left: 5%;
+    padding-right: 4%;
+    /* padding-top: 1.5%; */
+    position: relative;
+    top: -6%;
 }
 .pic-file-wrap {
   width: 100%;
@@ -1210,16 +1224,14 @@ export default {
   height: 8%;
   padding-left: 5%;
   padding-right: 4%;
-
   padding-top: 0%;
-
   display: flex;
   -webkit-box-pack: center;
-
   justify-content: center;
   -webkit-box-align: center;
-
   align-items: center;
+  position: relative;
+    top: -6%;
 }
 .btns-wrap >>> .el-button {
   padding: 5px 20px;
@@ -1279,7 +1291,7 @@ export default {
 }
 .border-bottom {
   border-bottom: solid 0.05em #80808045;
-  padding-bottom: 7%;
+  padding-bottom: 3%;
 }
 .font-style1 {
   color: #3d6b84;
