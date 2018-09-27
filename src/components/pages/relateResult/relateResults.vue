@@ -7,7 +7,7 @@
                     <div class="item-title-font">文章</div>
                 </div>
                 <div class="article-lists-wrap item-lists">
-                    <a href="javascript:;" @click="getArticleLink(article)" class="article" v-for="(article,index) in articleLists">[{{index+1}}] {{article.articleName}}</a>
+                    <a href="javascript:;" @click="getArticleLink(article)" class="article" v-for="(article,index) in articleLists"><span>[{{index+1}}]</span> <span>{{article.articleName}}</span></a>
                 </div>
             </div>
             <div class="books-wrap item">
@@ -16,7 +16,7 @@
                     <div class="item-title-font">专著</div>
                 </div>
                 <div class="booke-lists-wrap item-lists">
-                    <div class="book" v-for="(book,index) in bookLists">[{{index+1}}] {{book}}</div>
+                    <div class="book" v-for="(book,index) in bookLists"><span>[{{index+1}}]</span> <span>{{book}}</span></div>
                 </div>
             </div>
             <div class="copy-right-wrap item">
@@ -25,7 +25,7 @@
                     <div class="item-title-font">软件著作权</div>
                 </div>
                 <div class="copyright-lists-wrap item-lists">
-                    <div class="copyright" v-for="copyright in copyrightLists">{{copyright}}</div>
+                    <div class="copyright" v-for="(copyright,index) in copyrightLists"><span>[{{index+1}}]</span><span>{{copyright}}</span></div>
                 </div>
             </div>
         </div>
@@ -201,6 +201,33 @@ export default {
   clear: both;
   display: flex;
 }
+.article-lists-wrap a{
+  margin-bottom: 3%;
+}
+.article-lists-wrap.item-lists a span:nth-child(1){
+  margin-right: 2%;
+  font-weight: bold;
+}
+.article-lists-wrap.item-lists a span:nth-child(2){
+word-break: break-all;
+}
+.booke-lists-wrap .book{
+  margin-bottom: 3%;
+}
+.booke-lists-wrap .book span:nth-child(1){
+    margin-right: 2%;
+  font-weight: bold;
+}
+.booke-lists-wrap .book span:nth-child(2){
+word-break: break-all;
+}
+.copyright-lists-wrap .copyright{
+  margin-bottom: 3%;
+}
+.copyright-lists-wrap .copyright span:nth-child(1){
+    margin-right: 2%;
+  font-weight: bold;
+}
 .pic-wrap {
   display: flex;
   align-items: center;
@@ -245,8 +272,8 @@ export default {
     font-weight: bold;
 }
 .item-lists {
-  padding-left: 5%;
-  padding-right: 3%;
+  padding-left: 7%;
+  padding-right: 7%;
   line-height: 2;
 }
 a:link,

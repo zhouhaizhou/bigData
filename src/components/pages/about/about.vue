@@ -106,20 +106,25 @@ width: 100%;
 
 }
 .foot-left{
-    width: 40%;
+width: 40%;
     float: left;
     line-height: 2.5;
+    padding-top: 2%;
+    padding-bottom: 4%;
+    height: 45vh;
 }
 .foot-title-wrap{
     font-size: 1.5em;
-    font-weight: bold;
-    padding-top: 18%;
-    padding-bottom: 18%;
+    font-weight: 700;
+    padding-top: 1%;
+    padding-bottom: 13%;
+    height: 13vh;
 }
 .foot-text{
-color: #2c81D9;
+    color: #2c81d9;
     padding-top: 3.8%;
     font-size: 1.2em;
+    height: 4.9vh;
 }
 .foot-right{
     float: left;
