@@ -280,7 +280,7 @@ export default {
       return fmt;
     },
     /**
-     * 根据更新频率中的“小时、日、月、年”来动态改变elementUI的时间空间类型
+     * 根据更新频率中的“小时、日、月、年”来动态改变elementUI的时间控件类型
      */
     changeDateTimeTypeFormat() {
       let hour = this.UpdateInterValue.indexOf("时"); //注意：数据库中配置时，年月日时，的命名采用要包含此处对应的字符
@@ -311,8 +311,12 @@ export default {
     dateChange() {
       setTimeout(() => {
         document.querySelectorAll(
-          ".has-time .el-time-spinner__wrapper"
-        )[1].style.display =
+          ".has-time"
+        )[0].querySelectorAll(".el-time-spinner__wrapper")[1].style.display =
+          "none";
+          document.querySelectorAll(
+          ".el-popper.has-time"
+        )[1].querySelectorAll(".el-time-spinner__wrapper")[1].style.display =
           "none";
       }, 100); //由于获取焦点时动态生成时的div还没出来，所以设置延迟执行
     },
@@ -676,14 +680,6 @@ export default {
             }
           });
       }
-    },
-    getSTime(val) {
-      // var d = new Date(val);
-      // this.startTimes = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate()+'-'+d.getHours();
-    },
-    getETime(val) {
-      // var d = new Date(val);
-      // this.endTimes = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate()+' '+d.getHours();
     },
     getNowFormatDate() {
       var date = new Date();
@@ -1052,6 +1048,7 @@ export default {
 .provinces-position-wrap {
     float: left;
     height: 40%;
+    width: 91%;
     padding-left: 5%;
     padding-right: 4%;
     padding-top: 0.5%;
