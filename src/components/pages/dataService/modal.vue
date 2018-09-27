@@ -1302,6 +1302,7 @@ export default {
 .padding-bottom {
   padding-top: 0.4vw;
   /* padding-bottom: 0.7vh; */
+  height: 12%;
 }
 .border-bottom {
   border-bottom: solid 0.05em #80808045;
