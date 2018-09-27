@@ -41,18 +41,103 @@ export default {
           articleName:
             "Gao W, Tie X, Xu J, et al. Long-term trend of O3 in a mega City (Shanghai), China: Characteristics, causes, and interactions with precursors[J]. Science of the Total Environment, 2017, 603-604:425.",
           articleUrl:
-            "http://kns.cnki.net/KCMS/detail/detail.aspx?dbcode=SJES&dbname=SJESTEMP_U&filename=SJESEABF50A3F9F22A70252BEB4EC599ADD7&uid=WEEvREcwSlJHSldRa1FhdXNXa0hFbHBYckZoNHdVaGJSRkt4UEJENUYrTT0=$9A4hF_YAuvQ5obgVAqNKPCYcEjKensW4IQMovwHtwkF4VYPoHbKxJw!!&v=MzEzNTNsZkNwTFU4NXQ5aHhieTh4YUE9TmlmT2ZjYkpiS2ZKci81R0V1SjVEbjVJeUJZUjd6MFBQUTNtMldFd2NMdmxNYzZZQ0pVYUYxdVFVci9QSmxjU2JtS0NHWUNHUQ=="
+            ""
+        },
+        {
+          articleName:
+            "Zhou G, Xu J, Xie Y, et al. Numerical air quality forecasting over eastern China: An operational application of WRF-Chem[J]. Atmospheric Environment, 2017, 153:94-108.",
+          articleUrl:
+            ""
+        },
+        {
+          articleName:
+            "Pu W, Quan W, Ma Z, et al. Long-term trend of chemical composition of atmospheric precipitation at a regional background station in Northern China[J]. Science of the Total Environment, 2017, 580:1340-1350.",
+          articleUrl:
+            ""
         },
         {
           articleName:
             "Xu J, Chang L, Yan F, et al. Role of climate anomalies on decadal variation in the occurrence of wintertime haze in the Yangtze River Delta, China.[J]. Science of the Total Environment, 2017, 599-600:918.",
           articleUrl:
-            "http://kns.cnki.net/KCMS/detail/detail.aspx?dbcode=SJES&dbname=SJESTEMP_U&filename=SJES643113042C20E1F8D4A12C238BD18DD6&uid=WEEvREcwSlJHSldRa1FhdXNXa0hFbHBYckZoNHdVaGJSRkt4UEJENUYrTT0=$9A4hF_YAuvQ5obgVAqNKPCYcEjKensW4IQMovwHtwkF4VYPoHbKxJw!!&v=MTQ0MDZ1UVVyL1BKbGNTYm1LQ0dZQ0dRbGZDcExVODV0OWh4Ynk2eEtvPU5pZk9mYlc4SGRETnJJOUJacGdOREFrNHVSNW43azU4U2d6Z3J4cEhEYk9jTWM2WkNKVWFGMQ=="
+            ""
         },
         {
-          articleName: "Visual Basic与Oracle数据库在生态与农牧业气象中的应用",
+          articleName:
+            "Tan H, Cai M, Fan Q, et al. An analysis of aerosol liquid water content and related impact factors in Pearl River Delta.[J]. Science of the Total Environment, 2016, 579.",
           articleUrl:
-            "http://kns.cnki.net/KCMS/detail/detail.aspx?dbcode=CJFQ&dbname=CJFDLAST2017&filename=GLXZ201624101&uid=WEEvREcwSlJHSldRa1FhdXNXa0hFbHBYckZoNHdVaGJSRkt4UEJENUYrTT0=$9A4hF_YAuvQ5obgVAqNKPCYcEjKensW4IQMovwHtwkF4VYPoHbKxJw!!&v=MjI4MjdTN0RoMVQzcVRyV00xRnJDVVJMS2ZidVpwRnluaFY3dkJJaUhUZExHNEg5Zk9xNDVGWllSOGVYMUx1eFk="
+            ""
+        },
+        {
+          articleName:
+            "Deng H, Tan H, Li F, et al. Impact of relative humidity on visibility degradation during a haze event: A case study[J]. Science of the Total Environment, 2016, 569-570:1149-1158.",
+          articleUrl:
+            ""
+        },
+        {
+          articleName:
+            "Qin Y M, Tan H B, Jie Li Y, et al. Impacts of traffic emissions on atmospheric particulate nitrate and organics at a downwind site on the periphery of Guangzhou, China[J]. Atmospheric Chemistry & Physics, 2017, 17(17):1-31.",
+          articleUrl:
+            ""
+        },
+        {
+          articleName:
+            "Cheung H H Y, Tan H B, Xu H B, et al. Measurements of non-volatile aerosols with a VTDMA and their correlations with carbonaceous aerosols in Guangzhou, China[J]. Atmospheric Chemistry & Physics Discussions, 2016, 15(18):25269-25298.",
+          articleUrl:
+            ""
+        },
+        {
+          articleName:
+            "Cai M, Tan H, Chan C K, et al. Comparison of Aerosol Hygroscopcity, Volatility, and Chemical Composition between a Suburban Site in the Pearl River Delta Region and a Marine Site in Okinawa[J]. Aerosol & Air Quality Research, 2017, 17(12).",
+          articleUrl:
+            ""
+        },
+        {
+          articleName:
+            "Zhang Z, Ma Z, Kim S J. Significant Decrease of PM2.5 in Beijing Based on Long-Term Records and Kolmogorov–Zurbenko Filter Approach[J]. Aerosol & Air Quality Research, 2017, 18(3).",
+          articleUrl:
+            ""
+        },
+        {
+          articleName:
+            "陈赛华, 周广强, 朱彬,等. 一种快速定量估计大气污染物来源的方法[J]. 环境科学学报, 2017, 37(7):2474-2481.",
+          articleUrl:
+            ""
+        },
+        {
+          articleName:
+            "康志明, 桂海林, 王继康,等. 2015年北京“阅兵蓝”特征及成因探讨[J]. 中国环境科学, 2016, 36(11):3227-3236.",
+          articleUrl:
+            ""
+        },
+        {
+          articleName:
+            "孔锋, 代光烁, 李曼,等. 中国不同历时霾日数时空变化特征及其与城镇化和风速的关联性研究(1961-2015)[J]. 灾害学, 2017, 32(3):63-70.",
+          articleUrl:
+            ""
+        },
+        {
+          articleName:
+            "于彩霞, 邓学良, 石春娥,等. 基于CALIOP的安徽沿淮地区霾天气溶胶类型及垂直分布特征[J]. 环境科学学报, 2018, 38(4):1317-1326.",
+          articleUrl:
+            ""
+        },
+        {
+          articleName:
+            "黄俊, 廖碧婷, 吴兑,等. 广州近地面臭氧浓度特征及气象影响分析[J]. 环境科学学报, 2018, 38(1):23-31.",
+          articleUrl:
+            ""
+        },
+        {
+          articleName:
+            "徐宏辉, 徐婧莎, 何俊,等. 高效液相色谱-三重四极杆质谱法快速测定真菌气溶胶示踪物[J]. 环境化学, 2017(12):2683-2689.",
+          articleUrl:
+            ""
+        },
+        {
+          articleName:
+            "浦静姣, 徐宏辉, 马千里. 长江三角洲背景地区大气污染对能见度的影响[J]. 中国环境科学, 2017, 37(12):4435-4441.",
+          articleUrl:
+            ""
         }
       ],
       bookLists: [
