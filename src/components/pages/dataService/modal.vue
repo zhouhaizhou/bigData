@@ -116,11 +116,11 @@
                   </el-select>
                 </div>
 
-                <div class="time-interval-name float-left">时间间隔：</div>
-                <div class="time-interval-value float-left">
+                <div id="time-interval-name" class="time-interval-name float-left">时间间隔：</div>
+                <div id="time-interval-value" class="time-interval-value float-left">
                   <el-input v-model="timeInput" @keyup.native="proving1" @blur="checkInputIsEmpty()" placeholder="请输入数字"></el-input>
                 </div>
-                <div class="time-interval-unit ">
+                <div id="time-interval-unit" class="time-interval-unit ">
                   <el-select v-model="timeValue" placeholder="请选择">
                     <el-option v-for="item in timeType" :key="item.value" :label="item.label" :value="item.label">
                     </el-option>
@@ -161,7 +161,7 @@ export default {
   props: ["moduleEnName", "moduleCnName", "isShow"],
   data() {
     return {
-      dateFormat:'',
+      dateFormat: "",
       elementCnName: "",
       modalData: [],
       UpdateInterValue: "",
@@ -204,20 +204,20 @@ export default {
   },
   computed: {
     ...mapState(["UserToken"]),
-    dateType(){
+    dateType() {
       let str = this.modalData[0].UpdateInter;
-      if(str.indexOf('小时')>=0){
-        this.dateFormat='yyyy-MM-dd HH';
-        return 'datetime';
-      }else if(str.indexOf('天')>=0||str.indexOf('日')>=0){
-        this.dateFormat='yyyy-MM-dd';
-        return 'date';
-      }else if(str.indexOf('月')>=0){
-        this.dateFormat='yyyy-MM';
-        return 'month';
-      }else if(str.indexOf('年')>=0){
-        this.dateFormat='yyyy';
-        return 'year';
+      if (str.indexOf("小时") >= 0) {
+        this.dateFormat = "yyyy-MM-dd HH";
+        return "datetime";
+      } else if (str.indexOf("天") >= 0 || str.indexOf("日") >= 0) {
+        this.dateFormat = "yyyy-MM-dd";
+        return "date";
+      } else if (str.indexOf("月") >= 0) {
+        this.dateFormat = "yyyy-MM";
+        return "month";
+      } else if (str.indexOf("年") >= 0) {
+        this.dateFormat = "yyyy";
+        return "year";
       }
     }
   },
@@ -238,8 +238,8 @@ export default {
         this.checkAll = false; //刚进来时，将上次勾选的全选对勾去掉
         document.querySelector("html").style.overflow = "auto";
         //关闭modal时，将时间清空，解决因网络慢造成时间显示还是上个模块选过的时间
-        this.startTimes="";
-        this.endTimes="";
+        this.startTimes = "";
+        this.endTimes = "";
       } else {
         //  this.isIndeterminate = false;//弹框显示时，默认选中后台返回数据中的第一个要素
       }
@@ -310,13 +310,13 @@ export default {
      */
     dateChange() {
       setTimeout(() => {
-        document.querySelectorAll(
-          ".has-time"
-        )[0].querySelectorAll(".el-time-spinner__wrapper")[1].style.display =
+        document
+          .querySelectorAll(".has-time")[0]
+          .querySelectorAll(".el-time-spinner__wrapper")[1].style.display =
           "none";
-          document.querySelectorAll(
-          ".el-popper.has-time"
-        )[1].querySelectorAll(".el-time-spinner__wrapper")[1].style.display =
+        document
+          .querySelectorAll(".el-popper.has-time")[1]
+          .querySelectorAll(".el-time-spinner__wrapper")[1].style.display =
           "none";
       }, 100); //由于获取焦点时动态生成时的div还没出来，所以设置延迟执行
     },
@@ -336,15 +336,27 @@ export default {
           let resData = eval("(" + response.data + ")");
           let str = resData[0].IntervalTime;
           let Arr = str.split("、");
-          let timeTypeArr = [];
-          for (let i = 0; i < Arr.length; i++) {
-            let obj = {
-              value: i,
-              label: Arr[i]
-            };
-            timeTypeArr.push(obj);
+          //如果更新频率为年的话，就隐藏掉“时间间隔”
+          if (self.UpdateInterValue.indexOf("年") > -1) {
+            //隐藏掉“时间间隔”
+            document.querySelector(".famat-time-wrap #time-interval-name").style.display="none";
+            document.querySelector(".famat-time-wrap #time-interval-value").style.display="none";
+            document.querySelector(".famat-time-wrap #time-interval-unit").style.display="none";
+          } else {
+            let timeTypeArr = [];
+            for (let i = 0; i < Arr.length; i++) {
+              let obj = {
+                value: i,
+                label: Arr[i]
+              };
+              timeTypeArr.push(obj);
+            }
+            self.timeType = timeTypeArr;
+
+            document.querySelector(".famat-time-wrap #time-interval-name").style.display="block";
+            document.querySelector(".famat-time-wrap #time-interval-value").style.display="block";
+            document.querySelector(".famat-time-wrap #time-interval-unit").style.display="block";
           }
-          self.timeType = timeTypeArr;
         })
         .catch(response => {
           console.log(response);
@@ -504,7 +516,9 @@ export default {
       let startDate = "";
       let endDate = "";
       let str = this.UpdateInterValue;
-
+      //由于日期输入框中虽然显示到日、月、年，但是startT都都默认位数到小时，所以此处统一采用加四个0的方式
+      startDate = startT + "0000";
+      endDate = endT + "0000";
       //结束时间不能大于数据的最新时间
       let lst = new Date(this.lstTime); //数据的最新时间
       let end = new Date(this.endTimes + "00:00");
@@ -519,8 +533,8 @@ export default {
           return;
         }
       } else if (str.indexOf("天") != -1 || str.indexOf("日") != -1) {
-        startDate = startT + "000000";
-        endDate = endT + "000000";
+        // startDate = startT + "000000";
+        // endDate = endT + "000000";
 
         // let lstNormalFomat=this._global.formatDate(lst, "yyyy-MM-dd");//将数据的最新时间GMT时间格式化为对应的正常格式
         let lstNormalFomat = this.formatDate1(lst, "yyyy-MM-dd"); //将数据的最新时间GMT时间格式化为对应的正常格式
@@ -529,8 +543,8 @@ export default {
           return;
         }
       } else if (str.indexOf("月") != -1) {
-        startDate = startT + "00000000";
-        endDate = endT + "00000000";
+        // startDate = startT + "00000000";
+        // endDate = endT + "00000000";
 
         // let lstNormalFomat=this._global.formatDate(lst, "yyyy-MM");//将数据的最新时间GMT时间格式化为对应的正常格式
         let lstNormalFomat = this.formatDate1(lst, "yyyy-MM"); //将数据的最新时间GMT时间格式化为对应的正常格式
@@ -539,8 +553,8 @@ export default {
           return;
         }
       } else if (str.indexOf("年") != -1) {
-        startDate = startT + "0000000000";
-        endDate = endT + "0000000000";
+        // startDate = startT + "0000000000";
+        // endDate = endT + "0000000000";
 
         // let lstNormalFomat=this._global.formatDate(lst, "yyyy");//将数据的最新时间GMT时间格式化为对应的正常格式
         let lstNormalFomat = this.formatDate1(lst, "yyyy"); //将数据的最新时间GMT时间格式化为对应的正常格式
@@ -670,7 +684,7 @@ export default {
             console.log(error.data);
             // alert("下载失败");
             // console.log(error)
-            var str = error + "";
+            var str = error.message + "";
 
             if (str.search("timeout") !== -1) {
               // 超时error捕获
@@ -678,6 +692,7 @@ export default {
               // self.showLoadMoreOk = false
               alert("请求超时，起止时间过大，请缩小时间跨度");
             }
+            loading.close();
           });
       }
     },
@@ -896,25 +911,25 @@ export default {
 .middle {
 }
 .middle-name-wrap {
-    width: 14%;
-    height: 20%;
-    position: relative;
-    top: -23%;
-    left: -3%;
-    background-color: white;
-    color: #4fb9ed;
-    font-size: 21px;
-    font-weight: bold;
-    text-align: center;
-    line-height: 1.5;
+  width: 14%;
+  height: 20%;
+  position: relative;
+  top: -23%;
+  left: -3%;
+  background-color: white;
+  color: #4fb9ed;
+  font-size: 21px;
+  font-weight: bold;
+  text-align: center;
+  line-height: 1.5;
 }
 .middle-left-wrap {
   width: 70%;
   height: 100%;
   float: left;
   font-size: 15.5px;
-      position: relative;
-    top: -21%;
+  position: relative;
+  top: -21%;
 }
 
 .data-content {
@@ -958,8 +973,8 @@ export default {
   width: 25%;
   font-size: 15px;
   padding-left: 5%;
-      position: relative;
-    top: -21%;
+  position: relative;
+  top: -21%;
 }
 .comments-wrap {
 }
@@ -1011,25 +1026,25 @@ export default {
   font-size: 8px;
 }
 .file-download-font {
-    width: 13%;
-    height: 5%;
-    position: relative;
-    top: -3%;
-    left: 3%;
-    background-color: white;
-    color: #4fb9ed;
-    font-size: 21px;
-    font-weight: bold;
-    text-align: center;
-    line-height: 1.5;
+  width: 13%;
+  height: 5%;
+  position: relative;
+  top: -3%;
+  left: 3%;
+  background-color: white;
+  color: #4fb9ed;
+  font-size: 21px;
+  font-weight: bold;
+  text-align: center;
+  line-height: 1.5;
 }
 .date-all-wrap {
-    height: 11.1%;
-    padding-left: 5%;
-    padding-right: 4%;
-    padding-top: 2%;
-    position: relative;
-    top: -4.2%;
+  height: 11.1%;
+  padding-left: 5%;
+  padding-right: 4%;
+  padding-top: 2%;
+  position: relative;
+  top: -4.2%;
 }
 .date-wrap {
   padding-bottom: 1.5%;
@@ -1046,14 +1061,14 @@ export default {
 }
 
 .provinces-position-wrap {
-    float: left;
-    height: 40%;
-    width: 91%;
-    padding-left: 5%;
-    padding-right: 4%;
-    padding-top: 0.5%;
-    position: relative;
-    top: -6%;
+  float: left;
+  height: 40%;
+  width: 91%;
+  padding-left: 5%;
+  padding-right: 4%;
+  padding-top: 0.5%;
+  position: relative;
+  top: -6%;
 }
 
 .all-select-wrap {
@@ -1070,13 +1085,13 @@ export default {
   margin-right: 3%;
 }
 .elements-select-wrap {
-    float: left;
-    height: 25%;
-    width: 91%;
-    padding-left: 5%;
-    padding-right: 4%;
-    position: relative;
-    top: -6.5%;
+  float: left;
+  height: 25%;
+  width: 91%;
+  padding-left: 5%;
+  padding-right: 4%;
+  position: relative;
+  top: -6.5%;
 }
 .element-select-title {
   width: 100%;
@@ -1147,9 +1162,9 @@ export default {
 .element-content >>> .el-checkbox__label {
   font-size: 14.5px;
 }
-.el-checkbox-group{
-      margin-top: 1.5%;
-    margin-bottom: 1%;
+.el-checkbox-group {
+  margin-top: 1.5%;
+  margin-bottom: 1%;
 }
 .element-radio-font-wrap {
   width: 24%;
@@ -1159,13 +1174,14 @@ export default {
   padding-top: 0.3%;
 }
 .files-wrap {
-    float: left;
-    height: 11%;
-    padding-left: 5%;
-    padding-right: 4%;
-    /* padding-top: 1.5%; */
-    position: relative;
-    top: -6%;
+  float: left;
+  width: 91%;
+  height: 11%;
+  padding-left: 5%;
+  padding-right: 4%;
+  /* padding-top: 1.5%; */
+  position: relative;
+  top: -6%;
 }
 .pic-file-wrap {
   width: 100%;
@@ -1235,6 +1251,7 @@ export default {
   /* height: 30px; */
 }
 .btns-wrap {
+  width:91%;
   height: 8%;
   padding-left: 5%;
   padding-right: 4%;
@@ -1245,7 +1262,7 @@ export default {
   -webkit-box-align: center;
   align-items: center;
   position: relative;
-    top: -6%;
+  top: -6%;
 }
 .btns-wrap >>> .el-button {
   padding: 5px 20px;

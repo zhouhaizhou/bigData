@@ -277,14 +277,14 @@ export default {
           // console.log(error);
           // alert("下载失败");
 
-      var str = error + ''
+      var str = error.message + "";
       
         if (str.search('timeout') !== -1) {   // 超时error捕获
           // self.showLoadMore = true
           // self.showLoadMoreOk = false
           alert("请求超时")
         }
-      
+      loading.close();
 
         });
     },
