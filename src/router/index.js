@@ -5,6 +5,7 @@ import layout from '@/components/common/layout.vue'
 import register from '@/components/pages/userRegister.vue'
 import cart from '@/components/pages/cart.vue'
 import userLogin from '@/components/pages/userLogin.vue'
+import questionnaire from '@/components/pages/questionnaire.vue'
 // import HelloWorld from '@/components/HelloWorld'
 
 import modalProvincesPan from '@/components/pages/dataService/modalProvincesPan.vue'
@@ -23,10 +24,14 @@ export default new Router({
         },{
           path:'/cart',
           component:cart
-        }
-        ,{
+        },
+        {
           path:'/userLogin',
           component:userLogin
+        },
+        {
+          path:'/questionnaire',
+          component:questionnaire
         }
         // ,
         // {

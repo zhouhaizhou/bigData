@@ -7,7 +7,7 @@
                     <div class="item-title-font">文章</div>
                 </div>
                 <div class="article-lists-wrap item-lists">
-                    <a href="javascript:;" @click="getArticleLink(article)" class="article" v-for="(article,index) in articleLists">[{{index+1}}] {{article.articleName}}</a>
+                    <a href="javascript:;" @click="getArticleLink(article)" class="article" v-for="(article,index) in articleLists"><span>[{{index+1}}]</span> <span>{{article.articleName}}</span></a>
                 </div>
             </div>
             <div class="books-wrap item">
@@ -16,7 +16,7 @@
                     <div class="item-title-font">专著</div>
                 </div>
                 <div class="booke-lists-wrap item-lists">
-                    <div class="book" v-for="(book,index) in bookLists">[{{index+1}}] {{book}}</div>
+                    <div class="book" v-for="(book,index) in bookLists"><span>[{{index+1}}]</span> <span>{{book.bookName}}</span></div>
                 </div>
             </div>
             <div class="copy-right-wrap item">
@@ -25,7 +25,7 @@
                     <div class="item-title-font">软件著作权</div>
                 </div>
                 <div class="copyright-lists-wrap item-lists">
-                    <div class="copyright" v-for="copyright in copyrightLists">{{copyright}}</div>
+                    <div class="copyright" v-for="(copyright,index) in copyrightLists"><span>[{{index+1}}]</span><span>{{copyright.copyrightName}}</span></div>
                 </div>
             </div>
         </div>
@@ -36,32 +36,13 @@
 export default {
   data() {
     return {
-      articleLists: [
-        {
-          articleName:
-            "Gao W, Tie X, Xu J, et al. Long-term trend of O3 in a mega City (Shanghai), China: Characteristics, causes, and interactions with precursors[J]. Science of the Total Environment, 2017, 603-604:425.",
-          articleUrl:
-            "http://kns.cnki.net/KCMS/detail/detail.aspx?dbcode=SJES&dbname=SJESTEMP_U&filename=SJESEABF50A3F9F22A70252BEB4EC599ADD7&uid=WEEvREcwSlJHSldRa1FhdXNXa0hFbHBYckZoNHdVaGJSRkt4UEJENUYrTT0=$9A4hF_YAuvQ5obgVAqNKPCYcEjKensW4IQMovwHtwkF4VYPoHbKxJw!!&v=MzEzNTNsZkNwTFU4NXQ5aHhieTh4YUE9TmlmT2ZjYkpiS2ZKci81R0V1SjVEbjVJeUJZUjd6MFBQUTNtMldFd2NMdmxNYzZZQ0pVYUYxdVFVci9QSmxjU2JtS0NHWUNHUQ=="
-        },
-        {
-          articleName:
-            "Xu J, Chang L, Yan F, et al. Role of climate anomalies on decadal variation in the occurrence of wintertime haze in the Yangtze River Delta, China.[J]. Science of the Total Environment, 2017, 599-600:918.",
-          articleUrl:
-            "http://kns.cnki.net/KCMS/detail/detail.aspx?dbcode=SJES&dbname=SJESTEMP_U&filename=SJES643113042C20E1F8D4A12C238BD18DD6&uid=WEEvREcwSlJHSldRa1FhdXNXa0hFbHBYckZoNHdVaGJSRkt4UEJENUYrTT0=$9A4hF_YAuvQ5obgVAqNKPCYcEjKensW4IQMovwHtwkF4VYPoHbKxJw!!&v=MTQ0MDZ1UVVyL1BKbGNTYm1LQ0dZQ0dRbGZDcExVODV0OWh4Ynk2eEtvPU5pZk9mYlc4SGRETnJJOUJacGdOREFrNHVSNW43azU4U2d6Z3J4cEhEYk9jTWM2WkNKVWFGMQ=="
-        },
-        {
-          articleName: "Visual Basic与Oracle数据库在生态与农牧业气象中的应用",
-          articleUrl:
-            "http://kns.cnki.net/KCMS/detail/detail.aspx?dbcode=CJFQ&dbname=CJFDLAST2017&filename=GLXZ201624101&uid=WEEvREcwSlJHSldRa1FhdXNXa0hFbHBYckZoNHdVaGJSRkt4UEJENUYrTT0=$9A4hF_YAuvQ5obgVAqNKPCYcEjKensW4IQMovwHtwkF4VYPoHbKxJw!!&v=MjI4MjdTN0RoMVQzcVRyV00xRnJDVVJMS2ZidVpwRnluaFY3dkJJaUhUZExHNEg5Zk9xNDVGWllSOGVYMUx1eFk="
-        }
-      ],
-      bookLists: [
-        "(美)ThomasKyte著,袁勤勇,张玉魁等译.Oracle 专家高级编程[M]. 清华大学出版社, 2002",
-        "清源计算机工作室编著.Visual Basic 6.0开发宝典[M]. 机械工业出版社, 1999",
-        "刘辰等编著.ORACLE数据库系统[M]. 人民邮电出版社, 1999"
-      ],
-      copyrightLists: ["污染天气大数据平台V1.0"]
+      articleLists: [],
+      bookLists: [],
+      copyrightLists: []
     };
+  },
+  mounted(){
+    this.getAllData();
   },
   methods: {
     open() {
@@ -88,6 +69,22 @@ export default {
 			).catch(response => {
             console.log(response);
           });
+    },
+    /**
+     * 获取相关成果的所有数据
+     */
+    getAllData(){
+      let self=this;
+      this.axios.get("HomeDataService.svc/GetRelateResults").then(
+        response=>{
+          let resData=eval("("+response.data+")");
+          self.articleLists=resData[0].articleLists;
+          self.bookLists=resData[0].bookLists;
+          self.copyrightLists=resData[0].copyrightLists;
+        }
+      ).catch(response=>{
+        console.log(response);
+      });
     }
   }
 };
@@ -115,6 +112,33 @@ export default {
   cursor: pointer;
   clear: both;
   display: flex;
+}
+.article-lists-wrap a{
+  margin-bottom: 3%;
+}
+.article-lists-wrap.item-lists a span:nth-child(1){
+  margin-right: 2%;
+  font-weight: bold;
+}
+.article-lists-wrap.item-lists a span:nth-child(2){
+word-break: break-all;
+}
+.booke-lists-wrap .book{
+  margin-bottom: 3%;
+}
+.booke-lists-wrap .book span:nth-child(1){
+    margin-right: 2%;
+  font-weight: bold;
+}
+.booke-lists-wrap .book span:nth-child(2){
+word-break: break-all;
+}
+.copyright-lists-wrap .copyright{
+  margin-bottom: 3%;
+}
+.copyright-lists-wrap .copyright span:nth-child(1){
+    margin-right: 2%;
+  font-weight: bold;
 }
 .pic-wrap {
   display: flex;
@@ -160,8 +184,8 @@ export default {
     font-weight: bold;
 }
 .item-lists {
-  padding-left: 5%;
-  padding-right: 3%;
+  padding-left: 7%;
+  padding-right: 7%;
   line-height: 2;
 }
 a:link,

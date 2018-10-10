@@ -305,6 +305,7 @@ export default {
   /* transform: scale(0.9,0.9); */
   font-weight: bold;
   text-align: center;
+  font-size: 13px;
 }
 .province-cur {
   cursor: pointer;

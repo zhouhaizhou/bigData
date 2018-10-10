@@ -122,13 +122,13 @@ export default {
 				};
 				
 			var objToStr = JSON.stringify(obj);
-      this.axios.get("",{//待传入请求地址
+      this.axios.get("HomeDataService.svc/GetUserFormInfo",{//待传入请求地址
 				params:{
 					funParams: objToStr
 				}
 			}).then(response => {
-            let resData = eval("(" + response.data + ")");
-            alert("提交成功！");
+            let resData = response.data
+            alert(resData);
           }
 			).catch(response => {
             console.log(response);
