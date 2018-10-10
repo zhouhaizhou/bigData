@@ -6,7 +6,7 @@ import register from '@/components/pages/userRegister.vue'
 import cart from '@/components/pages/cart.vue'
 import userLogin from '@/components/pages/userLogin.vue'
 import questionnaire from '@/components/pages/questionnaire.vue'
-// import HelloWorld from '@/components/HelloWorld'
+import registerInfo from '@/components/pages/registerInfo.vue'
 
 import modalProvincesPan from '@/components/pages/dataService/modalProvincesPan.vue'
 
@@ -20,7 +20,19 @@ export default new Router({
             children:[]
         },{
           path:'/register',
-          component:register
+          component:layout,
+          children:[
+            {
+              path:'',
+              //name:'registerInfo',
+              component:register
+            },
+            {
+              path:'registerInfo',
+              name:'registerInfo',
+              component:registerInfo
+            }
+          ]
         },{
           path:'/cart',
           component:cart
@@ -33,6 +45,11 @@ export default new Router({
           path:'/questionnaire',
           component:questionnaire
         }
+        // ,{
+        //   path:'/registerInfo',
+        //   name:'registerInfo',
+        //   component:registerInfo
+        // }
         // ,
         // {
         //   path:'/modalProvincesPan',

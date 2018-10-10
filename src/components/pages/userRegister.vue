@@ -1,6 +1,5 @@
 <template>
   <div>
-    <my-header></my-header>
     <div class="user-register">用户注册</div>
     <div class="sub-img-wrap" style="">
       <div class="sub-img"></div>
@@ -39,7 +38,6 @@
       </div>
 
     </div>
-    <my-footer></my-footer>
   </div>
 </template>
 
@@ -88,6 +86,7 @@ export default {
   methods: {
     enter: function() {
       var mythis = this;
+      this.$router.push({name:'registerInfo'});
       console.log(mythis);
     },
     mouseOver: function(u) {
