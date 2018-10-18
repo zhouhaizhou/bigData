@@ -123,7 +123,7 @@ export default {
     ...mapMutations(["SETLOCALCITY", "REMOVECOOKIES"]),
     brforeLeave(activeName, oldActiveName) {
       if (activeName == "statistics") {
-        window.open("statistics.html");
+        window.open("http://61.152.122.108:8282/OpenReport");
         return false;
       } else {
         return true;
