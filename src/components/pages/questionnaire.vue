@@ -150,7 +150,7 @@ export default {
       let obj = {
         dataArr: this.dataArr,
         advices: this.advices,
-        userName: account
+        account: account
       };
       //将json对象转化为JSON字符串
       let objToStr = JSON.stringify(obj);
