@@ -93,7 +93,10 @@ export default {
   },
   mounted(){
     let roleId=this.$route.params.roleId;
-    this.roleId=roleId==undefined?5:roleId;
+    if(roleId==undefined){
+      this.$router.push("/register");
+    }
+    this.roleId=roleId;
     this.getInfo()
     this.getRegisterItem();
   },
