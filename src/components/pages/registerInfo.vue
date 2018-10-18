@@ -236,7 +236,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .img{
   width:15%;
   height:14vh;
@@ -265,7 +265,7 @@ export default {
   margin-right: 17px;
 }
 .com {
-  display: inline-flex;
+  display: inline-flex !important;
   width: 100% !important;
 }
 .com /deep/ .el-input__prefix{
