@@ -113,7 +113,7 @@ export default {
   text-align: center;
 }
 .sub-img-wrap {
-  width: 99vw;
+  width: auto;
   height: 1vh;
   display: flex;
   justify-content: center;

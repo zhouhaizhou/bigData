@@ -339,9 +339,15 @@ export default {
           //如果更新频率为年的话，就隐藏掉“时间间隔”
           if (self.UpdateInterValue.indexOf("年") > -1) {
             //隐藏掉“时间间隔”
-            document.querySelector(".famat-time-wrap #time-interval-name").style.display="none";
-            document.querySelector(".famat-time-wrap #time-interval-value").style.display="none";
-            document.querySelector(".famat-time-wrap #time-interval-unit").style.display="none";
+            document.querySelector(
+              ".famat-time-wrap #time-interval-name"
+            ).style.display = "none";
+            document.querySelector(
+              ".famat-time-wrap #time-interval-value"
+            ).style.display = "none";
+            document.querySelector(
+              ".famat-time-wrap #time-interval-unit"
+            ).style.display = "none";
           } else {
             let timeTypeArr = [];
             for (let i = 0; i < Arr.length; i++) {
@@ -353,9 +359,15 @@ export default {
             }
             self.timeType = timeTypeArr;
 
-            document.querySelector(".famat-time-wrap #time-interval-name").style.display="block";
-            document.querySelector(".famat-time-wrap #time-interval-value").style.display="block";
-            document.querySelector(".famat-time-wrap #time-interval-unit").style.display="block";
+            document.querySelector(
+              ".famat-time-wrap #time-interval-name"
+            ).style.display = "block";
+            document.querySelector(
+              ".famat-time-wrap #time-interval-value"
+            ).style.display = "block";
+            document.querySelector(
+              ".famat-time-wrap #time-interval-unit"
+            ).style.display = "block";
           }
         })
         .catch(response => {
@@ -507,6 +519,13 @@ export default {
         alert("请登录后再下载数据！");
         return;
       }
+      // //定义一个标识
+      // let stateType = "1"; //直接下载的标识
+      // //调用公共的部分
+      // let obj = this.commonFun(stateType);
+
+
+
       var data = this.getNowFormatDate();
       var nowTime = data.toString().replace(/[^0-9]/gi, "");
 
@@ -589,6 +608,7 @@ export default {
         }
       }
 
+      //选取的要素
       var checkedIndex = this.checkedElements;
       var eleObj = {
         eleEn: [],
@@ -626,74 +646,243 @@ export default {
         alert("请选择要素！");
         return;
       } else {
-        var obj = {
-          userName: account,
-          downTime: nowTime + "",
-          moduleEnName: this.moduleEnName,
-          date: startDate + "-" + endDate,
-          province: this.province,
-          provinceData: this.provinceData,
-          citySite: this.citySite,
-          citySiteDetail: this.citySiteDetail,
-          elementEn: eleEnStr,
-          elementCn: eleCnStr,
-          famat: this.famatValue,
-          timeInterval: timeIntervalStr,
-          insertTime: nowTime,
-          downState: "1",
-          isDown: "1"
-        };
+          var obj = {
+            userName: account,
+            downTime: nowTime + "",
+            moduleEnName: this.moduleEnName,
+            date: startDate + "-" + endDate,
+            province: this.province,
+            provinceData: this.provinceData,
+            citySite: this.citySite,
+            citySiteDetail: this.citySiteDetail,
+            elementEn: eleEnStr,
+            elementCn: eleCnStr,
+            famat: this.famatValue,
+            timeInterval: timeIntervalStr,
+            insertTime: nowTime,
+            downState: "1",
+            isDown: "1"
+          };
 
-        var objToStr = JSON.stringify(obj);
-        //添加loading加载层
-        const loading = this.$loading({
-          lock: true,
-          text: "正在请求数据...",
-          spinner: "el-icon-loading",
-          background: "rgba(0, 0, 0, 0.7)"
+      var objToStr = JSON.stringify(obj);
+      //添加loading加载层
+      const loading = this.$loading({
+        lock: true,
+        text: "正在请求数据...",
+        spinner: "el-icon-loading",
+        background: "rgba(0, 0, 0, 0.7)"
+      });
+
+      let self = this;
+      this.axios
+        .get("DataService.svc/insertDownList", {
+          params: {
+            funParams: objToStr
+          },
+          timeout: 1000 * 60 * 5
+        })
+        .then(res => {
+          let data = res.data;
+          loading.close();
+          if (data != "ERROR") {
+            let arr = JSON.parse(data);
+            let a = document.createElement("a");
+            let path = this._global.downPath;
+            arr.result.forEach(element => {
+              let fileName = element.zipDownUrl;
+              let id = element.id;
+              let fullPath = path + id + "/" + fileName;
+              a.download = fileName;
+              a.href = fullPath;
+              a.click();
+            });
+          } else {
+            alert("没有数据！");
+          }
+        })
+        .catch(error => {
+          console.log(error.data);
+          // alert("下载失败");
+          // console.log(error)
+          var str = error.message + "";
+
+          if (str.search("timeout") !== -1) {
+            // 超时error捕获
+            // self.showLoadMore = true
+            // self.showLoadMoreOk = false
+            alert("请求超时，起止时间过大，请缩小时间跨度");
+          }
+          loading.close();
         });
+      }
+    },
+    /**
+     * 将nowDownload与insertCart两个方法中公用的部分提取出来
+     */
+    commonFun(stateType) {
+      let account = this.UserToken.Account;
+      var data = this.getNowFormatDate();
+      var nowTime = data.toString().replace(/[^0-9]/gi, "");
 
-        let self = this;
-        this.axios
-          .get("DataService.svc/insertDownList", {
-            params: {
-              funParams: objToStr
-            },
-            timeout: 1000 * 60 * 5
-          })
-          .then(res => {
-            let data = res.data;
-            loading.close();
-            if (data != "ERROR") {
-              let arr = JSON.parse(data);
-              let a = document.createElement("a");
-              let path = this._global.downPath;
-              arr.result.forEach(element => {
-                let fileName = element.zipDownUrl;
-                let id = element.id;
-                let fullPath = path + id + "/" + fileName;
-                a.download = fileName;
-                a.href = fullPath;
-                a.click();
-              });
-            } else {
-              alert("没有数据！");
-            }
-          })
-          .catch(error => {
-            console.log(error.data);
-            // alert("下载失败");
-            // console.log(error)
-            var str = error.message + "";
+      //处理时间为数字字符串
+      var startT = this.startTimes.replace(/[^0-9]/gi, "");
+      var endT = this.endTimes.replace(/[^0-9]/gi, "");
+      let startDate = "";
+      let endDate = "";
+      let str = this.UpdateInterValue;
+      //由于日期输入框中虽然显示到日、月、年，但是startT都都默认位数到小时，所以此处统一采用加四个0的方式
+      startDate = startT + "0000";
+      endDate = endT + "0000";
+      //结束时间不能大于数据的最新时间
+      let lst = new Date(this.lstTime); //数据的最新时间
+      let end = new Date(this.endTimes + "00:00");
+      if (str.indexOf("时") != -1) {
+        startDate = startT + "0000";
+        endDate = endT + "0000";
 
-            if (str.search("timeout") !== -1) {
-              // 超时error捕获
-              // self.showLoadMore = true
-              // self.showLoadMoreOk = false
-              alert("请求超时，起止时间过大，请缩小时间跨度");
-            }
-            loading.close();
-          });
+        // let lstNormalFomat=this._global.formatDate(lst, "yyyy-MM-dd hh");//将数据的最新时间GMT时间格式化为对应的正常格式
+        let lstNormalFomat = this.formatDate1(lst, "yyyy-MM-dd HH"); //将数据的最新时间GMT时间格式化为对应的正常格式
+        if (end.getTime() - lst.getTime() > 0) {
+          alert("结束时间不能大于" + lstNormalFomat);
+          return;
+        }
+      } else if (str.indexOf("天") != -1 || str.indexOf("日") != -1) {
+        // startDate = startT + "000000";
+        // endDate = endT + "000000";
+
+        // let lstNormalFomat=this._global.formatDate(lst, "yyyy-MM-dd");//将数据的最新时间GMT时间格式化为对应的正常格式
+        let lstNormalFomat = this.formatDate1(lst, "yyyy-MM-dd"); //将数据的最新时间GMT时间格式化为对应的正常格式
+        if (end.getTime() - lst.getTime() > 0) {
+          alert("结束时间不能大于" + lstNormalFomat);
+          return;
+        }
+      } else if (str.indexOf("月") != -1) {
+        // startDate = startT + "00000000";
+        // endDate = endT + "00000000";
+
+        // let lstNormalFomat=this._global.formatDate(lst, "yyyy-MM");//将数据的最新时间GMT时间格式化为对应的正常格式
+        let lstNormalFomat = this.formatDate1(lst, "yyyy-MM"); //将数据的最新时间GMT时间格式化为对应的正常格式
+        if (end.getTime() - lst.getTime() > 0) {
+          alert("结束时间不能大于" + lstNormalFomat);
+          return;
+        }
+      } else if (str.indexOf("年") != -1) {
+        // startDate = startT + "0000000000";
+        // endDate = endT + "0000000000";
+
+        // let lstNormalFomat=this._global.formatDate(lst, "yyyy");//将数据的最新时间GMT时间格式化为对应的正常格式
+        let lstNormalFomat = this.formatDate1(lst, "yyyy"); //将数据的最新时间GMT时间格式化为对应的正常格式
+        if (end.getTime() - lst.getTime() > 0) {
+          alert("结束时间不能大于" + lstNormalFomat);
+          return;
+        }
+      } else {
+        //非年月日的起止时间按小时
+        startDate = startT + "0000";
+        endDate = endT + "0000";
+
+        // let lstNormalFomat=this._global.formatDate(lst, "yyyy-MM-dd hh");//将数据的最新时间GMT时间格式化为对应的正常格式
+        let lstNormalFomat = this.formatDate1(lst, "yyyy-MM-dd hh"); //将数据的最新时间GMT时间格式化为对应的正常格式
+        if (end.getTime() - lst.getTime() > 0) {
+          alert("结束时间不能大于" + lstNormalFomat);
+          return;
+        }
+      }
+
+      //起止时间间隔不能大于三个月
+      let hour = this.UpdateInterValue.indexOf("时");
+      if (hour != -1) {
+        let end = new Date(this.endTimes + ":00:00");
+        let start = new Date(this.startTimes + ":00:00");
+        let disTime = end.getTime() - start.getTime();
+        if (disTime < 3600 * 1000 * 24 * 30 * 3) {
+          //时间间隔小于三个月就不做处理
+        } else {
+          alert("时间间隔大于三个月，请重新选择");
+          return;
+        }
+      }
+
+      //选取的要素
+      var checkedIndex = this.checkedElements;
+      var eleObj = {
+        eleEn: [],
+        eleCn: []
+      };
+      if (checkedIndex.length != 0) {
+        for (var i = 0; i < checkedIndex.length; i++) {
+          eleObj.eleEn.push(
+            this.elements[this.checkedElements[i]].elementEnName
+          );
+          eleObj.eleCn.push(
+            this.elements[this.checkedElements[i]].elementCnName
+          );
+        }
+      } else {
+        eleObj.eleEn.push("");
+        eleObj.eleCn.push("");
+      }
+      var eleEnStr = eleObj.eleEn.toString();
+      var eleCnStr = eleObj.eleCn.toString();
+      var timeIntervalStr = this.timeInput + this.timeValue;
+
+      var comparTime = startT > endT;
+
+      if (startT == "" || endT == "") {
+        alert("选择的日期不能空！");
+        return;
+      } else if (comparTime == true) {
+        alert("起始时间不能大于结束时间！");
+        return;
+      } else if (this.citySite == "" || this.citySiteDetail == "") {
+        alert("请选择省市对应的站点！");
+        return;
+      } else if (eleEnStr == "" || eleCnStr == "") {
+        alert("请选择要素！");
+        return;
+      } else {
+        let obj = {};
+        if (stateType == "1") {
+          obj = {
+            userName: account,
+            downTime: nowTime + "",
+            moduleEnName: this.moduleEnName,
+            date: startDate + "-" + endDate,
+            province: this.province,
+            provinceData: this.provinceData,
+            citySite: this.citySite,
+            citySiteDetail: this.citySiteDetail,
+            elementEn: eleEnStr,
+            elementCn: eleCnStr,
+            famat: this.famatValue,
+            timeInterval: timeIntervalStr,
+            insertTime: nowTime,
+            downState: "1",
+            isDown: "1"
+          };
+        } else if (stateType == "0") {
+         var obj = {
+            userName: account,
+            downTime: nowTime + "",
+            moduleEnName: this.moduleEnName,
+            date: startDate + "-" + endDate,
+            province: this.province,
+            provinceData: this.provinceData,
+            citySite: this.citySite,
+            citySiteDetail: this.citySiteDetail,
+            elementEn: eleEnStr,
+            elementCn: eleCnStr,
+            famat: this.famatValue,
+            timeInterval: timeIntervalStr,
+            insertTime: nowTime,
+            downState: "0",
+            isDown: "0"
+          };
+        } else {
+          return;
+        }
+
+        return obj;
       }
     },
     getNowFormatDate() {
@@ -745,13 +934,95 @@ export default {
         alert("请登录后再加入清单！");
         return;
       }
+      // //定义一个标识
+      // let stateType = "0"; //插入清单的标识
+      // //调用公共的部分
+      // this.commonFun(stateType);
+
+
       var data = this.getNowFormatDate();
       var nowTime = data.toString().replace(/[^0-9]/gi, "");
 
       //处理时间为数字字符串
       var startT = this.startTimes.replace(/[^0-9]/gi, "");
       var endT = this.endTimes.replace(/[^0-9]/gi, "");
-      // alert(this.checkedElements);
+      let startDate = "";
+      let endDate = "";
+      let str = this.UpdateInterValue;
+      //由于日期输入框中虽然显示到日、月、年，但是startT都都默认位数到小时，所以此处统一采用加四个0的方式
+      startDate = startT + "0000";
+      endDate = endT + "0000";
+      //结束时间不能大于数据的最新时间
+      let lst = new Date(this.lstTime); //数据的最新时间
+      let end = new Date(this.endTimes + "00:00");
+      if (str.indexOf("时") != -1) {
+        startDate = startT + "0000";
+        endDate = endT + "0000";
+
+        // let lstNormalFomat=this._global.formatDate(lst, "yyyy-MM-dd hh");//将数据的最新时间GMT时间格式化为对应的正常格式
+        let lstNormalFomat = this.formatDate1(lst, "yyyy-MM-dd HH"); //将数据的最新时间GMT时间格式化为对应的正常格式
+        if (end.getTime() - lst.getTime() > 0) {
+          alert("结束时间不能大于" + lstNormalFomat);
+          return;
+        }
+      } else if (str.indexOf("天") != -1 || str.indexOf("日") != -1) {
+        // startDate = startT + "000000";
+        // endDate = endT + "000000";
+
+        // let lstNormalFomat=this._global.formatDate(lst, "yyyy-MM-dd");//将数据的最新时间GMT时间格式化为对应的正常格式
+        let lstNormalFomat = this.formatDate1(lst, "yyyy-MM-dd"); //将数据的最新时间GMT时间格式化为对应的正常格式
+        if (end.getTime() - lst.getTime() > 0) {
+          alert("结束时间不能大于" + lstNormalFomat);
+          return;
+        }
+      } else if (str.indexOf("月") != -1) {
+        // startDate = startT + "00000000";
+        // endDate = endT + "00000000";
+
+        // let lstNormalFomat=this._global.formatDate(lst, "yyyy-MM");//将数据的最新时间GMT时间格式化为对应的正常格式
+        let lstNormalFomat = this.formatDate1(lst, "yyyy-MM"); //将数据的最新时间GMT时间格式化为对应的正常格式
+        if (end.getTime() - lst.getTime() > 0) {
+          alert("结束时间不能大于" + lstNormalFomat);
+          return;
+        }
+      } else if (str.indexOf("年") != -1) {
+        // startDate = startT + "0000000000";
+        // endDate = endT + "0000000000";
+
+        // let lstNormalFomat=this._global.formatDate(lst, "yyyy");//将数据的最新时间GMT时间格式化为对应的正常格式
+        let lstNormalFomat = this.formatDate1(lst, "yyyy"); //将数据的最新时间GMT时间格式化为对应的正常格式
+        if (end.getTime() - lst.getTime() > 0) {
+          alert("结束时间不能大于" + lstNormalFomat);
+          return;
+        }
+      } else {
+        //非年月日的起止时间按小时
+        startDate = startT + "0000";
+        endDate = endT + "0000";
+
+        // let lstNormalFomat=this._global.formatDate(lst, "yyyy-MM-dd hh");//将数据的最新时间GMT时间格式化为对应的正常格式
+        let lstNormalFomat = this.formatDate1(lst, "yyyy-MM-dd hh"); //将数据的最新时间GMT时间格式化为对应的正常格式
+        if (end.getTime() - lst.getTime() > 0) {
+          alert("结束时间不能大于" + lstNormalFomat);
+          return;
+        }
+      }
+
+      //起止时间间隔不能大于三个月
+      let hour = this.UpdateInterValue.indexOf("时");
+      if (hour != -1) {
+        let end = new Date(this.endTimes + ":00:00");
+        let start = new Date(this.startTimes + ":00:00");
+        let disTime = end.getTime() - start.getTime();
+        if (disTime < 3600 * 1000 * 24 * 30 * 3) {
+          //时间间隔小于三个月就不做处理
+        } else {
+          alert("时间间隔大于三个月，请重新选择");
+          return;
+        }
+      }
+
+      //选取的要素
       var checkedIndex = this.checkedElements;
       var eleObj = {
         eleEn: [],
@@ -776,19 +1047,6 @@ export default {
 
       var comparTime = startT > endT;
 
-      let hour = this.UpdateInterValue.indexOf("时");
-      if (hour != -1) {
-        let end = new Date(this.endTimes + ":00:00");
-        let start = new Date(this.startTimes + ":00:00");
-        let disTime = end.getTime() - start.getTime();
-        if (disTime < 3600 * 1000 * 24 * 30 * 3) {
-          //时间间隔小于三个月就不做处理
-        } else {
-          alert("时间间隔大于三个月，请重新选择");
-          return;
-        }
-      }
-
       if (startT == "" || endT == "") {
         alert("选择的日期不能空！");
         return;
@@ -802,41 +1060,44 @@ export default {
         alert("请选择要素！");
         return;
       } else {
-        var obj = {
-          userName: account,
-          downTime: nowTime + "",
-          moduleEnName: this.moduleEnName,
-          date: startT + "0000-" + endT + "0000",
-          province: this.province,
-          provinceData: this.provinceData,
-          citySite: this.citySite,
-          citySiteDetail: this.citySiteDetail,
-          elementEn: eleEnStr,
-          elementCn: eleCnStr,
-          famat: this.famatValue,
-          timeInterval: timeIntervalStr,
-          insertTime: nowTime,
-          downState: "0",
-          isDown: "0"
-        };
+        var  obj = {
+            userName: account,
+            downTime: nowTime + "",
+            moduleEnName: this.moduleEnName,
+            date: startDate + "-" + endDate,
+            province: this.province,
+            provinceData: this.provinceData,
+            citySite: this.citySite,
+            citySiteDetail: this.citySiteDetail,
+            elementEn: eleEnStr,
+            elementCn: eleCnStr,
+            famat: this.famatValue,
+            timeInterval: timeIntervalStr,
+            insertTime: nowTime,
+            downState: "0",
+            isDown: "0"
+          };
 
-        var objToStr = JSON.stringify(obj);
 
-        let self = this;
-        this.axios
-          .get("DataService.svc/insertDownList", {
-            params: {
-              funParams: objToStr
-            }
-          })
-          .then(response => {
-            let resData = eval("(" + response.data + ")");
-            alert("加入清单成功！");
-          })
-          .catch(response => {
-            console.log(response);
-            alert("加入清单失败！");
-          });
+
+
+      var objToStr = JSON.stringify(obj);
+
+      let self = this;
+      this.axios
+        .get("DataService.svc/insertDownList", {
+          params: {
+            funParams: objToStr
+          }
+        })
+        .then(response => {
+          let resData = eval("(" + response.data + ")");
+          alert("加入清单成功！");
+        })
+        .catch(response => {
+          console.log(response);
+          alert("加入清单失败！");
+        });
       }
     },
     //      验证只能输入正整数
@@ -869,14 +1130,59 @@ export default {
 </script>
 
 <style scoped>
-.body-background {
-  width: 1920px;
-  height: 942px;
-  background-color: #00000085;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: black;
+/*适应宽度*/
+@media screen and (min-width: 1366px) and (max-width: 1919px) {
+  .body-background {
+    width: 1591px;
+    height: 1080px;
+    background-color: #00000085;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: black;
+  }
+  .middle-name-wrap {
+    width: 15%;
+    height: 20%;
+    position: relative;
+    top: -19%;
+    left: -3%;
+    background-color: white;
+    color: #4fb9ed;
+    font-size: 21px;
+    font-weight: bold;
+    text-align: center;
+    line-height: 1.5;
+}
+.modal-wraps {
+  width: 50%;
+  height: 97%;
+  background-color: white;
+  border-radius: 1em;
+}
+}
+@media screen and (min-width: 1920px) {
+  .body-background {
+    width: 1920px;
+    height: 942px;
+    background-color: #00000085;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: black;
+  }
+  .middle-name-wrap {
+  width: 14%;
+  height: 20%;
+  position: relative;
+  top: -23%;
+  left: -3%;
+  background-color: white;
+  color: #4fb9ed;
+  font-size: 21px;
+  font-weight: bold;
+  text-align: center;
+  line-height: 1.5;
 }
 .modal-wraps {
   width: 45%;
@@ -884,6 +1190,32 @@ export default {
   background-color: white;
   border-radius: 1em;
 }
+}
+
+/*适应高度*/
+@media screen and (min-height: 901px) and (max-height: 1080px) {
+  .body-background {
+    width: 1920px;
+    height: 942px;
+    background-color: #00000085;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: black;
+  }
+}
+@media screen and (min-height: 800px) and (max-height: 900px) {
+  .body-background {
+    width: 2000px;
+    height: 1080px;
+    background-color: #00000085;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: black;
+  }
+}
+
 .modal-wrap-left {
   padding-top: 2%;
   padding-left: 3%;
@@ -910,19 +1242,7 @@ export default {
 }
 .middle {
 }
-.middle-name-wrap {
-  width: 14%;
-  height: 20%;
-  position: relative;
-  top: -23%;
-  left: -3%;
-  background-color: white;
-  color: #4fb9ed;
-  font-size: 21px;
-  font-weight: bold;
-  text-align: center;
-  line-height: 1.5;
-}
+
 .middle-left-wrap {
   width: 70%;
   height: 100%;
@@ -1251,7 +1571,7 @@ export default {
   /* height: 30px; */
 }
 .btns-wrap {
-  width:91%;
+  width: 91%;
   height: 8%;
   padding-left: 5%;
   padding-right: 4%;
