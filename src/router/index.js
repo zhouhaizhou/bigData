@@ -58,7 +58,7 @@ export default new Router({
         // }
     ],
     scrollBehavior (to, from, savedPosition) {
-      if(!(to.meta.parentEntityName.indexOf('dataDownLoad')>-1)){
+      if((to.meta.parentEntityName!=undefined) && (!(to.meta.parentEntityName.indexOf('dataDownLoad')>-1))){
         return { x: 0, y: 0 }
       }
     }
