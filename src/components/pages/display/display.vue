@@ -116,20 +116,20 @@ export default {
     proEleType(data){
       //let typeArr = data.type;
       data.forEach((element,i) => {
-        if(element=='PM25'){
-          data[i]='PM<sub>2.5</sub>';
-        }else if(element=='PM10'){
-          data[i]='PM<sub>10</sub>'
-        }else if(element=='PM1'){
-          data[i]='PM<sub>1</sub>'
-        }else if(element=='O3'){
-          data[i]='O₃'
-        }else if(element=='NO2'){
-          data[i]='NO₂'
-        }else if(element=='SO₂'){
-          data[i]='SO₂'
-        }else if(element=='CO2'){
-          data[i]='CO₂'
+        if(element.indexOf('PM25')>-1){
+          data[i]=data[i].replace('PM25','PM<sub>2.5</sub>');
+        }else if(element.indexOf('PM10')>-1){
+          data[i]=data[i].replace('PM10','PM<sub>10</sub>');
+        }else if(element.indexOf('PM1')>-1){
+          data[i]=data[i].replace('PM1','PM<sub>1</sub>');
+        }else if(element.indexOf('O3')>-1){
+          data[i]=data[i].replace('O3','O₃');
+        }else if(element.indexOf('NO2')>-1){
+          data[i]=data[i].replace('NO2','NO₂');
+        }else if(element.indexOf('SO2')>-1){
+          data[i]=data[i].replace('SO2','SO₂');
+        }else if(element.indexOf('CO2')>-1){
+          data[i]=data[i].replace('CO2','CO₂');
         }
       });
        

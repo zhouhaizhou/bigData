@@ -56,9 +56,10 @@ export default {
     },
     selectIndex(val) {
       let path="";
+      let PRODUCT_PATH=process.env.PRODUCT_PATH;
       if(val!=-1){
         let temp = this.times[val].url;
-        path ='./static/webProduct/'+temp;
+        path =PRODUCT_PATH+temp;
       }
       //temp=temp.split('?')[0];
       //let path = this.webProduct + temp;
