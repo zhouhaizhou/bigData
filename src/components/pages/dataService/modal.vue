@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="modal-component">
     <div id="modal" class="body-background">
       <div class="modal-wraps">
         <div class="modal-wrap-left">
@@ -1130,11 +1130,15 @@ export default {
 </script>
 
 <style scoped>
+.modal-component{
+  width: 100vw;
+  height: 100vh;
+}
 /*适应宽度*/
 @media screen and (min-width: 1366px) and (max-width: 1919px) {
   .body-background {
-    width: 1591px;
-    height: 1080px;
+    width: 100%;
+    height: 100%;
     background-color: #00000085;
     display: flex;
     justify-content: center;
@@ -1163,8 +1167,8 @@ export default {
 }
 @media screen and (min-width: 1920px) {
   .body-background {
-    width: 1920px;
-    height: 942px;
+    width: 100%;
+    height: 100%;
     background-color: #00000085;
     display: flex;
     justify-content: center;
@@ -1195,8 +1199,8 @@ export default {
 /*适应高度*/
 @media screen and (min-height: 901px) and (max-height: 1080px) {
   .body-background {
-    width: 1920px;
-    height: 942px;
+    width: 100%;
+    height: 100%;
     background-color: #00000085;
     display: flex;
     justify-content: center;
@@ -1206,8 +1210,8 @@ export default {
 }
 @media screen and (min-height: 800px) and (max-height: 900px) {
   .body-background {
-    width: 2000px;
-    height: 1080px;
+    width: 100%;
+    height: 100%;
     background-color: #00000085;
     display: flex;
     justify-content: center;
