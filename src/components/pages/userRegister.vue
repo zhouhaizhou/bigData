@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="background-color:#fff">
     <div class="user-register">用户注册</div>
     <div class="sub-img-wrap" style="">
       <div class="sub-img"></div>
@@ -106,7 +106,7 @@ export default {
 
 <style scoped>
 .user-register {
-  margin-top: 3vh;
+  padding-top: 3vh;
   height: 5vh;
   font-weight: bold;
   font-size: 1.8em;
