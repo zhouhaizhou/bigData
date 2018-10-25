@@ -2,51 +2,8 @@
  import building from '@/components/common/building'
  import about from '@/components/pages/about/about'
  import content from '../components/common/content.vue'
- import axios from 'axios';
  import relateResults from '../components/pages/relateResult/relateResults.vue'
- import store from '../store/index.js'
 
- function siderBarRouters(path) {
-   return new Promise((resolve, reject) => {
-     let account=store.state.UserToken.Account;
-    //  alert(account);
-     axios.get("GetImageProducts.svc/GetModules", {
-         params: {
-           token: account,
-           moduleName: path
-         }
-       }).then(function (response) {
-         let data = response.data;
-         if(data.indexOf("失败")>-1||data.indexOf("没有")>-1){
-           reject(data);
-           return;
-         }
-         data=JSON.parse(data);
-         proRoutersObj(data);
-         resolve(data);
-       })
-       .catch(function (error) {
-         console.log(error);
-         reject(error);
-       });
-   })
- }
-
- function proRoutersObj(data) {
-   //var newObj = {};
-   // if (obj instanceof Array) {
-   //   //newObj = [];
-   // }
-   for (var key in data) {
-     let val = data[key];
-     if (key == 'component') {
-       val = require("../components/" + val + ".vue");
-       val = val.default;
-     }
-     data[key] = typeof val === 'object' ? proRoutersObj(val) : val;
-   }
-   return data;
- }
  /* 需要权限判断的路由 */
  const dynamicRoutes = [{
      path: '/home',
@@ -138,9 +95,21 @@
        parentEntityName: '/',
        firstLoad: true
      }
-   },
+   },{
+    path: '/admin/:account',
+    component: content,
+    children: [],
+    name: 'admin',
+    meta: {
+      name: '用户管理',
+      entityName: 'admin',
+      type: 'top',
+      parentEntityName: '/',
+      firstLoad: true
+    }
+  },
  ]
- export {
-   siderBarRouters
- }
+//  export {
+//    siderBarRouters
+//  }
  export default dynamicRoutes;
