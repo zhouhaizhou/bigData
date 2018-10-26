@@ -12,7 +12,8 @@
         <div class="units-wrap">
         <div class="units-title">相关单位</div>
         <div class="unit" v-for="unit in units">
-          <div @click="linkClick(unit.url)">{{unit.name}}</div>
+          <!-- <div @click="linkClick(unit.url)">{{unit.name}}</div>  加了链接 -->
+           <div>{{unit.name}}</div>   
         </div>
       </div>
       <div class="address-wrap">
@@ -24,7 +25,8 @@
       <div class="friendly-link-wrap">
         <div class="friendly-link-title">友情链接</div>
         <div class="friendly-links">
-          <div class="friendly-link" v-for="fL in fLinks" @click="linkClick(fL.url)">{{fL.name}}</div>
+          <!-- <div class="friendly-link" v-for="fL in fLinks" @click="linkClick(fL.url)">{{fL.name}}</div> -->
+          <div class="friendly-link" v-for="fL in fLinks">{{fL.name}}</div>
         </div>
       </div>
 </div>
@@ -153,7 +155,7 @@ export default {
   color: #7d8089;
 }
 .unit {
-  cursor: pointer;
+  /* cursor: pointer; */
   line-height: 1.6;
   font-size: 0.8em;
   color: #a4a4a6;
@@ -187,7 +189,7 @@ export default {
   font-size: 0.8em;
   color: #a4a4a6;
   line-height: 1.6;
-  cursor: pointer;
+  /* cursor: pointer; */
 }
 .bak {
   margin-top: 3.2vh;
