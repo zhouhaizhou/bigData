@@ -7,7 +7,8 @@
                     <div class="item-title-font">文章</div>
                 </div>
                 <div class="article-lists-wrap item-lists">
-                    <a href="javascript:;" @click="getArticleLink(article)" class="article" v-for="(article,index) in articleLists"><span>[{{index+1}}]</span> <span>{{article.articleName}}</span></a>
+                    <!-- <a href="javascript:;" @click="getArticleLink(article)" class="article" v-for="(article,index) in articleLists"><span>[{{index+1}}]</span> <span>{{article.articleName}}</span></a> -->
+                    <div class="article" v-for="(article,index) in articleLists"><span>[{{index+1}}]</span> <span>{{article.articleName}}</span></div>
                 </div>
             </div>
             <div class="books-wrap item">
@@ -109,18 +110,18 @@ export default {
     background-size: 65%;
 }
 .article {
-  cursor: pointer;
+  /* cursor: pointer; */
   clear: both;
   display: flex;
 }
 .article-lists-wrap a{
   margin-bottom: 3%;
 }
-.article-lists-wrap.item-lists a span:nth-child(1){
+.article-lists-wrap.item-lists  span:nth-child(1){
   margin-right: 2%;
   font-weight: bold;
 }
-.article-lists-wrap.item-lists a span:nth-child(2){
+.article-lists-wrap.item-lists  span:nth-child(2){
 word-break: break-all;
 }
 .booke-lists-wrap .book{

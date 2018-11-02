@@ -13,8 +13,8 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/api': {
-         target: 'http://61.152.122.108:8282/BIGDATAWCF/SYS/BigData',//设置你调用的接口域名和端口号 别忘了加http  发布前待释放
-        //  target: 'http://localhost:45990/SYS/BigData',//设置你调用的接口域名和端口号 别忘了加http  本地调试开发  发布前带隐藏
+          // target: 'http://61.152.122.108:8282/BIGDATAWCF/SYS/BigData',//设置你调用的接口域名和端口号 别忘了加http  发布前待释放
+          target: 'http://localhost:45990/SYS/BigData',//设置你调用的接口域名和端口号 别忘了加http    本地调试开发 注意：去掉注释之后一定要编译项目，否则连不到本地程序  发布前带隐藏
         //target: 'https://api.douban.com',//设置你调用的接口域名和端口号 别忘了加http
         changeOrigin: true,
         pathRewrite: {

@@ -84,11 +84,16 @@ export default {
         this.deafultProvince(); //更新默认城市
       }
     },
+    /**
+     * 父页面的modal弹框关闭时，执行相应的操作
+     */
     isShow() {
       //监听
       if (this.isShow == false) {
         this.isIndeterminate = false; //弹框关闭时，全选按钮恢复初始状态
         this.checkAll=false;//刚进来时，将上次勾选的全选对勾去掉
+        this.provinces=[];//将上一次的获取的省份全部清空
+        this.cities = [];//将上一次的获取的站点全部清空
 
       } else {
         //  this.isIndeterminate = false;//弹框显示时，默认选中后台返回数据中的第一个要素
@@ -119,7 +124,11 @@ export default {
     getAllData() {
       let self = this;
       this.axios
-        .get("DataService.svc/GetProvince")
+        .get("DataService.svc/GetProvince",{
+          params:{
+            DataType: self.moduleEnName, //待修改为this.moduleEnName，先用固定值代替
+          }
+        })
         .then(response => {
           //需要接收父组件传过来的参数去后台查询相应的省市和站点
           let resData = eval("(" + response.data + ")");
@@ -130,9 +139,6 @@ export default {
               provinceCode: resData[i].provinceCode,
               provinceAllName: resData[i].provinceData
             };
-            // self.provinces.push(resData[i].province);
-            // self.provinceCode.push(resData[i].provinceCode);
-            //   provincesArr[i] = resData[i].province;
           }
           self.provinces = provincesArr;
         })
@@ -141,6 +147,7 @@ export default {
         });
     },
     getCityData(province) {
+      this.checkAll=false;//获取下一个省份的站点之前，去掉之前勾选的“全选”
       //点击省份，改变provinceChecked
       this.provinceChecked = province.provinceCode;
       let self = this;
@@ -194,7 +201,8 @@ export default {
     getCheckedCitiesParams() {
       //解析勾选的城市站点，传给父组件
       let checkedCitie = this.checkedCities;
-      // var checkedCitieArr=checkedCitie.join(",");//将数组转化成字符串
+      if(checkedCitie!=undefined){
+        // var checkedCitieArr=checkedCitie.join(",");//将数组转化成字符串
       var ids = [];
       var sites = [];
       for (var i = 0; i < checkedCitie.length; i++) {
@@ -210,6 +218,8 @@ export default {
       };
       //向父组件传城市站点值
       this.$emit("getCityParams", cityObj);
+      }
+      
     },
     handleCheckAllChange(val) {
       this.checkedCities = val ? this.cityOptions : [];

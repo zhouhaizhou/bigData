@@ -15,7 +15,7 @@
               <div class="lists-wrap">
                 <!-- <div :class="{listWrap:(item.lists).length>1?true:false,listWrapOne:(item.lists).length>1?false:true}" v-for="(list,index) in item.lists" @mouseout="mouseout" @mouseover="mouseover"> -->
                   <div :class="listsLength(item.lists)" v-for="(list,index) in item.lists" @mouseout="mouseout" @mouseover="mouseover">
-                  <div class="list-img" :style="{backgroundImage:'url('+list.imgUrl+')',backgroundRepeat:'no-repeat',backgroundPosition:'center center',backgroundSize:'cover'}" @mouseover="showContent(list)" @click="showModal(list)">
+                  <div class="list-img" :style="{backgroundImage:'url('+list.imgUrl+')',backgroundRepeat:'no-repeat',backgroundPosition:'center center',backgroundSize:'cover'}" @click="showModal(list)">
                     <div class="info-wrap">
                       <div class="info-font">{{list.imgInfo}}</div>
                     </div>
@@ -144,11 +144,6 @@ export default {
     clear: function() {
       var para1 = this.$refs.splitLine[this.$refs.splitLine.length - 1];
       para1.parentNode.removeChild(para1);
-    },
-    showContent: function(list) {
-      //鼠标悬浮图片时显示的文字内容，不悬浮时，不请求显示
-      // alert(list);
-      // console.log(list);
     },
     mouseout(env) {
       // env.currentTarget.classList.remove("hover");

@@ -8,7 +8,7 @@ import userLogin from '@/components/pages/userLogin.vue'
 import questionnaire from '@/components/pages/questionnaire.vue'
 import registerInfo from '@/components/pages/registerInfo.vue'
 
-import modalProvincesPan from '@/components/pages/dataService/modalProvincesPan.vue'
+import personInfo from '@/components/pages/userManagerSys/personInfo.vue'
 
 Vue.use(Router)
 
@@ -50,12 +50,12 @@ export default new Router({
         //   name:'registerInfo',
         //   component:registerInfo
         // }
-        // ,
-        // {
-        //   path:'/modalProvincesPan',
-        //   name:'modalProvincesPan',
-        //   component:modalProvincesPan
-        // }
+        ,
+        {//测试开发用   待处理待隐藏
+          path:'/personInfo',
+          name:'personInfo',
+          component:personInfo
+        }
     ],
     scrollBehavior (to, from, savedPosition) {
       if((to.meta.parentEntityName!=undefined) && (!(to.meta.parentEntityName.indexOf('dataDownLoad')>-1))){

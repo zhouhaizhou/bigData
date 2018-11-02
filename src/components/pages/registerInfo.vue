@@ -8,7 +8,7 @@
       </div>
     </div>
     <el-form :model="check" ref="items" id="form"  label-width="10vw" class="item-class" :rules="relues">
-      <el-form-item  :label="item.label+'：'" :prop="item.infokey" v-for="(item,index) in items" :key="index">
+      <el-form-item  :label="item.label+'：'" :prop="item.infoKey" v-for="(item,index) in items" :key="index">
         <el-row>
           <el-col :span="18">
             <!-- <el-input v-if='item.type=="select"' :type="item.type" class="require" v-model="item.value" @change="inputChange(item.value,item.infoType)" autocomplete="off"></el-input> -->
@@ -24,10 +24,10 @@
               value-format="yyyy-MM-dd"
               placeholder="选择日期">
             </el-date-picker>
-            <el-input v-else :accept="item.accept" :type="item.type" :ref="item.infokey"  class="com" :class="{require:item.require=='1',norm:item.require!='1'}" v-model="item.value" @change="inputChange(item,index)" autocomplete="off"></el-input>
+            <el-input v-else :accept="item.accept" :type="item.type" :ref="item.infoKey"  class="com" :class="{require:item.require=='1',norm:item.require!='1'}" v-model="item.value" @change="inputChange(item,index)" autocomplete="off"></el-input>
             <span v-if="item.description" style="margin-left:30px;line-height:25px;">{{item.description}}</span>
           </el-col>
-          <el-col :offset="2" :span="4" v-if='item.infokey=="account"'>
+          <el-col :offset="2" :span="4" v-if='item.infoKey=="account"'>
             <el-button type="primary" @click="checkAccount">验证用户名</el-button>
           </el-col>
         </el-row>
@@ -93,7 +93,10 @@ export default {
   },
   mounted(){
     let roleId=this.$route.params.roleId;
-    this.roleId=roleId==undefined?5:roleId;
+    if(roleId==undefined){
+      this.$router.push("/register");
+    }
+    this.roleId=roleId;
     this.getInfo()
     this.getRegisterItem();
   },
@@ -129,16 +132,16 @@ export default {
     },
     inputChange(item,index) {
       if(item.type=='file'){
-        let file = this.$refs[item.infokey][0].$el.firstElementChild.files[0];
+        let file = this.$refs[item.infoKey][0].$el.firstElementChild.files[0];
         let size=file.size/1024;
         if(size>Number(item.sizeRestrict)&&Number(item.sizeRestrict)){
-          this.$refs[item.infokey][0].$el.firstElementChild.files=null;this.$refs[item.infokey][0].$el.outerHTML=this.$refs[item.infokey][0].$el.outerHTML;
+          this.$refs[item.infoKey][0].$el.firstElementChild.files=null;this.$refs[item.infoKey][0].$el.outerHTML=this.$refs[item.infoKey][0].$el.outerHTML;
           item.value="";
           this.$message.error("文件大小不能超过"+item.sizeRestrict+"KB");
           return;
         }
       }
-      this.check[item.infokey] = item.value;
+      this.check[item.infoKey] = item.value;
     },
     getRegisterItem(){
        this.axios
@@ -196,9 +199,9 @@ export default {
       this.items.forEach((element,i) => {
         if(element.type=="file"){
           let temp={};
-          let file=self.$refs[element.infokey][0].$el.firstElementChild.files[0];
-          formData.append(element.infokey,file);
-          temp["key"]=element.infokey;
+          let file=self.$refs[element.infoKey][0].$el.firstElementChild.files[0];
+          formData.append(element.infoKey,file);
+          temp["key"]=element.infoKey;
           if(file==undefined){
             temp["fileName"]="";
           }else{
@@ -206,7 +209,7 @@ export default {
           }
           fileName.push(temp);
         }else{
-          formData.append(element.infokey,element.value);
+          formData.append(element.infoKey,element.value);
         }
       })
       let config={
@@ -233,7 +236,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .img{
   width:15%;
   height:14vh;
@@ -262,7 +265,7 @@ export default {
   margin-right: 17px;
 }
 .com {
-  display: inline-flex;
+  display: inline-flex !important;
   width: 100% !important;
 }
 .com /deep/ .el-input__prefix{
