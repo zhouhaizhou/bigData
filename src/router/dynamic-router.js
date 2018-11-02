@@ -96,6 +96,7 @@
        firstLoad: true
      }
    },{
+   // path: '/admin',
     path: '/admin/:account',
     component: content,
     children: [],

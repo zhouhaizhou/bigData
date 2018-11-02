@@ -23,6 +23,7 @@ import selCon from "./selCon.vue";
 import right from "./right";
 import dialogImg from "./dialogImg";
 import { mapMutations } from "vuex";
+import profession from '../../../utils/profession.js'
 export default {
   components: {
     selCon,
@@ -68,8 +69,9 @@ export default {
   methods: {
     ...mapMutations(["SETSELECTEDTIME"]),
     getData(Station, type, startTime, endTime, interTime) {
-      type=type.replace(/O₃/g,'O3').replace(/NO₂/g,'NO2').replace(/SO₂/g,'SO2').replace(/CO₂/g,'CO2')
-      .replace(/PM<sub>2.5<\/sub>/g,'PM25').replace(/PM<sub>10<\/sub>/g,'PM10').replace(/PM<sub>1<\/sub>/g,'PM1');
+      // type=type.replace(/O₃/g,'O3').replace(/NO₂/g,'NO2').replace(/SO₂/g,'SO2').replace(/CO₂/g,'CO2')
+      // .replace(/PM<sub>2.5<\/sub>/g,'PM25').replace(/PM<sub>10<\/sub>/g,'PM10').replace(/PM<sub>1<\/sub>/g,'PM1');
+      type = profession.EleUpperToLower(type);
       let self = this;
       let entityName = this.$route.name;
       this.SETSELECTEDTIME(-1);
@@ -102,7 +104,10 @@ export default {
               data.endTime = "";
               data.area = ["华东"];
             }
-            this.proEleType(data.type);
+            data.type.forEach((element,i)=>{
+              data.type[i]=profession.proEleType(element);
+            })
+            //profession.proEleType(data.type);
             self.condition = data;
             self.playInterval = self.condition.intervalOpt[0]["key"];
             self.calImgWidth();
@@ -112,27 +117,6 @@ export default {
           console.log(response);
           this.calImgWidth();
         });
-    },
-    proEleType(data){
-      //let typeArr = data.type;
-      data.forEach((element,i) => {
-        if(element.indexOf('PM25')>-1){
-          data[i]=data[i].replace('PM25','PM<sub>2.5</sub>');
-        }else if(element.indexOf('PM10')>-1){
-          data[i]=data[i].replace('PM10','PM<sub>10</sub>');
-        }else if(element.indexOf('PM1')>-1){
-          data[i]=data[i].replace('PM1','PM<sub>1</sub>');
-        }else if(element.indexOf('O3')>-1){
-          data[i]=data[i].replace('O3','O₃');
-        }else if(element.indexOf('NO2')>-1){
-          data[i]=data[i].replace('NO2','NO₂');
-        }else if(element.indexOf('SO2')>-1){
-          data[i]=data[i].replace('SO2','SO₂');
-        }else if(element.indexOf('CO2')>-1){
-          data[i]=data[i].replace('CO2','CO₂');
-        }
-      });
-       
     },
     calImgWidth() {
       let main = document.querySelector(".wrap").offsetWidth;

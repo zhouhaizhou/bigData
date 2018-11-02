@@ -120,7 +120,7 @@ export default {
   },
   methods: {
     ...mapActions(["FETCH_PERMISSION", "LOGIN"]),
-    ...mapMutations(["SETLOCALCITY", "REMOVECOOKIES"]),
+    ...mapMutations(["SETLOCALCITY", "REMOVECOOKIES","SETCOOKIES"]),
     brforeLeave(activeName, oldActiveName) {
       if (activeName == "statistics") {
         window.open("http://61.152.122.108:8282/OpenReport");
@@ -254,6 +254,7 @@ export default {
           password: "BIGDATA",
           expires: "-1D"
         };
+        //let temp='{"UserName":"访客","Account":"readearth","Alias":"访客","RoleID":"2","starLevel":null,"expires":"-1D"}';
         this.LOGIN(params);
         this.$router.push("/home");
       } else {

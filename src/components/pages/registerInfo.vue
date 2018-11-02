@@ -7,7 +7,7 @@
         <div style="line-height:30px;font-size:18px;margin-bottom:40px;">{{des}}</div>
       </div>
     </div>
-    <el-form :model="check" ref="items" id="form"  label-width="10vw" class="item-class" :rules="relues">
+    <el-form :model="check" ref="items" id="form"  label-width="10vw" class="item-class">
       <el-form-item  :label="item.label+'：'" :prop="item.infoKey" v-for="(item,index) in items" :key="index">
         <el-row>
           <el-col :span="18">
@@ -74,14 +74,18 @@ export default {
   },
   mounted(){
     let roleId=this.$route.params.roleId;
-    if(roleId==undefined){
+    let itemsObj=this.$route.params.itemsObj;
+    if(roleId==undefined){   
       this.$router.push("/register");  //跳转到注册页面
-    }else{
-      this.roleId=roleId;
-      this.getInfo()
-      this.getRegisterItem();
-      this.checkItem();
     }
+    if(itemsObj==undefined){   //用户注册
+      this.roleId=roleId;
+      this.getRegisterItem();
+    }else{   //修改个人信息
+      this.roleId=itemsObj.roleId;
+      this.items=itemsObj.items;
+    }
+    this.getInfo()
   },
   methods: {
     resetForm(items){

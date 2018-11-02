@@ -106,6 +106,29 @@ export function cloneObj(obj){
   export function joinRouter(MainContainer, routers, path) {
     for (let i = 0; i < MainContainer.length; i++) {
       let item = MainContainer[i]
+      if ( item.children!=undefined && item.children.length > 0) {
+      //if (item.children.length > 0 && item.meta.type != 'top') {
+        joinRouter(item.children, routers, path);
+      } else {
+        let itemPath=item.path;
+        if(item.path.indexOf("/:")>0){  //路由中有参数
+          itemPath=item.path.split('/:')[0];
+        }
+        if (itemPath == path && (item.meta.entityName == routers[0].meta.parentEntityName)) {
+          if(item.children==undefined){
+            item["children"]=[];
+          }
+          item.children.push(...routers);
+        }
+      }
+    }
+    return MainContainer;
+  }
+  //原版
+  export function joinRouter2(MainContainer, routers, path) {
+    for (let i = 0; i < MainContainer.length; i++) {
+      let item = MainContainer[i]
+      //if ( item.children!=undefined && item.children.length > 0) {
       if (item.children.length > 0 && item.meta.type != 'top') {
         joinRouter(item.children, routers, path);
       } else {
@@ -120,7 +143,6 @@ export function cloneObj(obj){
     }
     return MainContainer;
   }
-
   //后台读取的路由json转成路由对象，并导入路由中用到的组件
 export function proRoutersObj(data) {
   for (var key in data) {

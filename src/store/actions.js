@@ -43,7 +43,7 @@ export default {
     let routeRed = routerTo.params.redirect;
     let children = null;
     if (!firstLoad) { //不是第一次点击则不需要重新从后台读取，直接获取第一次缓存的数据即可
-      if (path.split('/').length > 2) {
+      if (path.split('/').length > 2 && routerTo.name!='admin') {
         return;
       } else {
         commit('SET_SIDERMENU', state.cacheSiderBar[path]);
