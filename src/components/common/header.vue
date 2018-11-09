@@ -22,7 +22,7 @@
       </el-col>
       <el-col :span='8' class="right " id="rightWith" offset=0>
         <div class="item">
-          <span style="display:inline-block;margin-right:10px;">{{interview}}</span>
+          <span style="display:inline-block;margin-right:10px;" :class="{cur:loginTxt!='登录'}" @click="goUserAdmin">{{interview}}</span>
           <el-rate :class="{'invisible':loginTxt=='登录'}" style="display:inline-block;vertical-align:text-bottom;" v-model="grade" disabled text-color="#ff9900">
           </el-rate>
           <span style="cursor:pointer;margin-right:20px;" @click="goCart">
@@ -120,7 +120,7 @@ export default {
   },
   methods: {
     ...mapActions(["FETCH_PERMISSION", "LOGIN"]),
-    ...mapMutations(["SETLOCALCITY", "REMOVECOOKIES"]),
+    ...mapMutations(["SETLOCALCITY", "REMOVECOOKIES","SETCOOKIES"]),
     brforeLeave(activeName, oldActiveName) {
       if (activeName == "statistics") {
         window.open("http://61.152.122.108:8282/OpenReport");
@@ -134,6 +134,11 @@ export default {
         this.loginTxt = "退出";
       } else {
         this.loginTxt = "登录";
+      }
+    },
+    goUserAdmin(){
+      if(this.loginTxt == "退出"){
+        this.$router.push("/admin/"+this.userInfo.Account);
       }
     },
     headerInit() {
@@ -249,6 +254,7 @@ export default {
           password: "BIGDATA",
           expires: "-1D"
         };
+        //let temp='{"UserName":"访客","Account":"readearth","Alias":"访客","RoleID":"2","starLevel":null,"expires":"-1D"}';
         this.LOGIN(params);
         this.$router.push("/home");
       } else {
@@ -375,5 +381,8 @@ export default {
   transition: all 0.5s;
   list-style: none;
   z-index: 1;
+}
+.cur{
+  cursor: pointer;
 }
 </style>

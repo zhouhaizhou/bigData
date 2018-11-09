@@ -13,7 +13,8 @@
         </el-submenu>
         <el-menu-item :key="v.name" :index="v.name" :class="{'gis-active':v.name=='GISInterVisual','text-center':v.meta.parentEntityName=='userSupport'}" @click="gotoRoute(v.name,$event)" v-else>
           <!-- <i class="iconfont" :class="v.meta.icon"></i> -->
-          <span slot="title">{{v.meta.name}}</span>
+          <span slot="title" v-html="v.meta.name"></span>
+          <!-- <span slot="title">{{v.meta.name}}</span> -->
         </el-menu-item>
       </template>
     </div>
@@ -21,6 +22,7 @@
 </template>
 
 <script>
+import profession from '../../utils/profession.js'
 export default {
   name: "my-nav",
   props: {
@@ -137,5 +139,8 @@ export default {
 .menu-container0 >>> .el-submenu__title {
   height: 45px;
   line-height: 45px;
+}
+.menu-container0 /deep/ span sub{
+  vertical-align: sub !important;
 }
 </style>

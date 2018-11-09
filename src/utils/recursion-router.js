@@ -5,7 +5,8 @@
  * @return {Array} realRoutes 过滤后的路由
  */
 import axios from 'axios'
-
+import store from '../store/index.js'
+//一级菜单过滤
 export function recursionRouter(userRouter = [], allRouter = []) {
   var realRoutes = []
   allRouter.forEach((v, i) => {
@@ -53,8 +54,9 @@ export function getContainer(routers, path, containerRouters) {
   }
   return router;
 }
-
-var cloneObj = function (obj) {
+//对象深度拷贝
+export function cloneObj(obj){
+//var cloneObj = function (obj) {
   var newObj = {};
   if (obj instanceof Array) {
     newObj = [];
@@ -86,11 +88,12 @@ var cloneObj = function (obj) {
   //     setDefaultRoute(v.children, parentName,defaultRoute);
   //   }
   // })
+  //设置默认路由
   export function setDefaultRoute(parentName) {
   return new Promise((resolve, reject) => {
       axios({
         method: "get",
-        url: "./static/pageDefaultRouter.json",
+        url: "./static/data/pageDefaultRouter.json",
         baseURL: ''
       }).then(res => {
         let data = res.data;
@@ -103,13 +106,78 @@ var cloneObj = function (obj) {
   export function joinRouter(MainContainer, routers, path) {
     for (let i = 0; i < MainContainer.length; i++) {
       let item = MainContainer[i]
-      if (item.children.length > 0 && item.meta.type != 'top') {
+      if ( item.children!=undefined && item.children.length > 0) {
+      //if (item.children.length > 0 && item.meta.type != 'top') {
         joinRouter(item.children, routers, path);
       } else {
-        if (item.path == path && (item.meta.entityName == routers[0].meta.parentEntityName)) {
+        let itemPath=item.path;
+        if(item.path.indexOf("/:")>0){  //路由中有参数
+          itemPath=item.path.split('/:')[0];
+        }
+        if (itemPath == path && (item.meta.entityName == routers[0].meta.parentEntityName)) {
+          if(item.children==undefined){
+            item["children"]=[];
+          }
           item.children.push(...routers);
         }
       }
     }
     return MainContainer;
   }
+  //原版
+  export function joinRouter2(MainContainer, routers, path) {
+    for (let i = 0; i < MainContainer.length; i++) {
+      let item = MainContainer[i]
+      //if ( item.children!=undefined && item.children.length > 0) {
+      if (item.children.length > 0 && item.meta.type != 'top') {
+        joinRouter(item.children, routers, path);
+      } else {
+        let itemPath=item.path;
+        if(item.path.indexOf("/:")>0){  //路由中有参数
+          itemPath=item.path.split('/:')[0];
+        }
+        if (itemPath == path && (item.meta.entityName == routers[0].meta.parentEntityName)) {
+          item.children.push(...routers);
+        }
+      }
+    }
+    return MainContainer;
+  }
+  //后台读取的路由json转成路由对象，并导入路由中用到的组件
+export function proRoutersObj(data) {
+  for (var key in data) {
+    let val = data[key];
+    if (key == 'component') {
+      val = require("../components/" + val + ".vue");
+      val = val.default;
+    }
+    data[key] = typeof val === 'object' ? proRoutersObj(val) : val;
+  }
+  return data;
+}
+//从后台读取左侧菜单模块
+export function siderBarRouters(path) {
+  return new Promise((resolve, reject) => {
+    let account=store.state.UserToken.Account;
+   //  alert(account);
+    axios.get("GetImageProducts.svc/GetModules", {
+        params: {
+          token: account,
+          moduleName: path
+        }
+      }).then(function (response) {
+        let data = response.data;
+        if(data.indexOf("失败")>-1||data.indexOf("没有")>-1){
+          reject(data);
+          return;
+        }
+        data=JSON.parse(data);
+        proRoutersObj(data);
+        resolve(data);
+      })
+      .catch(function (error) {
+        console.log(error);
+        reject(error);
+      });
+  })
+}

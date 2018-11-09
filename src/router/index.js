@@ -2,61 +2,13 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import home from '@/components/pages/home/home.vue'
 import layout from '@/components/common/layout.vue'
-import register from '@/components/pages/userRegister.vue'
-import cart from '@/components/pages/cart.vue'
-import userLogin from '@/components/pages/userLogin.vue'
-import questionnaire from '@/components/pages/questionnaire.vue'
-import registerInfo from '@/components/pages/registerInfo.vue'
 
-import personInfo from '@/components/pages/userManagerSys/personInfo.vue'
-
+import data from '../../static/data/routerIndex.json'
+import {proRoutersObj} from '@/utils/recursion-router'
+let router=proRoutersObj(data);
 Vue.use(Router)
-
 export default new Router({
-    routes: [
-        {
-            path: '/',
-            redirect:'/home',
-            children:[]
-        },{
-          path:'/register',
-          component:layout,
-          children:[
-            {
-              path:'',
-              //name:'registerInfo',
-              component:register
-            },
-            {
-              path:'registerInfo',
-              name:'registerInfo',
-              component:registerInfo
-            }
-          ]
-        },{
-          path:'/cart',
-          component:cart
-        },
-        {
-          path:'/userLogin',
-          component:userLogin
-        },
-        {
-          path:'/questionnaire',
-          component:questionnaire
-        }
-        // ,{
-        //   path:'/registerInfo',
-        //   name:'registerInfo',
-        //   component:registerInfo
-        // }
-        ,
-        {//测试开发用   待处理待隐藏
-          path:'/personInfo',
-          name:'personInfo',
-          component:personInfo
-        }
-    ],
+    routes: router,
     scrollBehavior (to, from, savedPosition) {
       if((to.meta.parentEntityName!=undefined) && (!(to.meta.parentEntityName.indexOf('dataDownLoad')>-1))){
         return { x: 0, y: 0 }

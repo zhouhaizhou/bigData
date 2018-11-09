@@ -1,19 +1,8 @@
 import Router from 'vue-router'
-import {
-  fetchPermission
-} from '@/utils/permission'
-import router, {
-  DynamicRoutes
-} from '@/router/index'
-import {
-  recursionRouter,
-  setDefaultRoute,
-  getContainer,
-  joinRouter
-} from '@/utils/recursion-router'
-import dynamicRouter, {
-  siderBarRouters
-} from '@/router/dynamic-router'
+import router, {DynamicRoutes} from '@/router/index'
+import { recursionRouter,setDefaultRoute,getContainer,joinRouter,siderBarRouters,cloneObj} from '@/utils/recursion-router'
+// import dynamicRouter, { siderBarRouters} from '@/router/dynamic-router'
+import dynamicRouter from '@/router/dynamic-router'
 import axios from 'axios'
 export default {
   scrollAnchor({commit,state}, paramObj) {
@@ -42,10 +31,7 @@ export default {
       });
     }, 15);
   },
-  FETCH_PERMISSION({
-    commit,
-    state
-  }, paramObj) {
+  FETCH_PERMISSION({commit, state}, paramObj) {
     let type = paramObj.type;
     let path = paramObj.path;
     path = ((path.charAt(path.length - 1) == "/") && path.length > 1) ? path.substring(0, path.length - 1) : path;
@@ -55,12 +41,9 @@ export default {
     let routerTo = paramObj.router;
     let firstLoad = paramObj.flag;
     let routeRed = routerTo.params.redirect;
-    // let defaultRouter = {
-    //   name: null
-    // };
     let children = null;
     if (!firstLoad) { //不是第一次点击则不需要重新从后台读取，直接获取第一次缓存的数据即可
-      if (path.split('/').length > 2) {
+      if (path.split('/').length > 2 && routerTo.name!='admin') {
         return;
       } else {
         commit('SET_SIDERMENU', state.cacheSiderBar[path]);
@@ -76,10 +59,16 @@ export default {
       }
     }
     if (type == 'top') { //第一次获取一级菜单
-      permissionList = fetchPermission("");
-      routers = recursionRouter(permissionList, dynamicRouter) //这里其实做了一步过滤
+      //routers = recursionRouter(permissionList, dynamicRouter) //这里其实做了一步过滤
+      routers =dynamicRouter;
       children = joinRouter(DynamicR, routers, path);
-      commit('SET_TOPMENU', children[0].children);
+      let topMenu=cloneObj(children[0].children);
+      topMenu.forEach((element,i) => {
+        if(element.name=='admin'){
+          topMenu.splice(i,1);
+        }
+      });
+      commit('SET_TOPMENU', topMenu);
       router.addRoutes(DynamicR);
       commit('SET_PERMISSION', [...DynamicR])
     } else { //从后台读取左边权限  第一次点击一级菜单才会触发
@@ -103,10 +92,7 @@ export default {
       }).catch(res=>console.log(res));
     }
   },
-  LOGIN({
-    commit,
-    state
-  }, paramObj) {
+  LOGIN({commit,state}, paramObj) {
     return new Promise((resolve, reject) => {
       let userName = paramObj.userName;
       let password = paramObj.password;

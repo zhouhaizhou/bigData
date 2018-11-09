@@ -1,30 +1,14 @@
 <template>
   <div>
-    <!-- <el-container class="container">
-      <el-header  ref="header" :style="{height:this.height+'px'}">
-        <my-header ref="myheader"></my-header>
-      </el-header>
-      <el-container>
-        <el-aside width="400px">
-          <router-view></router-view>
-        </el-aside>
-        <el-container>
-          <el-main>
-            <my-main></my-main>
-          </el-main>
-          <el-footer></el-footer>
-        </el-container>
-      </el-container>
-    </el-container> -->
     <el-container class="container">
       <el-header ref="header" :style="{height:this.height+'px'}" class="fixedheader">
         <my-header ref="myheader"></my-header>
       </el-header>
-      <el-main class="mainposition">
+      <el-main ref="main" class="mainposition">
         <router-view></router-view>
       </el-main>
       <el-footer>
-        <my-footer></my-footer>
+        <my-footer ref="myfooter"></my-footer>
       </el-footer>
     </el-container>
   </div>

@@ -7,7 +7,7 @@
         <div style="line-height:30px;font-size:18px;margin-bottom:40px;">{{des}}</div>
       </div>
     </div>
-    <el-form :model="check" ref="items" id="form"  label-width="10vw" class="item-class" :rules="relues">
+    <el-form :model="check" ref="items" id="form"  label-width="10vw" class="item-class">
       <el-form-item  :label="item.label+'：'" :prop="item.infoKey" v-for="(item,index) in items" :key="index">
         <el-row>
           <el-col :span="18">
@@ -24,8 +24,15 @@
               value-format="yyyy-MM-dd"
               placeholder="选择日期">
             </el-date-picker>
-            <el-input v-else :accept="item.accept" :type="item.type" :ref="item.infoKey"  class="com" :class="{require:item.require=='1',norm:item.require!='1'}" v-model="item.value" @change="inputChange(item,index)" autocomplete="off"></el-input>
-            <span v-if="item.description" style="margin-left:30px;line-height:25px;">{{item.description}}</span>
+          
+            <el-input v-else :accept="item.accept" 
+              :type="item.type" 
+              :ref="item.infoKey"  class="com" 
+              :class="{require:item.require=='1',norm:item.require!='1'}" 
+              v-model="item.value" 
+              @change="inputChange(item,index)" 
+              autocomplete="off"></el-input>
+            <span v-if="item.description" :class="{'span-color':item.spanColor==undefined?false:true}" style="margin-left:30px;line-height:25px;">{{item.description}}</span>
           </el-col>
           <el-col :offset="2" :span="4" v-if='item.infoKey=="account"'>
             <el-button type="primary" @click="checkAccount">验证用户名</el-button>
@@ -50,30 +57,8 @@
 <script>
 export default {
   data() {
-    var validatorAccount = (rule, value, callback) => {
-      let mobile=/(^1\d{10}$)/;
-      let email=/^((\w-*\.*)+@(\w-?)+(\.\w{2,})+$)/
-      if (value === "") {
-        callback(new Error("请输入账号"));
-      } else {
-        if (!(email.test(value)||mobile.test(value))) {
-          callback("请输入合法的账号");
-        }
-        callback();
-      }
-    };
-    var validatorcheckPass = (rule, value, callback) => {
-      let self = this;
-      if (value === "") {
-        callback(new Error("请确认密码"));
-      } else if (!(value === self.check.pass)) {
-        callback(new Error("两次输入的密码不一致"));
-      } else {
-        callback();
-      }
-    };
     return {
-      check: {
+       check: {
         account: "",
         pass: "",
         checkPass: ""
@@ -85,20 +70,22 @@ export default {
       footer_hidden:false,
       agree:false,
       roleId:'',
-      relues: {
-        account: [{ validator: validatorAccount, trigger: "blur" }],
-        checkPass: [{ validator: validatorcheckPass, trigger: "blur" }]
-      }
     };
   },
   mounted(){
     let roleId=this.$route.params.roleId;
-    if(roleId==undefined){
-      this.$router.push("/register");
+    let itemsObj=this.$route.params.itemsObj;
+    if(roleId==undefined){   
+      this.$router.push("/register");  //跳转到注册页面
     }
-    this.roleId=roleId;
+    if(itemsObj==undefined){   //用户注册
+      this.roleId=roleId;
+      this.getRegisterItem();
+    }else{   //修改个人信息
+      this.roleId=itemsObj.roleId;
+      this.items=itemsObj.items;
+    }
     this.getInfo()
-    this.getRegisterItem();
   },
   methods: {
     resetForm(items){
@@ -131,16 +118,35 @@ export default {
         )
     },
     inputChange(item,index) {
-      if(item.type=='file'){
+      if(item.type=='file'){   //文件上传限制
         let file = this.$refs[item.infoKey][0].$el.firstElementChild.files[0];
         let size=file.size/1024;
         if(size>Number(item.sizeRestrict)&&Number(item.sizeRestrict)){
-          this.$refs[item.infoKey][0].$el.firstElementChild.files=null;this.$refs[item.infoKey][0].$el.outerHTML=this.$refs[item.infoKey][0].$el.outerHTML;
           item.value="";
+          item.spanColor="v";
           this.$message.error("文件大小不能超过"+item.sizeRestrict+"KB");
+          alert("文件大小不能超过"+item.sizeRestrict+"KB,请重新选择！");
           return;
         }
       }
+      if(item.regular!=null&&item.regular!=''){   //正则表达式限制
+        let reg=eval(item.regular);
+        let obj=this.$refs[item.infoKey][0].$el;
+        if(!reg.test(item.value)){
+          obj.firstElementChild.classList.add('checkthrow');
+        }else{
+          obj.firstElementChild.classList.remove('checkthrow');
+        }
+      }
+      if(item.infoKey=='checkPass'){   //密码验证
+        let obj=this.$refs[item.infoKey][0].$el;
+        if(item.value!=this.items[1].value){
+          obj.firstElementChild.classList.add('checkthrow');
+        }else{
+          obj.firstElementChild.classList.remove('checkthrow');
+        }
+      }
+      item.spanColor=undefined;
       this.check[item.infoKey] = item.value;
     },
     getRegisterItem(){
@@ -150,7 +156,6 @@ export default {
             roleId:this.roleId
           },
         }).then(res=>{
-          console.log(res);
           this.items=JSON.parse(res.data);
         }).catch(res=>{
             console.log(res)
@@ -254,6 +259,9 @@ export default {
   margin-left: 80px;
   margin-top: 30px;
 }
+.span-color{
+  color: red;
+}
 .require::before {
   content: "*";
   color: red;
@@ -290,7 +298,7 @@ export default {
   text-indent: 2em;
 }
 ._footer-hidden{
-  height: 90px;
+  height: 115px;
   overflow: hidden;
 }
 ._footer p{
@@ -307,5 +315,8 @@ export default {
 }
 .btn{
   text-align: center;
+}
+.com /deep/ .checkthrow{
+  border-color: red !important;
 }
 </style>
