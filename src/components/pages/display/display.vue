@@ -23,6 +23,7 @@ import selCon from "./selCon.vue";
 import right from "./right";
 import dialogImg from "./dialogImg";
 import { mapMutations } from "vuex";
+import profession from '../../../utils/profession.js'
 export default {
   components: {
     selCon,
@@ -68,8 +69,9 @@ export default {
   methods: {
     ...mapMutations(["SETSELECTEDTIME"]),
     getData(Station, type, startTime, endTime, interTime) {
-      type=type.replace(/O₃/g,'O3').replace(/NO₂/g,'NO2').replace(/SO₂/g,'SO2').replace(/CO₂/g,'CO2')
-      .replace(/PM<sub>2.5<\/sub>/g,'PM25').replace(/PM<sub>10<\/sub>/g,'PM10').replace(/PM<sub>1<\/sub>/g,'PM1');
+      // type=type.replace(/O₃/g,'O3').replace(/NO₂/g,'NO2').replace(/SO₂/g,'SO2').replace(/CO₂/g,'CO2')
+      // .replace(/PM<sub>2.5<\/sub>/g,'PM25').replace(/PM<sub>10<\/sub>/g,'PM10').replace(/PM<sub>1<\/sub>/g,'PM1');
+      type = profession.EleUpperToLower(type);
       let self = this;
       let entityName = this.$route.name;
       this.SETSELECTEDTIME(-1);
@@ -102,7 +104,10 @@ export default {
               data.endTime = "";
               data.area = ["华东"];
             }
-            this.proEleType(data.type);
+            data.type.forEach((element,i)=>{
+              data.type[i]=profession.proEleType(element);
+            })
+            //profession.proEleType(data.type);
             self.condition = data;
             self.playInterval = self.condition.intervalOpt[0]["key"];
             self.calImgWidth();
@@ -112,27 +117,6 @@ export default {
           console.log(response);
           this.calImgWidth();
         });
-    },
-    proEleType(data){
-      //let typeArr = data.type;
-      data.forEach((element,i) => {
-        if(element=='PM25'){
-          data[i]='PM<sub>2.5</sub>';
-        }else if(element=='PM10'){
-          data[i]='PM<sub>10</sub>'
-        }else if(element=='PM1'){
-          data[i]='PM<sub>1</sub>'
-        }else if(element=='O3'){
-          data[i]='O₃'
-        }else if(element=='NO2'){
-          data[i]='NO₂'
-        }else if(element=='SO₂'){
-          data[i]='SO₂'
-        }else if(element=='CO2'){
-          data[i]='CO₂'
-        }
-      });
-       
     },
     calImgWidth() {
       let main = document.querySelector(".wrap").offsetWidth;

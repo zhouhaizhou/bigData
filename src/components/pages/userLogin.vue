@@ -22,7 +22,7 @@
 
                 <el-form-item label="" prop="userName" class="regi_form_input">
                   <i class="icon IconPeople"></i>
-                  <el-input v-model.number="ruleForm2.userName" placeholder="用户名" class="user-ui" @keyup.enter.native="submitForm('ruleForm2')"></el-input>
+                  <el-input v-model="ruleForm2.userName" placeholder="用户名" class="user-ui" @keyup.enter.native="submitForm('ruleForm2')"></el-input>
                 </el-form-item>
                 <el-form-item label="" prop="pass" class="regi_form_input noMargin">
                   <i class="icon IconPwd"></i>

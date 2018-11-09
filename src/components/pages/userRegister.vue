@@ -1,6 +1,5 @@
 <template>
-  <div>
-    <my-header></my-header>
+  <div style="background-color:#fff">
     <div class="user-register">用户注册</div>
     <div class="sub-img-wrap" style="">
       <div class="sub-img"></div>
@@ -30,7 +29,7 @@
             {{user.content}}
           </div>
         </div>
-        <div class="enter-wrap" @click="enter()">
+        <div class="enter-wrap" @click="enter(user.roleId)">
           <div class="enter">
             {{user.enter}}
           </div>
@@ -39,7 +38,6 @@
       </div>
 
     </div>
-    <my-footer></my-footer>
   </div>
 </template>
 
@@ -62,6 +60,7 @@ export default {
           img: require("../../assets/img/dqzxsmzc-n.png"),
           imgHover: require("../../assets/img/dqzxsmzc-d.png"),
           subtitle: "大气专项用户实名注册",
+          roleId:'5',
           content:
             "通过网络在线方式提交申请和注册。大气专项用户可在污染天气大数据平台浏览、查询和下载指定气象数据和产品",
           enter: "立即加入"
@@ -70,6 +69,7 @@ export default {
           img: require("../../assets/img/jykysmzc-n.png"),
           imgHover: require("../../assets/img/jykysmzc-d.png"),
           subtitle: "教育科研实名注册",
+          roleId:'3',
           content:
             "通过网络在线方式申请和注册。教育科研注册用户可在污染天气大数据平台浏览、查询和下载中国气象最新公布的《基本气象资料和产品开放清单》",
           enter: "立即加入"
@@ -78,6 +78,7 @@ export default {
           img: require("../../assets/img/dwsmzc-n.png"),
           imgHover: require("../../assets/img/dwsmzc-d.png"),
           subtitle: "单位实名注册",
+          roleId:'4',
           content:
             "通过网络在线方式申请和注册。单位实名祖册用户可在污染天气大数据平台浏览、查询和下载指定气象数据和产品",
           enter: "立即加入"
@@ -86,9 +87,8 @@ export default {
     };
   },
   methods: {
-    enter: function() {
-      var mythis = this;
-      console.log(mythis);
+    enter: function(roleId) {
+      this.$router.push({name:'registerInfo',params:{roleId:roleId}});
     },
     mouseOver: function(u) {
       img1 = u.img;
@@ -106,7 +106,7 @@ export default {
 
 <style scoped>
 .user-register {
-  margin-top: 3vh;
+  padding-top: 3vh;
   height: 5vh;
   font-weight: bold;
   font-size: 1.8em;

@@ -1,0 +1,35 @@
+ [
+   {
+      "path": "/",
+      "redirect":"/home",
+      "children":[]
+  },{
+    "path":"/register",
+    "component":"common/layout",
+    "children":[
+      {
+        "path":"",
+        "component":"pages/userRegister"
+      },
+      {
+        "path":"registerInfo",
+        "name":"registerInfo",
+        "component":"pages/registerInfo"
+      }
+    ]
+  },{
+    "path":"/cart",
+    "component":"pages/cart"
+  },
+  {
+    "path":"/userLogin",
+    "component":"pages/userLogin"
+  },
+  {
+    "path":"/questionnaire",
+    "component":"pages/questionnaire"
+  },{
+    "path":"/uedit",
+    "component":"pages/uedit"
+  }
+]

@@ -15,7 +15,7 @@
               <div class="lists-wrap">
                 <!-- <div :class="{listWrap:(item.lists).length>1?true:false,listWrapOne:(item.lists).length>1?false:true}" v-for="(list,index) in item.lists" @mouseout="mouseout" @mouseover="mouseover"> -->
                   <div :class="listsLength(item.lists)" v-for="(list,index) in item.lists" @mouseout="mouseout" @mouseover="mouseover">
-                  <div class="list-img" :style="{backgroundImage:'url('+list.imgUrl+')',backgroundRepeat:'no-repeat',backgroundPosition:'center center',backgroundSize:'cover'}" @mouseover="showContent(list)" @click="showModal(list)">
+                  <div class="list-img" :style="{backgroundImage:'url('+list.imgUrl+')',backgroundRepeat:'no-repeat',backgroundPosition:'center center',backgroundSize:'cover'}" @click="showModal(list)">
                     <div class="info-wrap">
                       <div class="info-font">{{list.imgInfo}}</div>
                     </div>
@@ -145,11 +145,6 @@ export default {
       var para1 = this.$refs.splitLine[this.$refs.splitLine.length - 1];
       para1.parentNode.removeChild(para1);
     },
-    showContent: function(list) {
-      //鼠标悬浮图片时显示的文字内容，不悬浮时，不请求显示
-      // alert(list);
-      // console.log(list);
-    },
     mouseout(env) {
       // env.currentTarget.classList.remove("hover");
     },
@@ -277,16 +272,17 @@ export default {
   margin-bottom: 3vh;
 }
 .nav-marker {
-  float: left;
-  width: 0.5vw;
-  height: 2.5vh;
-  background-color: #1bbf9d;
+    float: left;
+    width: .5vw;
+    height: 2.6vh;
+    background-color: #1bbf9d;
 }
 .sub-title {
-  float: left;
-  margin-left: 0.8vw;
-  font-size: 1vw;
-  font-weight: bold;
+float: left;
+    margin-left: .8vw;
+    font-size: 1.2vw;
+    font-weight: 700;
+    line-height: 1.1;
 }
 .lists-wrap {
   clear: both;
@@ -358,11 +354,11 @@ export default {
   text-indent: 2em;
 }
 .list-title {
-  margin-left: 6%;
-  text-align: left;
-  font-weight: bold;
-  margin-bottom: 1vh;
-  font-size: 1vw;
+    margin-left: 6%;
+    text-align: left;
+    /* font-weight: 700; */
+    margin-bottom: 1vh;
+    font-size: 1.08vw;
 }
 .list-marker-wrap {
   height: 11%;
@@ -373,7 +369,7 @@ export default {
 }
 .icon-text-wrap-com {
   float: left;
-  width: 32%;
+  width: 29%;
   display: flex;
   align-items: center;
 }
@@ -382,14 +378,14 @@ export default {
 }
 .text-wrap-com {
   width: 92%;
-  padding-left: 9%;
+  padding-left: 0%;
 }
 .view-wrap {
   float: left;
 }
 .view-icon {
-  background: url("../../../assets/img/dataDownLoad/view.png") no-repeat center
-    center;
+  background: url("../../../assets/img/dataDownLoad/view.png") no-repeat 20%
+    20%;
 
   height: 2vh;
   float: left;

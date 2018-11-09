@@ -4,7 +4,7 @@
       <el-menu :unique-opened=true :collapse="isSidebarNavCollapse"
        background-color="#fff" text-color="#2c3e50" active-text-color="rgb(0, 162, 243)" 
        :default-active="currentMenu">
-        <DynamicMenu :menuList="sidebarMenu"></DynamicMenu>
+        <DynamicMenu :menuList="computedSidebarMenu"></DynamicMenu>
       </el-menu>
     </div>
     <div class="main">
@@ -17,6 +17,7 @@
 <script>
 import DynamicMenu from "./dynamic-menu";
 import { mapState } from "vuex";
+import profession from '../../utils/profession.js'
 export default {
   components: {
     DynamicMenu
@@ -27,18 +28,30 @@ export default {
     };
   },
   computed: {
-    ...mapState([
-      "sidebarMenu",
-      "currentMenu",
-      "isSidebarNavCollapse",
-      "navHeight"
-    ])
+    ...mapState(["sidebarMenu","currentMenu","isSidebarNavCollapse","navHeight"]),
+    computedSidebarMenu(){
+      let sidebarMenu=this.sidebarMenu;
+      let newSideBarMenu = this.iterationSidebarMenu(sidebarMenu);
+      return newSideBarMenu;
+    }
   },
   mounted() {
     let navH =
       document.querySelector(".navColor").offsetTop +
       document.querySelector(".navColor").offsetHeight;
      document.querySelector(".side").style.top = navH +15+ "px";
+  },
+  methods:{
+    iterationSidebarMenu(sidebarMenu){
+      sidebarMenu.forEach((element,i) => {
+        sidebarMenu[i].meta.name=profession.proEleType(element.meta.name);
+        if(element.children!=undefined&&element.children.length>0){
+          let eleChildrenArr=element.children;
+          this.iterationSidebarMenu(eleChildrenArr);
+        }
+      });
+      return sidebarMenu;
+    }
   }
 };
 </script>
@@ -52,6 +65,9 @@ export default {
   border: 1px solid #ccc;
   border-right: none;
   border-bottom: none;
+}
+.side >>> .el-submenu .el-menu-item{
+  min-width: 0px;
 }
 .main {
   width: 79.5vw;

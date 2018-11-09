@@ -53,5 +53,18 @@ module.exports = {
   },
   REMOVECOOKIES(state){
     $cookies.remove("UserToken");
+  },
+  setMainHeight(state,obj){
+    let self=obj.self;
+    let ref=obj.ref;
+    let headerH=state.navHeight;
+    let footerH=document.querySelector('.foot-wrap').scrollHeight;
+    let pageH=document.documentElement.clientHeight;
+    let mainContentH=obj.contentH;
+    let bottom=pageH-headerH-footerH-mainContentH;
+    if(bottom>0){
+      self.$refs[ref].style.marginBottom=bottom+'px'
+      mainH=mainContentH;
+    }
   }
 }

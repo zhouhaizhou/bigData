@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="modal-component">
     <div id="modal" class="body-background">
       <div class="modal-wraps">
         <div class="modal-wrap-left">
@@ -67,12 +67,12 @@
               </div>
               <div class="date-value">
                 <div class="start-time">
-                  <el-date-picker v-model="startTimes" class="time-time" :type="dateTimeType" :format="dateTimeFormat" value-format="yyyy-MM-dd HH" clear-icon="close" prefix-icon="1" @focus="dateChange">
+                  <el-date-picker v-model="startTimes" class="time-time" :type="dateTimeType" :format="dateTimeFormat" value-format="yyyy-MM-dd HH" clear-icon="close" prefix-icon="1" @focus="dateChange" @change="changeTime()">
                   </el-date-picker>
                 </div>
                 <div class="dao font-style1">到</div>
                 <div class="end-time">
-                  <el-date-picker v-model="endTimes" class="time-time" :type="dateTimeType" :format="dateTimeFormat" value-format="yyyy-MM-dd HH" clear-icon="close" prefix-icon="1" @focus="dateChange">
+                  <el-date-picker v-model="endTimes" class="time-time" :type="dateTimeType" :format="dateTimeFormat" value-format="yyyy-MM-dd HH" clear-icon="close" prefix-icon="1" @focus="dateChange" @change="changeTime()">
                   </el-date-picker>
                 </div>
               </div>
@@ -98,7 +98,7 @@
                 <!-- <div class="element-radio-font-wrap" v-for="ele in modalData[0].dataDownLoad[0].element">
                   <div class="radio-wrap"><input type="radio"></div>{{ele}}</div> -->
                 <el-checkbox-group v-model="checkedElements" @change="handleCheckedCitiesChange">
-                  <el-checkbox v-for="(element,index) in elements" :label="index" :key="index">{{element.elementCnName}}</el-checkbox>
+                  <el-checkbox v-for="(element,index) in elements" :label="index" :key="index"><label v-html="element.elementCnName"></label></el-checkbox>
                 </el-checkbox-group>
               </div>
             </div>
@@ -190,12 +190,15 @@ export default {
       timeValue: "天",
       timeType: [],
       timeTypeValue: "",
+      startTimesFlag: "", //数据库中数据的最早时间，用它来限制用户输入的起始时间是否合法
       startTimes: "",
+      lstTime: "", //数据库中数据的最新时间  正常格式，后面通过new Date（this.lstTime）转化为GMT时间格式，用作对比用户选的起始时间
       endTimes: "", //this._global.formatDate(new Date(), "yyyy-MM-dd hh")将GMT时间格式转化为字符串形式的正常时间格式
 
       dateTimeType: "",
       dateTimeFormat: "",
-      lstTime: "" //数据库中数据的最新时间
+      nowStartTime: "", //时间控件的时间修改前的时间
+      nowEndTime: ""
     };
   },
   mounted() {},
@@ -242,6 +245,14 @@ export default {
         this.endTimes = "";
       } else {
         //  this.isIndeterminate = false;//弹框显示时，默认选中后台返回数据中的第一个要素
+      }
+    },
+    //子组件的省份发生变化时，要素也恢复最初状态
+    province(){
+      if(this.province!=""){
+        this.isIndeterminate = false; //弹框关闭时，全选按钮恢复初始状态
+        this.checkAll = false;//全选按钮取消勾选
+        this.checkedElements=[];
       }
     }
   },
@@ -309,6 +320,9 @@ export default {
      * 修改elementUI中的样式，动态修改style
      */
     dateChange() {
+      //截获时间改变前，时间控件中的时间值，为change事件提供值
+      this.nowStartTime = this.startTimes;
+      this.nowEndTime = this.endTimes;
       setTimeout(() => {
         document
           .querySelectorAll(".has-time")[0]
@@ -319,6 +333,55 @@ export default {
           .querySelectorAll(".el-time-spinner__wrapper")[1].style.display =
           "none";
       }, 100); //由于获取焦点时动态生成时的div还没出来，所以设置延迟执行
+    },
+    /**
+     * 改变elementUI中的起止时间，并作限制
+     */
+    changeTime(type) {
+      //选的开始时间不能小于数据的开始时间
+      let sTBefore = new Date(this.startTimesFlag);
+      let startDateTime = new Date(this.startTimes + "00:00"); //所选起始时间
+      //结束时间不能大于数据的最新时间
+      let lst = new Date(this.lstTime); //数据的最新时间  处理成世界时
+      let end = new Date(this.endTimes + "00:00");
+
+      let lstNormalFomat = "";
+      let startNormalFomat = "";
+      let str = this.UpdateInterValue;
+      if (str.indexOf("时") != -1) {
+        // let lstNormalFomat=this._global.formatDate(lst, "yyyy-MM-dd hh");//将数据的最新时间GMT时间格式化为对应的正常格式
+        lstNormalFomat = this.formatDate1(lst, "yyyy-MM-dd HH"); //将数据的最新时间GMT时间格式化为对应的正常格式
+        startNormalFomat = this.formatDate1(sTBefore, "yyyy-MM-dd HH"); //将数据的最新时间GMT时间格式化为对应的正常格式
+      } else if (str.indexOf("天") != -1 || str.indexOf("日") != -1) {
+        // let lstNormalFomat=this._global.formatDate(lst, "yyyy-MM-dd");//将数据的最新时间GMT时间格式化为对应的正常格式
+        lstNormalFomat = this.formatDate1(lst, "yyyy-MM-dd"); //将数据的最新时间GMT时间格式化为对应的正常格式
+        startNormalFomat = this.formatDate1(sTBefore, "yyyy-MM-dd"); //将数据的最新时间GMT时间格式化为对应的正常格式
+      } else if (str.indexOf("月") != -1) {
+        // let lstNormalFomat=this._global.formatDate(lst, "yyyy-MM");//将数据的最新时间GMT时间格式化为对应的正常格式
+        lstNormalFomat = this.formatDate1(lst, "yyyy-MM"); //将数据的最新时间GMT时间格式化为对应的正常格式
+        startNormalFomat = this.formatDate1(sTBefore, "yyyy-MM"); //将数据的最新时间GMT时间格式化为对应的正常格式
+      } else if (str.indexOf("年") != -1) {
+        // let lstNormalFomat=this._global.formatDate(lst, "yyyy");//将数据的最新时间GMT时间格式化为对应的正常格式
+        lstNormalFomat = this.formatDate1(lst, "yyyy"); //将数据的最新时间GMT时间格式化为对应的正常格式
+        startNormalFomat = this.formatDate1(sTBefore, "yyyy"); //将数据的最新时间GMT时间格式化为对应的正常格式
+      } else {
+        // let lstNormalFomat=this._global.formatDate(lst, "yyyy-MM-dd hh");//将数据的最新时间GMT时间格式化为对应的正常格式
+        lstNormalFomat = this.formatDate1(lst, "yyyy-MM-dd hh"); //将数据的最新时间GMT时间格式化为对应的正常格式
+        startNormalFomat = this.formatDate1(sTBefore, "yyyy-MM-dd hh"); //将数据的最新时间GMT时间格式化为对应的正常格式
+      }
+      //设置提示
+      //所选时间不能小于数据的起始时间
+      if (startDateTime.getTime() - sTBefore.getTime() < 0) {
+        this.startTimes = this.nowStartTime; //恢复原有值
+        alert("起始时间不能小于 " + startNormalFomat);
+        return;
+      }
+      //如果选的结束时间大于数据库中的最新时间，就提示“所选时间不能大于数据库中数据的最新时间”
+      if (end.getTime() - lst.getTime() > 0) {
+        this.endTimes = this.nowEndTime; //恢复原有值
+        alert("结束时间不能大于 " + lstNormalFomat);
+        return;
+      }
     },
     /**
      *  获取资料对应的间隔时间
@@ -393,12 +456,15 @@ export default {
             new Date(resData[0].collect_time),
             "yyyy-MM-dd hh"
           );
-          self.defaultSetByModuleEnName();
+          // self.defaultSetByModuleEnName();
         })
         .catch(response => {
           console.log(response);
         });
     },
+    /**
+     * 根据更新频率中的“时日月年”，动态修改时间间隔的单位
+     */
     defaultSetByModuleEnName() {
       let hour = this.UpdateInterValue.indexOf("时"); //注意：数据库中配置时，年月日时，的命名采用要包含此处对应的字符
       let day = this.UpdateInterValue.indexOf("天");
@@ -422,6 +488,9 @@ export default {
         this.timeValue = "天";
       }
     },
+    /**
+     * 根据更新频率的单位，设置起始时间
+     */
     getTime(time) {
       const start = new Date(this.endTimes + ":00:00"); //将正常的字符串时间格式转化为GMT时间格式
       // this.endTimes = this._global.formatDate(new Date(), "yyyy-MM-dd hh");
@@ -465,7 +534,7 @@ export default {
       this.axios
         .get("DataService.svc/getSubTitle", {
           params: {
-            moduleEnName: this.moduleEnName //待修改为moduleEnName，先用固定值代替
+            moduleEnName: self.moduleEnName //待修改为moduleEnName，先用固定值代替
             // moduleEnName: "hourData" //待修改为moduleEnName，先用固定值代替
           }
         })
@@ -473,14 +542,85 @@ export default {
           let resData = eval("(" + response.data + ")");
           self.modalData = resData;
           self.UpdateInterValue = self.modalData[0].UpdateInter; //将更新频率赋值给变量数据UpdateInterValue，用于设置默认时间
+          //获取起始时间，用于限制选的起始时间不能过小
+          self.startTimesFlag = self.modalData[0].startTime;
+          //获取结束时间，用于放到时间控件中的结束时间内
+          self.lstTime = self.modalData[0].endTime; //将数据的最新时间保留下来（保存为GMT时间格式），用作对比用户选的起始时间
+          self.endTimes = self._global.formatDate(
+            new Date(self.modalData[0].endTime),
+            "yyyy-MM-dd hh"
+          ); //self.modalData[0].endTime
 
-          // this.defaultSetByModuleEnName();//需要的变量生成后执行   解决axios不能同步
-          self.getLstTime();
-          this.changeDateTimeTypeFormat();
+          //将获取到的时间根据moduleEnName的不同在资料内容中显示不同的时间格式
+          self.getTimeFormatByModuleEnName(
+            self.modalData[0].startTime,
+            self.modalData[0].endTime
+          );
+          self.defaultSetByModuleEnName(); //需要的变量生成后执行   解决axios不能同步
+          // self.getLstTime();
+          self.changeDateTimeTypeFormat();
         })
         .catch(response => {
           console.log(response);
         });
+    },
+    /**
+     * 根据moduleEnName的不同在资料内容中显示不同的时间格式
+     */
+    getTimeFormatByModuleEnName(startT, endT) {
+      let sT = startT;
+      let eT = endT;
+      let hour = this.UpdateInterValue.indexOf("时"); //注意：数据库中配置时，年月日时，的命名采用要包含此处对应的字符
+      let day = this.UpdateInterValue.indexOf("天");
+      let day1 = this.UpdateInterValue.indexOf("日");
+      let month = this.UpdateInterValue.indexOf("月");
+      let year = this.UpdateInterValue.indexOf("年");
+      if (hour != -1) {
+        this.modalData[0].startTime = this._global.formatDate(
+          new Date(sT),
+          "yyyy-MM-dd hh"
+        );
+        this.modalData[0].endTime = this._global.formatDate(
+          new Date(eT),
+          "yyyy-MM-dd hh"
+        );
+      } else if (day != -1 || day1 != -1) {
+        this.modalData[0].startTime = this._global.formatDate(
+          new Date(sT),
+          "yyyy-MM-dd"
+        );
+        this.modalData[0].endTime = this._global.formatDate(
+          new Date(eT),
+          "yyyy-MM-dd"
+        );
+      } else if (month != -1) {
+        this.modalData[0].startTime = this._global.formatDate(
+          new Date(sT),
+          "yyyy-MM"
+        );
+        this.modalData[0].endTime = this._global.formatDate(
+          new Date(eT),
+          "yyyy-MM"
+        );
+      } else if (year != -1) {
+        this.modalData[0].startTime = this._global.formatDate(
+          new Date(sT),
+          "yyyy"
+        );
+        this.modalData[0].endTime = this._global.formatDate(
+          new Date(eT),
+          "yyyy"
+        );
+      } else {
+        this.modalData[0].startTime = this._global.formatDate(
+          new Date(sT),
+          "yyyy-MM-dd hh"
+        );
+        this.modalData[0].endTime = this._global.formatDate(
+          new Date(eT),
+          "yyyy-MM-dd hh"
+        );
+      }
     },
     getElementData() {
       let self = this;
@@ -499,7 +639,7 @@ export default {
           for (var i = 0; i < resData.length; i++) {
             elementsArr[i] = {
               id: resData[i].id,
-              elementCnName: resData[i].elementCn,
+              elementCnName: self.proEleType(resData[i].elementCn),
               elementEnName: resData[i].elementEn
             };
             self.elementCnNameArr.push(resData[i].elementCn);
@@ -513,6 +653,29 @@ export default {
           console.log(response);
         });
     },
+    /**
+     * 将要素处理成带下标的形式
+     */
+    proEleType(data) {
+      if (data.indexOf("PM25") > -1) {
+        data = data.replace("PM25", "PM<sub>2.5</sub>");
+      } else if (data.indexOf("PM10") > -1) {
+        data = data.replace("PM10", "PM<sub>10</sub>");
+      } else if (data.indexOf("PM1") > -1) {
+        data = data.replace("PM1", "PM<sub>1</sub>");
+      } else if (data.indexOf("O3") > -1) {
+        data = data.replace("O3", "O₃");
+      } else if (data.indexOf("NO2") > -1) {
+        data = data.replace("NO2", "NO₂");
+      } else if (data.indexOf("SO2") > -1) {
+        data = data.replace("SO2", "SO₂");
+      } else if (data.indexOf("CO2") > -1) {
+        data = data.replace("CO2", "CO₂");
+      } else {
+        data = data;
+      }
+      return data;
+    },
     nowDownLoad() {
       let account = this.UserToken.Account;
       if (account == "readearth") {
@@ -524,8 +687,6 @@ export default {
       // //调用公共的部分
       // let obj = this.commonFun(stateType);
 
-
-
       var data = this.getNowFormatDate();
       var nowTime = data.toString().replace(/[^0-9]/gi, "");
 
@@ -538,61 +699,6 @@ export default {
       //由于日期输入框中虽然显示到日、月、年，但是startT都都默认位数到小时，所以此处统一采用加四个0的方式
       startDate = startT + "0000";
       endDate = endT + "0000";
-      //结束时间不能大于数据的最新时间
-      let lst = new Date(this.lstTime); //数据的最新时间
-      let end = new Date(this.endTimes + "00:00");
-      if (str.indexOf("时") != -1) {
-        startDate = startT + "0000";
-        endDate = endT + "0000";
-
-        // let lstNormalFomat=this._global.formatDate(lst, "yyyy-MM-dd hh");//将数据的最新时间GMT时间格式化为对应的正常格式
-        let lstNormalFomat = this.formatDate1(lst, "yyyy-MM-dd HH"); //将数据的最新时间GMT时间格式化为对应的正常格式
-        if (end.getTime() - lst.getTime() > 0) {
-          alert("结束时间不能大于" + lstNormalFomat);
-          return;
-        }
-      } else if (str.indexOf("天") != -1 || str.indexOf("日") != -1) {
-        // startDate = startT + "000000";
-        // endDate = endT + "000000";
-
-        // let lstNormalFomat=this._global.formatDate(lst, "yyyy-MM-dd");//将数据的最新时间GMT时间格式化为对应的正常格式
-        let lstNormalFomat = this.formatDate1(lst, "yyyy-MM-dd"); //将数据的最新时间GMT时间格式化为对应的正常格式
-        if (end.getTime() - lst.getTime() > 0) {
-          alert("结束时间不能大于" + lstNormalFomat);
-          return;
-        }
-      } else if (str.indexOf("月") != -1) {
-        // startDate = startT + "00000000";
-        // endDate = endT + "00000000";
-
-        // let lstNormalFomat=this._global.formatDate(lst, "yyyy-MM");//将数据的最新时间GMT时间格式化为对应的正常格式
-        let lstNormalFomat = this.formatDate1(lst, "yyyy-MM"); //将数据的最新时间GMT时间格式化为对应的正常格式
-        if (end.getTime() - lst.getTime() > 0) {
-          alert("结束时间不能大于" + lstNormalFomat);
-          return;
-        }
-      } else if (str.indexOf("年") != -1) {
-        // startDate = startT + "0000000000";
-        // endDate = endT + "0000000000";
-
-        // let lstNormalFomat=this._global.formatDate(lst, "yyyy");//将数据的最新时间GMT时间格式化为对应的正常格式
-        let lstNormalFomat = this.formatDate1(lst, "yyyy"); //将数据的最新时间GMT时间格式化为对应的正常格式
-        if (end.getTime() - lst.getTime() > 0) {
-          alert("结束时间不能大于" + lstNormalFomat);
-          return;
-        }
-      } else {
-        //非年月日的起止时间按小时
-        startDate = startT + "0000";
-        endDate = endT + "0000";
-
-        // let lstNormalFomat=this._global.formatDate(lst, "yyyy-MM-dd hh");//将数据的最新时间GMT时间格式化为对应的正常格式
-        let lstNormalFomat = this.formatDate1(lst, "yyyy-MM-dd hh"); //将数据的最新时间GMT时间格式化为对应的正常格式
-        if (end.getTime() - lst.getTime() > 0) {
-          alert("结束时间不能大于" + lstNormalFomat);
-          return;
-        }
-      }
 
       //起止时间间隔不能大于三个月
       let hour = this.UpdateInterValue.indexOf("时");
@@ -646,245 +752,77 @@ export default {
         alert("请选择要素！");
         return;
       } else {
-          var obj = {
-            userName: account,
-            downTime: nowTime + "",
-            moduleEnName: this.moduleEnName,
-            date: startDate + "-" + endDate,
-            province: this.province,
-            provinceData: this.provinceData,
-            citySite: this.citySite,
-            citySiteDetail: this.citySiteDetail,
-            elementEn: eleEnStr,
-            elementCn: eleCnStr,
-            famat: this.famatValue,
-            timeInterval: timeIntervalStr,
-            insertTime: nowTime,
-            downState: "1",
-            isDown: "1"
-          };
+        var obj = {
+          userName: account,
+          downTime: nowTime + "",
+          moduleEnName: this.moduleEnName,
+          date: startDate + "-" + endDate,
+          province: this.province,
+          provinceData: this.provinceData,
+          citySite: this.citySite,
+          citySiteDetail: this.citySiteDetail,
+          elementEn: eleEnStr,
+          elementCn: eleCnStr,
+          famat: this.famatValue,
+          timeInterval: timeIntervalStr,
+          insertTime: nowTime,
+          downState: "1",
+          isDown: "1"
+        };
 
-      var objToStr = JSON.stringify(obj);
-      //添加loading加载层
-      const loading = this.$loading({
-        lock: true,
-        text: "正在请求数据...",
-        spinner: "el-icon-loading",
-        background: "rgba(0, 0, 0, 0.7)"
-      });
-
-      let self = this;
-      this.axios
-        .get("DataService.svc/insertDownList", {
-          params: {
-            funParams: objToStr
-          },
-          timeout: 1000 * 60 * 5
-        })
-        .then(res => {
-          let data = res.data;
-          loading.close();
-          if (data != "ERROR") {
-            let arr = JSON.parse(data);
-            let a = document.createElement("a");
-            let path = this._global.downPath;
-            arr.result.forEach(element => {
-              let fileName = element.zipDownUrl;
-              let id = element.id;
-              let fullPath = path + id + "/" + fileName;
-              a.download = fileName;
-              a.href = fullPath;
-              a.click();
-            });
-          } else {
-            alert("没有数据！");
-          }
-        })
-        .catch(error => {
-          console.log(error.data);
-          // alert("下载失败");
-          // console.log(error)
-          var str = error.message + "";
-
-          if (str.search("timeout") !== -1) {
-            // 超时error捕获
-            // self.showLoadMore = true
-            // self.showLoadMoreOk = false
-            alert("请求超时，起止时间过大，请缩小时间跨度");
-          }
-          loading.close();
+        var objToStr = JSON.stringify(obj);
+        //添加loading加载层
+        const loading = this.$loading({
+          lock: true,
+          text: "正在请求数据...",
+          spinner: "el-icon-loading",
+          background: "rgba(0, 0, 0, 0.7)"
         });
+
+        let self = this;
+        this.axios
+          .get("DataService.svc/insertDownList", {
+            params: {
+              funParams: objToStr
+            },
+            timeout: 1000 * 60 * 5
+          })
+          .then(res => {
+            let data = res.data;
+            loading.close();
+            if (data != "ERROR") {
+              let arr = JSON.parse(data);
+              let a = document.createElement("a");
+              let path = this._global.downPath;
+              arr.result.forEach(element => {
+                let fileName = element.zipDownUrl;
+                let id = element.id;
+                let fullPath = path + id + "/" + fileName;
+                a.download = fileName;
+                a.href = fullPath;
+                a.click();
+              });
+            } else {
+              alert("没有数据！");
+            }
+          })
+          .catch(error => {
+            console.log(error.data);
+            // alert("下载失败");
+            // console.log(error)
+            var str = error.message + "";
+
+            if (str.search("timeout") !== -1) {
+              // 超时error捕获
+              // self.showLoadMore = true
+              // self.showLoadMoreOk = false
+              alert("请求超时，起止时间过大，请缩小时间跨度");
+            }
+            loading.close();
+          });
       }
     },
-    /**
-     * 将nowDownload与insertCart两个方法中公用的部分提取出来
-     */
-    commonFun(stateType) {
-      let account = this.UserToken.Account;
-      var data = this.getNowFormatDate();
-      var nowTime = data.toString().replace(/[^0-9]/gi, "");
 
-      //处理时间为数字字符串
-      var startT = this.startTimes.replace(/[^0-9]/gi, "");
-      var endT = this.endTimes.replace(/[^0-9]/gi, "");
-      let startDate = "";
-      let endDate = "";
-      let str = this.UpdateInterValue;
-      //由于日期输入框中虽然显示到日、月、年，但是startT都都默认位数到小时，所以此处统一采用加四个0的方式
-      startDate = startT + "0000";
-      endDate = endT + "0000";
-      //结束时间不能大于数据的最新时间
-      let lst = new Date(this.lstTime); //数据的最新时间
-      let end = new Date(this.endTimes + "00:00");
-      if (str.indexOf("时") != -1) {
-        startDate = startT + "0000";
-        endDate = endT + "0000";
-
-        // let lstNormalFomat=this._global.formatDate(lst, "yyyy-MM-dd hh");//将数据的最新时间GMT时间格式化为对应的正常格式
-        let lstNormalFomat = this.formatDate1(lst, "yyyy-MM-dd HH"); //将数据的最新时间GMT时间格式化为对应的正常格式
-        if (end.getTime() - lst.getTime() > 0) {
-          alert("结束时间不能大于" + lstNormalFomat);
-          return;
-        }
-      } else if (str.indexOf("天") != -1 || str.indexOf("日") != -1) {
-        // startDate = startT + "000000";
-        // endDate = endT + "000000";
-
-        // let lstNormalFomat=this._global.formatDate(lst, "yyyy-MM-dd");//将数据的最新时间GMT时间格式化为对应的正常格式
-        let lstNormalFomat = this.formatDate1(lst, "yyyy-MM-dd"); //将数据的最新时间GMT时间格式化为对应的正常格式
-        if (end.getTime() - lst.getTime() > 0) {
-          alert("结束时间不能大于" + lstNormalFomat);
-          return;
-        }
-      } else if (str.indexOf("月") != -1) {
-        // startDate = startT + "00000000";
-        // endDate = endT + "00000000";
-
-        // let lstNormalFomat=this._global.formatDate(lst, "yyyy-MM");//将数据的最新时间GMT时间格式化为对应的正常格式
-        let lstNormalFomat = this.formatDate1(lst, "yyyy-MM"); //将数据的最新时间GMT时间格式化为对应的正常格式
-        if (end.getTime() - lst.getTime() > 0) {
-          alert("结束时间不能大于" + lstNormalFomat);
-          return;
-        }
-      } else if (str.indexOf("年") != -1) {
-        // startDate = startT + "0000000000";
-        // endDate = endT + "0000000000";
-
-        // let lstNormalFomat=this._global.formatDate(lst, "yyyy");//将数据的最新时间GMT时间格式化为对应的正常格式
-        let lstNormalFomat = this.formatDate1(lst, "yyyy"); //将数据的最新时间GMT时间格式化为对应的正常格式
-        if (end.getTime() - lst.getTime() > 0) {
-          alert("结束时间不能大于" + lstNormalFomat);
-          return;
-        }
-      } else {
-        //非年月日的起止时间按小时
-        startDate = startT + "0000";
-        endDate = endT + "0000";
-
-        // let lstNormalFomat=this._global.formatDate(lst, "yyyy-MM-dd hh");//将数据的最新时间GMT时间格式化为对应的正常格式
-        let lstNormalFomat = this.formatDate1(lst, "yyyy-MM-dd hh"); //将数据的最新时间GMT时间格式化为对应的正常格式
-        if (end.getTime() - lst.getTime() > 0) {
-          alert("结束时间不能大于" + lstNormalFomat);
-          return;
-        }
-      }
-
-      //起止时间间隔不能大于三个月
-      let hour = this.UpdateInterValue.indexOf("时");
-      if (hour != -1) {
-        let end = new Date(this.endTimes + ":00:00");
-        let start = new Date(this.startTimes + ":00:00");
-        let disTime = end.getTime() - start.getTime();
-        if (disTime < 3600 * 1000 * 24 * 30 * 3) {
-          //时间间隔小于三个月就不做处理
-        } else {
-          alert("时间间隔大于三个月，请重新选择");
-          return;
-        }
-      }
-
-      //选取的要素
-      var checkedIndex = this.checkedElements;
-      var eleObj = {
-        eleEn: [],
-        eleCn: []
-      };
-      if (checkedIndex.length != 0) {
-        for (var i = 0; i < checkedIndex.length; i++) {
-          eleObj.eleEn.push(
-            this.elements[this.checkedElements[i]].elementEnName
-          );
-          eleObj.eleCn.push(
-            this.elements[this.checkedElements[i]].elementCnName
-          );
-        }
-      } else {
-        eleObj.eleEn.push("");
-        eleObj.eleCn.push("");
-      }
-      var eleEnStr = eleObj.eleEn.toString();
-      var eleCnStr = eleObj.eleCn.toString();
-      var timeIntervalStr = this.timeInput + this.timeValue;
-
-      var comparTime = startT > endT;
-
-      if (startT == "" || endT == "") {
-        alert("选择的日期不能空！");
-        return;
-      } else if (comparTime == true) {
-        alert("起始时间不能大于结束时间！");
-        return;
-      } else if (this.citySite == "" || this.citySiteDetail == "") {
-        alert("请选择省市对应的站点！");
-        return;
-      } else if (eleEnStr == "" || eleCnStr == "") {
-        alert("请选择要素！");
-        return;
-      } else {
-        let obj = {};
-        if (stateType == "1") {
-          obj = {
-            userName: account,
-            downTime: nowTime + "",
-            moduleEnName: this.moduleEnName,
-            date: startDate + "-" + endDate,
-            province: this.province,
-            provinceData: this.provinceData,
-            citySite: this.citySite,
-            citySiteDetail: this.citySiteDetail,
-            elementEn: eleEnStr,
-            elementCn: eleCnStr,
-            famat: this.famatValue,
-            timeInterval: timeIntervalStr,
-            insertTime: nowTime,
-            downState: "1",
-            isDown: "1"
-          };
-        } else if (stateType == "0") {
-         var obj = {
-            userName: account,
-            downTime: nowTime + "",
-            moduleEnName: this.moduleEnName,
-            date: startDate + "-" + endDate,
-            province: this.province,
-            provinceData: this.provinceData,
-            citySite: this.citySite,
-            citySiteDetail: this.citySiteDetail,
-            elementEn: eleEnStr,
-            elementCn: eleCnStr,
-            famat: this.famatValue,
-            timeInterval: timeIntervalStr,
-            insertTime: nowTime,
-            downState: "0",
-            isDown: "0"
-          };
-        } else {
-          return;
-        }
-
-        return obj;
-      }
-    },
     getNowFormatDate() {
       var date = new Date();
       var seperator1 = "-";
@@ -939,7 +877,6 @@ export default {
       // //调用公共的部分
       // this.commonFun(stateType);
 
-
       var data = this.getNowFormatDate();
       var nowTime = data.toString().replace(/[^0-9]/gi, "");
 
@@ -952,61 +889,6 @@ export default {
       //由于日期输入框中虽然显示到日、月、年，但是startT都都默认位数到小时，所以此处统一采用加四个0的方式
       startDate = startT + "0000";
       endDate = endT + "0000";
-      //结束时间不能大于数据的最新时间
-      let lst = new Date(this.lstTime); //数据的最新时间
-      let end = new Date(this.endTimes + "00:00");
-      if (str.indexOf("时") != -1) {
-        startDate = startT + "0000";
-        endDate = endT + "0000";
-
-        // let lstNormalFomat=this._global.formatDate(lst, "yyyy-MM-dd hh");//将数据的最新时间GMT时间格式化为对应的正常格式
-        let lstNormalFomat = this.formatDate1(lst, "yyyy-MM-dd HH"); //将数据的最新时间GMT时间格式化为对应的正常格式
-        if (end.getTime() - lst.getTime() > 0) {
-          alert("结束时间不能大于" + lstNormalFomat);
-          return;
-        }
-      } else if (str.indexOf("天") != -1 || str.indexOf("日") != -1) {
-        // startDate = startT + "000000";
-        // endDate = endT + "000000";
-
-        // let lstNormalFomat=this._global.formatDate(lst, "yyyy-MM-dd");//将数据的最新时间GMT时间格式化为对应的正常格式
-        let lstNormalFomat = this.formatDate1(lst, "yyyy-MM-dd"); //将数据的最新时间GMT时间格式化为对应的正常格式
-        if (end.getTime() - lst.getTime() > 0) {
-          alert("结束时间不能大于" + lstNormalFomat);
-          return;
-        }
-      } else if (str.indexOf("月") != -1) {
-        // startDate = startT + "00000000";
-        // endDate = endT + "00000000";
-
-        // let lstNormalFomat=this._global.formatDate(lst, "yyyy-MM");//将数据的最新时间GMT时间格式化为对应的正常格式
-        let lstNormalFomat = this.formatDate1(lst, "yyyy-MM"); //将数据的最新时间GMT时间格式化为对应的正常格式
-        if (end.getTime() - lst.getTime() > 0) {
-          alert("结束时间不能大于" + lstNormalFomat);
-          return;
-        }
-      } else if (str.indexOf("年") != -1) {
-        // startDate = startT + "0000000000";
-        // endDate = endT + "0000000000";
-
-        // let lstNormalFomat=this._global.formatDate(lst, "yyyy");//将数据的最新时间GMT时间格式化为对应的正常格式
-        let lstNormalFomat = this.formatDate1(lst, "yyyy"); //将数据的最新时间GMT时间格式化为对应的正常格式
-        if (end.getTime() - lst.getTime() > 0) {
-          alert("结束时间不能大于" + lstNormalFomat);
-          return;
-        }
-      } else {
-        //非年月日的起止时间按小时
-        startDate = startT + "0000";
-        endDate = endT + "0000";
-
-        // let lstNormalFomat=this._global.formatDate(lst, "yyyy-MM-dd hh");//将数据的最新时间GMT时间格式化为对应的正常格式
-        let lstNormalFomat = this.formatDate1(lst, "yyyy-MM-dd hh"); //将数据的最新时间GMT时间格式化为对应的正常格式
-        if (end.getTime() - lst.getTime() > 0) {
-          alert("结束时间不能大于" + lstNormalFomat);
-          return;
-        }
-      }
 
       //起止时间间隔不能大于三个月
       let hour = this.UpdateInterValue.indexOf("时");
@@ -1060,44 +942,41 @@ export default {
         alert("请选择要素！");
         return;
       } else {
-        var  obj = {
-            userName: account,
-            downTime: nowTime + "",
-            moduleEnName: this.moduleEnName,
-            date: startDate + "-" + endDate,
-            province: this.province,
-            provinceData: this.provinceData,
-            citySite: this.citySite,
-            citySiteDetail: this.citySiteDetail,
-            elementEn: eleEnStr,
-            elementCn: eleCnStr,
-            famat: this.famatValue,
-            timeInterval: timeIntervalStr,
-            insertTime: nowTime,
-            downState: "0",
-            isDown: "0"
-          };
+        var obj = {
+          userName: account,
+          downTime: nowTime + "",
+          moduleEnName: this.moduleEnName,
+          date: startDate + "-" + endDate,
+          province: this.province,
+          provinceData: this.provinceData,
+          citySite: this.citySite,
+          citySiteDetail: this.citySiteDetail,
+          elementEn: eleEnStr,
+          elementCn: eleCnStr,
+          famat: this.famatValue,
+          timeInterval: timeIntervalStr,
+          insertTime: nowTime,
+          downState: "0",
+          isDown: "0"
+        };
 
+        var objToStr = JSON.stringify(obj);
 
-
-
-      var objToStr = JSON.stringify(obj);
-
-      let self = this;
-      this.axios
-        .get("DataService.svc/insertDownList", {
-          params: {
-            funParams: objToStr
-          }
-        })
-        .then(response => {
-          let resData = eval("(" + response.data + ")");
-          alert("加入清单成功！");
-        })
-        .catch(response => {
-          console.log(response);
-          alert("加入清单失败！");
-        });
+        let self = this;
+        this.axios
+          .get("DataService.svc/insertDownList", {
+            params: {
+              funParams: objToStr
+            }
+          })
+          .then(response => {
+            let resData = eval("(" + response.data + ")");
+            alert("加入清单成功！");
+          })
+          .catch(response => {
+            console.log(response);
+            alert("加入清单失败！");
+          });
       }
     },
     //      验证只能输入正整数
@@ -1130,10 +1009,14 @@ export default {
 </script>
 
 <style scoped>
+.modal-component {
+  /* width: 100vw; */
+  height: 100vh;
+}
 /*适应宽度*/
-@media screen and (min-width: 1366px) and (max-width: 1919px) {
+@media screen and (min-width: 10px) and (max-width: 1919px) {
   .body-background {
-    width: 1591px;
+    width: 1911px;
     height: 1080px;
     background-color: #00000085;
     display: flex;
@@ -1153,18 +1036,18 @@ export default {
     font-weight: bold;
     text-align: center;
     line-height: 1.5;
-}
-.modal-wraps {
-  width: 50%;
-  height: 97%;
-  background-color: white;
-  border-radius: 1em;
-}
+  }
+  .modal-wraps {
+    width: 50%;
+    height: 97%;
+    background-color: white;
+    border-radius: 1em;
+  }
 }
 @media screen and (min-width: 1920px) {
   .body-background {
-    width: 1920px;
-    height: 942px;
+    width: 100%;
+    height: 1080px;
     background-color: #00000085;
     display: flex;
     justify-content: center;
@@ -1172,31 +1055,31 @@ export default {
     color: black;
   }
   .middle-name-wrap {
-  width: 14%;
-  height: 20%;
-  position: relative;
-  top: -23%;
-  left: -3%;
-  background-color: white;
-  color: #4fb9ed;
-  font-size: 21px;
-  font-weight: bold;
-  text-align: center;
-  line-height: 1.5;
-}
-.modal-wraps {
-  width: 45%;
-  height: 97%;
-  background-color: white;
-  border-radius: 1em;
-}
+    width: 14%;
+    height: 20%;
+    position: relative;
+    top: -23%;
+    left: -3%;
+    background-color: white;
+    color: #4fb9ed;
+    font-size: 21px;
+    font-weight: bold;
+    text-align: center;
+    line-height: 1.5;
+  }
+  .modal-wraps {
+    width: 45%;
+    height: 97%;
+    background-color: white;
+    border-radius: 1em;
+  }
 }
 
 /*适应高度*/
 @media screen and (min-height: 901px) and (max-height: 1080px) {
   .body-background {
-    width: 1920px;
-    height: 942px;
+    width: 1911px;
+    height: 1080px;
     background-color: #00000085;
     display: flex;
     justify-content: center;
@@ -1204,9 +1087,9 @@ export default {
     color: black;
   }
 }
-@media screen and (min-height: 800px) and (max-height: 900px) {
+@media screen and (min-height: 10px) and (max-height: 900px) {
   .body-background {
-    width: 2000px;
+    width: 1911px;
     height: 1080px;
     background-color: #00000085;
     display: flex;
