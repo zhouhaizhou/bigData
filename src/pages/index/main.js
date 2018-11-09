@@ -19,13 +19,16 @@ Vue.use(VueCookies);
 // var root = process.env.API_ROOT;
 // axios.defaults.withCredentials=true
 // axios.defaults.baseURL=root;
+var num=0;
 Vue.prototype._global =_global;
 Vue.prototype.axios =axios;
 router.beforeEach((to, from, next) => {
     store.commit('GETCOOKIES');
-    if(from.path=='/'&& to.matched.length==0){
-      //console.log(returnCitySN);
+    if(from.path=='/'&& to.matched.length==0&&num==0){
+      console.log("from"+from);
+      console.log("to"+to);
       store.dispatch('UpdateVisit');
+      num++;
     }
     (async ()=>{
       if(!store.state.UserToken){
