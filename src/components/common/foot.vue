@@ -99,7 +99,9 @@ export default {
   },
   methods: {
     linkClick: function(param) {
-      window.open(param);
+      if(param!=""){
+        window.open(param);
+      }
     }
   }
 };
