@@ -49,10 +49,10 @@ export default {
   methods: {
     getPersonInfo() {
       let account = this.UserToken.Account; //为获取用户名
-      if (account == "readearth") {
-        alert("请登录！");
-        return;
-      }
+      // if (account == "readearth") {
+      //   alert("请登录！");
+      //   return;
+      // }
       let self = this;
       this.axios
         .get("UserManager.svc/GetPersonInfo", {

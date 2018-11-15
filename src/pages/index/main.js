@@ -25,8 +25,6 @@ Vue.prototype.axios =axios;
 router.beforeEach((to, from, next) => {
     store.commit('GETCOOKIES');
     if(from.path=='/'&& to.matched.length==0&&num==0){
-      console.log("from"+from);
-      console.log("to"+to);
       store.dispatch('UpdateVisit');
       num++;
     }

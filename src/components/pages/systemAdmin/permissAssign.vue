@@ -64,9 +64,9 @@ export default {
   mounted() {
     this.getRoleData(); //获取左边的角色
 
-    setTimeout(() => {
+    //setTimeout(() => {
       this.setPagePaddingBottom();
-    }, 100);
+   // }, 100);
   },
   computed: {
     icon() {
@@ -100,7 +100,7 @@ export default {
           this.$refs.singleTable.setCurrentRow(this.roleData[0]);
           this.getAllAuth(); //获取右边所有的权限
         })
-        .catch(res => console.log(res));
+        .catch(res => console.log(res.response.data));
     },
     //获取右边所有权限
     getAllAuth() {
@@ -115,7 +115,7 @@ export default {
           });
           this.getRoleExistAuth(this.selectedRoleId);
         })
-        .catch(res => console.log(res));
+        .catch(res => console.log(res.response.data));
     },
     //获取该角色拥有的权限
     getRoleExistAuth(roleId) {
@@ -138,7 +138,7 @@ export default {
           self.$refs.tree.setCheckedNodes(data);
           // this.roleAllAuth=JSON.parse(res.data);
         })
-        .catch(res => console.log(res));
+        .catch(res => console.log(res.response.data));
     },
     handleCurrentChange(currentRow) {
       this.clearSearch();
@@ -167,7 +167,7 @@ export default {
         })
         .catch(res => {
           alert("权限设置失败！");
-          console.log(res);
+          console.log(res.response.data);
         });
     },
     toggle() {

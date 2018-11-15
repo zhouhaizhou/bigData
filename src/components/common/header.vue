@@ -1,7 +1,7 @@
 <template>
   <div class="header">
     <el-row>
-      <el-col :span='10' offset=3 class="left">
+      <el-col :span='10' offset=3 class="left" style="width: auto;">
         <div class="item">
           <img src="../../assets/img/tianqi.png" style="vertical-align:-1px;" alt="天气">
           <span class="temp">{{temp}}</span>
@@ -20,7 +20,7 @@
           <span class="week">{{week}}</span>
         </div>
       </el-col>
-      <el-col :span='8' class="right" offset=0>
+      <el-col :span='8' class="right " id="rightWith" offset=0>
         <div class="item">
           <span style="display:inline-block;margin-right:10px;" :class="{cur:loginTxt!='登录'}" @click="goUserAdmin">{{interview}}</span>
           <el-rate :class="{'invisible':loginTxt=='登录'}" style="display:inline-block;vertical-align:text-bottom;" v-model="grade" disabled text-color="#ff9900">
@@ -42,7 +42,7 @@
         <el-input type='text' v-model="inputKey" placeholder="输入关键字" suffix-icon="el-icon-search"></el-input>
       </el-col>
     </el-row>
-    <el-row>
+    <el-row class="threerow">
       <el-col :span="21" offset=2>
         <el-tabs v-model="page" @tab-click="handleClick($event)" :before-leave="brforeLeave" @mouseover.native="mouseover" @mouseout.native="mouseout">
           <el-tab-pane :label="option.meta.name" :name="option.name" v-for="(option,index) in topbarMenu" :key='index'>
@@ -211,8 +211,8 @@ export default {
         .then(res => {
           let data = JSON.parse(res.data).results;
           let today = data[0];
-          let t=today.weather_data[0].temperature.replace('℃','');
-          this.temp = t.split(' ~ ')[1]+'/'+t.split(' ~ ')[0]+'℃';
+          let t = today.weather_data[0].temperature.replace("℃", "");
+          this.temp = t.split(" ~ ")[1] + "/" + t.split(" ~ ")[0] + "℃";
           // today.low.split(" ")[1].split("℃")[0] +
           // "/" +
           // today.high.split(" ")[1];
@@ -275,12 +275,34 @@ export default {
 .item {
   float: left;
   margin-left: 30px;
+  font-size: 0.9vw;
 }
+
 .left .item:first-child {
   margin-left: 0;
 }
+
+/*适应宽度*/
+@media screen and (min-width: 10px) and (max-width: 1919px) {
+  #rightWith {
+    width: auto;
+    float: right;
+    margin-right: calc(100% - 1380px);
+  }
+}
+@media screen and (min-width: 1920px) {
+  #rightWith {
+    width: auto;
+    float: right;
+    margin-right: calc(100% - 1695px);
+  }
+}
+
 .right .item {
   float: right;
+}
+.threerow >>> .el-tabs__nav-scroll .el-tabs__nav .el-tabs__item {
+  font-size: 1vw;
 }
 .header {
   width: 100%;

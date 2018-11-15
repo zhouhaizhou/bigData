@@ -1,5 +1,5 @@
 <template>
-  <div class="content">
+  <div class="content" ref="content">
     <div class="header">
       <div class="strip"></div>
       <div class="header-text">修改密码</div>
@@ -14,7 +14,7 @@
         </el-col>
       </el-row>
       <el-row>
-        <el-col :span="10" :offset="6">
+        <el-col :span="8" :offset="5" style="padding-left:40px;margin-top:40px;">
           <el-button type="success" @click="confirm">确定</el-button>
           <el-button type="primary" style="margin-left:40px;" @click="reset">重置</el-button>
         </el-col>
@@ -24,6 +24,7 @@
 </template>
 
 <script>
+import { mapMutations } from "vuex";
 export default {
   data() {
     return {
@@ -44,9 +45,24 @@ export default {
       ]
     };
   },
+  mounted(){
+    this.setPagePaddingBottom();
+  },
   methods: {
+    ...mapMutations(["setMainHeight"]),
+    setPagePaddingBottom() {
+      setTimeout(()=>{
+        let contentH = document.querySelector(".content").clientHeight + 20;
+        let obj = {
+          contentH: contentH,
+          self: this,
+          ref: "content"
+        };
+        this.setMainHeight(obj);
+      },10)
+    },
     confirm() {
-      let oldPass = this.items[0].values;
+      let oldPass = this.items[0].value;
       let newPass = this.items[1].value;
       let checkPass = this.items[2].value;
       if (newPass != checkPass) {
@@ -55,7 +71,7 @@ export default {
       }
       for(var i=0;i<this.items.length;i++){
         let ele=this.items[i];
-        if(ele.value==""){
+        if(!ele.value){
           alert("请填写"+ele.label+"项")
           return;
         }
@@ -114,7 +130,7 @@ export default {
   line-height: 45px;
 }
 .main {
-  height: 300px;
+  height: 39vh;
   padding-top: 30px;
   margin-bottom: 80px;
 }

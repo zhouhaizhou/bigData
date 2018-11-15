@@ -1,11 +1,14 @@
 <template>
-  <div style="background-color:white;padding-right:15px">
+  <div style="background-color:white;margin-right:15px">
     <header-info info='动态资讯管理'></header-info>
     <div class="main" v-show="showInfo">
       <el-row>
-        <el-col :span="5">
-          <el-button type="primary" @click="add('')" size='mini' icon="el-icon-plus">添加</el-button>
-          <el-button type="danger" @click="del" size='mini' icon="el-icon-delete">删除</el-button>
+        <el-col :span="5" style="padding-right:20px;margin-top:-2px;">
+          <el-input v-model="inputKey" @change="search" @keyup.enter="search" placeholder="搜索"></el-input>
+        </el-col>
+        <el-col :span="4" offset="15">
+          <el-button class="btn" type="danger" @click="del" size='mini' icon="el-icon-delete">删除</el-button>
+          <el-button class="btn" type="primary" @click="add('')" size='mini' icon="el-icon-plus">添加</el-button>
         </el-col>
       </el-row>
       <el-row style="padding-bottom:0;">
@@ -32,8 +35,9 @@ export default {
   },
   data() {
     return {
+      inputKey:'',
       showInfo:true,
-      pageSize:5,
+      pageSize:10,
       selectedRow:[],
       tableColName: [
         {
@@ -61,7 +65,7 @@ export default {
           width:''
         },
         {
-          label: "操作",
+          label: "编辑",
           property: "option",
           type: "",
           width:'80'
@@ -95,7 +99,7 @@ export default {
           let data=JSON.parse(res.data);
           this.tableData=data;
         })
-        .catch(res => console.log(res));
+        .catch(res => console.log(res.response.data));
     },
     selectionChange(row){
       this.selectedRow=row;
@@ -120,6 +124,7 @@ export default {
       this.$router.push({ name: "info",params:{'data':content} });
     },
     del(){
+      if(!confirm('是否要删除？')) return;
       let ids=[];
       this.selectedRow.forEach(ele=>{
         ids.push(ele.id);
@@ -137,7 +142,7 @@ export default {
           // });
         })
         .catch(res => {
-          alert("删除失败");console.log(res)
+          alert("删除失败");console.log(res.response.data)
         });
     },
     edit(index,row){
@@ -154,5 +159,9 @@ export default {
 }
 .el-row{
   padding-bottom: 20px;
+}
+.btn{
+  float: right;
+  margin-right: 20px;
 }
 </style>

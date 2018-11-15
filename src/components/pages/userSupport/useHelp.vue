@@ -48,6 +48,7 @@
     padding-top: 0%;
     background-color: white;
     padding-left: 8%;
+	margin-bottom: 4%;
 }
 .img-font-wrap{
 width: 88%;

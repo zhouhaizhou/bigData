@@ -66,6 +66,9 @@ export default {
   border-right: none;
   border-bottom: none;
 }
+.side >>> .el-submenu .el-menu-item{
+  min-width: 0px;
+}
 .main {
   width: 79.5vw;
   /* background-color: aqua; */
