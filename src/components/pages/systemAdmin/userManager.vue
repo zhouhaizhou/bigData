@@ -15,6 +15,7 @@
       <el-dialog
         :title="title"
         :visible.sync="edit"
+        class="dialog"
         width="30%">
         <el-row v-for="(item,index) in dialog" :key=index  style="line-height:40px;">
           <el-col :span="3" :offset="1">
@@ -93,7 +94,7 @@ export default {
         },
         {
           label: "状态",
-          property: "userStatus",
+          property: "status",
           type: "",
           width:'150'
         },{
@@ -173,7 +174,7 @@ export default {
       this.axios
         .get("SystemAdmin.svc/GetUser")
         .then(res => {
-          let data=JSON.parse(res.data);
+          let data=JSON.parse(res.data.replace(/userStatus/g,'status'));
           data.forEach(ele=>{
             for (const key in ele) {
               if (ele[key]==null) {
@@ -242,5 +243,16 @@ export default {
 }
 .stop /deep/ .el-radio__input.is-checked+.el-radio__label{
   color:red;
+}
+.dialog /deep/ .el-dialog__title{
+  font-weight: bold !important;
+  font-size: 24px;
+}
+.dialog /deep/ .el-dialog__body{
+  padding: 20px 20px !important;
+}
+.dialog /deep/ .el-dialog__header{
+  padding: 20px 19px 22px !important;
+  border-bottom: 1px solid #ccc !important;
 }
 </style>

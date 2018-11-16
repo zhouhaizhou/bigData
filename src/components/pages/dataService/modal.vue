@@ -154,6 +154,7 @@
 <script>
 import myModalProvincesPan from "./modalProvincesPan";
 import { mapState } from "vuex";
+
 export default {
   components: {
     myModalProvincesPan
@@ -1138,6 +1139,39 @@ export default {
 .data-content {
   font-weight: bold;
 }
+.data-start-time-wrap {
+  /* width: 50%;
+    float: left; */
+}
+.data-start-time-name {
+}
+.data-start-time-value {
+}
+.data-end-time-wrap {
+}
+.data-end-time-wrap-name {
+}
+.data-end-time-wrap-value {
+}
+.update-wrap {
+  /* width: 50%;
+    float: left; */
+}
+.update-name {
+}
+.update-value {
+}
+.share-wrap {
+}
+
+.share-value {
+}
+.data-soure-wrap {
+}
+.data-soure-name {
+}
+.data-soure-value {
+}
 .middle-right-wrap {
   float: left;
   width: 25%;
@@ -1146,24 +1180,44 @@ export default {
   position: relative;
   top: -21%;
 }
-
+.comments-wrap {
+}
 .comment-pic {
   background: url("../../../assets/img/dataDownLoad/comment.png") no-repeat
     center center;
+}
+.comment-name {
+}
+.comment-count {
+}
+.likes-wrap {
 }
 .likes-pic {
   background: url("../../../assets/img/dataDownLoad/likes.png") no-repeat center
     center;
 }
+.likes-name {
+}
+.likes-count {
+}
+.views-wrap {
+}
 .views-pic {
   background: url("../../../assets/img/dataDownLoad/view.png") no-repeat center
     center;
 }
+.views-name {
+}
+.views-count {
+}
+
 .share-pic {
   background: url("../../../assets/img/modal/share.png") no-repeat center center;
   width: 16%;
   height: 2.1vh;
   background-size: 45%;
+}
+.share-name {
 }
 .share {
   padding-left: 28%;
@@ -1269,6 +1323,8 @@ export default {
   float: left;
   line-height: 1.5;
   padding-top: 2%;
+}
+.element-all-select-wrap-postion {
 }
 .element-content {
   height: 70%;
@@ -1383,10 +1439,20 @@ export default {
 .famat-time-wrap >>> .el-input__icon {
   height: 143%;
 }
+
+.time-interval-value >>> .el-input__inner {
+  /* height: 30px; */
+}
 .time-interval-unit {
   width: 15%;
   float: left;
   margin-left: 1%;
+}
+.time-interval-unit >>> .el-input__inner {
+  /* height: 30px; */
+}
+.fomat-time-wrap >>> .el-input__icon {
+  /* height: 30px; */
 }
 .btns-wrap {
   width: 91%;
@@ -1409,6 +1475,8 @@ export default {
 .now-download-wrap {
   float: left;
   margin-right: 5%;
+}
+.add-in-car {
 }
 .modal-wrap-right {
   /* background-color: pink; */

@@ -8,16 +8,17 @@
       ref="table" 
       :data="bindTableData" 
       border
+      tooltip-effect='dark'
       @selection-change="handleSelectionChange">
-        <el-table-column  v-if='(index<tableColName.length-1)&&colName.property!="userStatus"' :type="colName.type" v-for="(colName,index) in tableColName" :width='colName.width' :key=index :property=colName.property :label=colName.label>
+        <el-table-column show-overflow-tooltip v-if='(index<tableColName.length-1)&&colName.property!="status"' :type="colName.type" v-for="(colName,index) in tableColName" :width='colName.width' :key=index :property=colName.property :label=colName.label>
         </el-table-column>
-        <el-table-column v-if='(index==tableColName.length-1)||colName.property=="userStatus"' :type="colName.type" v-for="(colName,index) in tableColName" :width='colName.width' :key=index :property=colName.property :label=colName.label>
+        <el-table-column v-if='(index==tableColName.length-1)||colName.property=="status"' :type="colName.type" v-for="(colName,index) in tableColName" :width='colName.width' :key=index :property=colName.property :label=colName.label>
           <template slot-scope="scope">
-            <div v-if='colName.property=="userStatus"' :class="{active:scope.row.userStatus,stop:!scope.row.userStatus}">
+            <div v-if='colName.property=="status"' :class="{active:scope.row.status,stop:!scope.row.status}">
               <span class="circle"></span>
-              <span>{{userStatus(scope.row.userStatus)}}</span>
+              <span>{{status(scope.row.status)}}</span>
             </div>
-            <el-button v-else type="primary" icon="el-icon-edit" size="mini" @click="handleEdit(scope.$index, scope.row)"></el-button>
+            <el-button v-else type="primary" :icon="icon" size="mini" @click="handleEdit(scope.$index, scope.row)"></el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -50,9 +51,9 @@ export default {
     };
   },
   computed:{
-    userStatus(){
+    status(){
       return (val)=>{
-        return this.proUserStatus(val)
+        return this.proStatus(val)
       }
     },
     total(){
@@ -77,10 +78,20 @@ export default {
       }
       data=this.tableData.slice(start,end);
       return data;
+    },
+    icon(){
+      let val=this.tableColName[this.tableColName.length-1].label;
+      let icon='el-icon-edit';
+      if(val=='查看'){
+        icon='el-icon-view';
+      }else if(val=='详细'){
+        icon='el-icon-info';
+      }
+      return icon;
     }
   },
   methods: {
-    proUserStatus(val){
+    proStatus(val){
       if(val==true){
         return "激活";
       }else{

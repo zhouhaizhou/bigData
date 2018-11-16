@@ -37,10 +37,11 @@
         </el-col>
       </el-row>
       <el-dialog
-        :title="title"
+        title="详细"
         :visible.sync="edit"
-        width="30%">
-        
+        width="40%"
+        class="dialog">
+        <my-specific :info="editRow"></my-specific>
         <span slot="footer" class="dialog-footer">
           <el-button @click="edit = false">取 消</el-button>
           <el-button type="primary" @click="save">确 定</el-button>
@@ -53,10 +54,13 @@
 <script>
 import myHeader from "../systemAdmin/header";
 import myTable from "../systemAdmin/table";
+import mySpecific from "./specific";
 import profession from "../../../utils/profession.js";
 export default {
   data(){
     return {
+      edit:false,
+      editRow:[],
       startTime:'',
       endTime:'',
       selectedRow: [],
@@ -98,7 +102,8 @@ export default {
   },
    components: {
     myHeader,
-    myTable
+    myTable,
+    mySpecific
   },
   mounted(){
     let now=new Date();
@@ -153,8 +158,27 @@ export default {
           console.log(res.response.data);
         });
     },
-    handleEdit(){
-
+    save(){
+      let id=this.editRow.id;
+      this.axios
+        .get("SystemAdmin.svc/SaveMyDownload",{
+          params:{
+            id:id
+          }
+        })
+        .then(res => {
+          alert("保存成功！");
+          this.edit=false;
+          this.getMyDownload();
+        })
+        .catch(res => {
+          alert("保存失败");
+          console.log(res.response.data);
+        });
+    },
+    handleEdit(index,row){
+      this.edit=true;
+      this.editRow=row;
     },
     search(){
       let excludeField = ["id","citySite","citySite","date","downState","elementCn","elementEn","downTime","elementEn","moduleEnName","provinceData","timeInterval","userName"];
@@ -175,5 +199,16 @@ export default {
 .btn{
   float: right;
   margin-right: 20px;
+}
+.dialog /deep/ .el-dialog__title{
+  font-weight: bold !important;
+  font-size: 24px;
+}
+.dialog /deep/ .el-dialog__body{
+  padding: 10px 20px !important;
+}
+.dialog /deep/ .el-dialog__header{
+  padding: 20px 19px 22px !important;
+  border-bottom: 1px solid #ccc !important;
 }
 </style>
