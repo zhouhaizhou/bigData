@@ -14,7 +14,7 @@
         </el-table-column>
         <el-table-column v-if='(index==tableColName.length-1)||colName.property=="status"' :type="colName.type" v-for="(colName,index) in tableColName" :width='colName.width' :key=index :property=colName.property :label=colName.label>
           <template slot-scope="scope">
-            <div v-if='colName.property=="status"' :class="{active:scope.row.status,stop:!scope.row.status}">
+            <div v-if='colName.property=="status"' :class="{active:scope.row.status=='1',stop:scope.row.status=='0'||scope.row.status==''}">
               <span class="circle"></span>
               <span>{{status(scope.row.status)}}</span>
             </div>
@@ -42,7 +42,9 @@ export default {
   props: {
     tableColName: Array,
     tableData: Array,
-    pageSize:Number
+    pageSize:Number,
+    activeTxt:String,
+    inactiveTxt:String
   },
   data() {
     return {
@@ -92,10 +94,11 @@ export default {
   },
   methods: {
     proStatus(val){
+      let temp=this.tableData[0].author;
       if(val==true){
-        return "激活";
+        return this.activeTxt;
       }else{
-        return "停用";
+      return  this.inactiveTxt;
       }
     },
     handleSelectionChange(row) {

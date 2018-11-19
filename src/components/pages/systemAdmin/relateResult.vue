@@ -13,7 +13,7 @@
       </el-row>
       <el-row>
         <el-col :span="24">
-          <my-table pageSize="10" v-on:selectionChange="selectionChange" v-on:handleEdit="handleEdit" :tableColName=tableColName :tableData=tableData></my-table>
+          <my-table pageSize="10" v-on:selectionChange="selectionChange" activeTxt='已审核' inactiveTxt='未审核' v-on:handleEdit="handleEdit" :tableColName=tableColName :tableData=tableData></my-table>
         </el-col>
       </el-row>
       <el-dialog class="dialog" :title="title" :visible.sync="edit" width="40%">
@@ -213,7 +213,7 @@ export default {
       this.dialog[1].value=row.name;
       this.dialog[2].value=row.url;
       if(this.dialog.length==4){
-        let val=row.enable;
+        let val=row.status;
         val=val?"1":"0"
         this.dialog[3].value=val;
       }

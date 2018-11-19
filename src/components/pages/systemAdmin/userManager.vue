@@ -9,7 +9,7 @@
       </el-row>
       <el-row >
         <el-col :span="24">
-          <my-table pageSize="10"  v-on:selectionChange="selectionChange" v-on:handleEdit="handleEdit" :tableColName=tableColName :tableData=tableData></my-table>
+          <my-table pageSize="10"  v-on:selectionChange="selectionChange" v-on:handleEdit="handleEdit" activeTxt='激活' inactiveTxt='停用' :tableColName=tableColName :tableData=tableData></my-table>
         </el-col>
       </el-row>
       <el-dialog
@@ -90,13 +90,13 @@ export default {
           label: "用户星级",
           property: "userStar",
           type: "",
-          width:'100'
+          width:'60'
         },
         {
           label: "状态",
           property: "status",
           type: "",
-          width:'150'
+          width:'80'
         },{
           label: "创建时间",
           property: "createTime",
@@ -196,7 +196,7 @@ export default {
       this.dialog[2].value=row.mobile;
       this.dialog[3].value=row.userLevel;
       this.dialog[4].value=row.userType;
-      this.dialog[5].value=row.userStatus?1:0;
+      this.dialog[5].value=row.status=="1"?1:0;
       this.currentDataId=row.id
     },
     save(){

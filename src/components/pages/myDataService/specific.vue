@@ -1,10 +1,10 @@
 <template>
   <div class="specific">
     <el-row v-for="(item,index) in items" :key='index'>
-      <el-col :span="5" :offset="1">
+      <el-col :span="6" :offset="1">
         <span class="key">{{item.label}}：</span>
       </el-col>
-      <el-col :span="18">
+      <el-col :span="17">
         <span v-if='item.code!="addCard"'>{{item.value}}</span>
          <el-radio-group v-else v-model="item.value">
           <el-radio :label="0">是</el-radio>   <!-- 这里要改变数据库的状态值，0代表是未下载，1代表是已经下载过的 -->

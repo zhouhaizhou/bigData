@@ -8,6 +8,7 @@ import {proRoutersObj} from '@/utils/recursion-router'
 let router=proRoutersObj(data);
 Vue.use(Router)
 export default new Router({
+  mode:'history',
     routes: router,
     scrollBehavior (to, from, savedPosition) {
       if((to.meta.parentEntityName!=undefined) && (!(to.meta.parentEntityName.indexOf('dataDownLoad')>-1))){
