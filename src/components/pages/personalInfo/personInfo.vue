@@ -10,7 +10,12 @@
         <div class="top-left-wrap">
           <div class="font1">基本信息</div>
           <div>
-            <div class="item" v-for="(base,index) in baseInfo"><div class="key-wrap"><div class="float-right">{{base.label}} :</div></div><div class="value-wrap" :class="{colorRed:base.value=='待审核',colorGreen:base.value=='审核通过'}">{{base.value}}</div></div>
+            <div class="item" v-for="(base,index) in baseInfo">
+              <div class="key-wrap">
+                <div class="float-right">{{base.label}} :</div>
+              </div>
+              <div class="value-wrap" :class="{colorRed:base.value=='待审核',colorGreen:base.value=='审核通过'}">{{base.value}}</div>
+            </div>
             <!-- <span class="" v-for="(base,index) in baseInfo"><span>{{base}}</span></span> -->
           </div>
         </div>
@@ -19,9 +24,22 @@
         </div>
       </div>
       <div class="content-bottom-wrap">
-        <div  class="font1">详细信息</div>
+        <div class="font1">详细信息</div>
         <div>
-          <div class="item2" v-for="(detail,index) in detailInfo"><div class="key-wrap"><div class="float-right">{{detail.label}} :</div></div><div class="value-wrap">{{detail.value}}</div></div>
+          <div  v-for="(detail,index) in detailInfo">
+            <div v-if="detail.type!='file'" class="item">
+              <div class="key-wrap">
+                <div class="float-right">{{detail.label}} :</div>
+              </div>
+              <div class="value-wrap">{{detail.value}}</div>
+            </div>
+            <div v-else  class="item">
+              <div class="key-wrap">
+                <div class="float-right">{{detail.label}} :</div>
+              </div>
+              <div class="value-wrap"><a :href="detail.value">{{detail.label}}</a></div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -37,7 +55,7 @@ export default {
   data() {
     return {
       baseInfo: [],
-      detailInfo: [],
+      detailInfo: []
     };
   },
   mounted() {
@@ -70,14 +88,15 @@ export default {
             if (element.infoType === "0") {
               let baseInfoObj = {
                 label: element.label,
-                value: element.value
+                value: element.value,
+                type: element.type
               };
               baseInfoArr.push(baseInfoObj);
-              
             } else if (element.infoType === "1") {
               let detailInfoObj = {
                 label: element.label,
-                value: element.value
+                value: element.value,
+                type: element.type
               };
               detailInfoArr.push(detailInfoObj);
             }
@@ -122,63 +141,66 @@ export default {
   font-size: 1vw;
   font-weight: bold;
 }
-.content-wrap{
-      padding-left: 7%;
-    padding-top: 1%;
-    padding-bottom: 2%;
-    padding-right: 2%;
+.content-wrap {
+  padding-left: 7%;
+  padding-top: 1%;
+  padding-bottom: 2%;
+  padding-right: 2%;
 }
-.content-top-wrap{
+.content-top-wrap {
   height: auto;
-    float: left;
-    width: 100%;
-    padding-bottom: 1.5%;
+  float: left;
+  width: 100%;
+  padding-bottom: 1.5%;
 }
-.top-left-wrap{
-      float: left;
-    width: 90%;
+.top-left-wrap {
+  float: left;
+  width: 90%;
 }
-.top-right-wrap{
-      float: left;
-    width: 9%;
+.top-right-wrap {
+  float: left;
+  width: 9%;
 }
-.content-bottom-wrap{
-    float: left;
-    padding-bottom: 2%;
-    width: 90%;
+.top-right-wrap >>> .el-button.is-round{
+  border-radius:0px;
 }
-.font1{
-      font-size: 1.3em;
-    font-weight: bold;
+.content-bottom-wrap {
+  float: left;
+  padding-bottom: 2%;
+  width: 90%;
 }
-.item{
-  padding-bottom:1%;
+.font1 {
+  font-size: 1.3em;
+  font-weight: bold;
 }
-.item2{
-  padding-bottom:1%;
+.item {
+    height: 3vh;
+}
+.item2 {
+  padding-bottom: 1%;
 }
 /* .item:nth-child(2) .value-wrap{
   color:red;
 } */
-.colorRed{
-  color:red;
+.colorRed {
+  color: red;
 }
-.colorGreen{
-  color:green;
+.colorGreen {
+  color: green;
 }
-.key-wrap{
-    float: left;
-    width: 20%;
-    padding-bottom: 1%;
+.key-wrap {
+  float: left;
+  width: 20%;
+  /* padding-bottom: 1%; */
 }
-.float-right{
-      float: right;
+.float-right {
+  float: right;
 }
-.value-wrap{
-    float: left;
-    width: 77%;
-    padding-left: 1%;
-    padding-bottom: 1%;
+.value-wrap {
+  float: left;
+  width: 77%;
+  padding-left: 1%;
+  /* padding-bottom: 1%; */
 }
 </style>
 

@@ -48,7 +48,9 @@
           </div>
         </div>
       </div>
+
     </div>
+
     <my-footer></my-footer>
   </div>
 </template>
@@ -135,7 +137,7 @@ export default {
         let params={"userName":userName,"password":password,"expires":expires};
         this.LOGIN(params).then(res=>{
           if(res=="ok"){
-            this.$router.push("/home");
+           this.$router.push("/home");
           }else{
             alert("登录失败！");
             this.resetForm('ruleForm2');
