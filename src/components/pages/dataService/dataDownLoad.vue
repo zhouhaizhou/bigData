@@ -6,15 +6,14 @@
         <div class="items-trs-wrap">
 
           <!-- <div :class="{itemTrWrap:(item.lists).length>1?true:false,itemTrWrapOne:(item.lists).length>1?false:true}"  v-for="item in items"> -->
-          <div :class="itemChildrenArrLen(item)"  v-for="item in items">
+          <div :class="itemChildrenArrLen(item)" v-for="item in items">
             <div class="item-wrap">
-              <div class="sub-title-wrap">  
+              <div class="sub-title-wrap">
                 <div class="nav-marker"></div>
                 <div class="sub-title">{{item.name.parentModuleCnName}}</div>
               </div>
               <div class="lists-wrap">
-                <!-- <div :class="{listWrap:(item.lists).length>1?true:false,listWrapOne:(item.lists).length>1?false:true}" v-for="(list,index) in item.lists" @mouseout="mouseout" @mouseover="mouseover"> -->
-                  <div :class="listsLength(item.lists)" v-for="(list,index) in item.lists" @mouseout="mouseout" @mouseover="mouseover">
+                <div :class="listsLength(item.lists)" v-for="(list,index) in item.lists" @mouseout="mouseout" @mouseover="mouseover">
                   <div class="list-img" :style="{backgroundImage:'url('+list.imgUrl+')',backgroundRepeat:'no-repeat',backgroundPosition:'center center',backgroundSize:'cover'}" @click="showModal(list)">
                     <div class="info-wrap">
                       <div class="info-font">{{list.imgInfo}}</div>
@@ -32,7 +31,7 @@
                       <div class="comment-count text-wrap-com">{{list.commentCount}}</div>
                     </div>
                     <div class="likes-wrap icon-text-wrap-com">
-                      <div class="likes-icon icon-wrap-com" src=""></div>
+                      <div class=" icon-wrap-com" :class="{'likesIcon':!list.likeActive,'likesIconActive':list.likeActive}" @click="toggleLike(list)" src=""></div>
                       <div class="likes-count text-wrap-com">{{list.likesCount}}</div>
                     </div>
                   </div>
@@ -51,7 +50,7 @@
     </div>
     <div class="mymodal" v-show="isShow">
       <!-- 父组件传一个点击事件@hidden="hiddenShow"-->
-      <my-modal @hidden="hiddenShow" :moduleEnName="moduleEnName" :moduleCnName="moduleCnName" :isShow="isShow " ref="c1"></my-modal>
+      <my-modal @toggleLike="toggleLike" @hidden="hiddenShow" :moduleEnName="moduleEnName" :moduleCnName="moduleCnName " :isShow="isShow " ref="c1" :clickListData="clickListData"></my-modal>
     </div>
   </div>
 </template>
@@ -60,7 +59,7 @@
 import myHeader from "../../common/header";
 import myFooter from "../../common/foot";
 import myModal from "./modal";
-import { mapActions,mapState, mapMutations } from "vuex";
+import { mapActions, mapState, mapMutations } from "vuex";
 var moduleEnName = "",
   parentModule = "";
 export default {
@@ -85,14 +84,15 @@ export default {
       endTimes: null,
       moduleCnName: "",
       moduleEnName: "",
-      one: false
+      one: false,
+      clickListData:{}//将当前点击模块的list数据传给子组件   控制子组件收藏的变化
     };
   },
   mounted() {
     this.getAllData();
   },
-  computed:{
-    ...mapState(['UserToken','anchorTimer'])
+  computed: {
+    ...mapState(["UserToken", "anchorTimer"])
   },
   watch: {
     //监听路由变化
@@ -104,33 +104,95 @@ export default {
   },
   methods: {
     ...mapActions(["scrollAnchor"]),
-    ...mapMutations(['SETFUNRETURN']),
-    itemChildrenArrLen(item) {
-      let p=item.name.parentModule;
-      // if (item.lists.length == 1) {
-      //   // this.one=false;
-      //   return {itemTrWrapOne:true,p:true};
-      // } else {
-      //   // this.one=true;
-      //   return {itemTrWrap:true,p:true};
-      // }
+    ...mapMutations(["SETFUNRETURN"]),
+    ...mapState(["UserToken"]),
+    /**
+     * toggle效果
+     */
+    toggleLike(list) {
+      list.likeActive = !list.likeActive;
+      //获取向后台传的变量
+      let account = this.UserToken.Account;
+      if (account == "readearth") {
+        alert("请登录后再点击收藏！");
+        return;
+      }
+      var data = this.getNowFormatDate();
+      var nowTime = data.toString();
+      if (list.likeActive == true) {
+        //增   向数据库的表中增加收藏记录  并返回统计的条数
+        this.axios
+          .get("DataService.svc/insertLikeData", {
+            params: {
+              moduleEnName: list.moduleEnName,
+              account: account,
+              insertTime: nowTime + ""
+            }
+          })
+          .then(res => {
+            let data = res.data;
+            console.log(data);
+            let strArr=data.split(",")
+            if(strArr[0]>0){
+              alert("收藏成功！")
+            }else{
+              alert("收藏失败！")
+              return;
+            }
 
-            if (item.lists.length == 1) {
+            //更新收藏量
+            list.likesCount=strArr[1];
+          })
+          .catch(res => {
+            console.log(res);
+          });
+      } else {
+        //删
+        this.axios
+          .get("DataService.svc/deleteLikeData", {
+            params: {
+              moduleEnName: list.moduleEnName,
+              account: account
+            }
+          })
+          .then(res => {
+            let data = res.data;
+            console.log(data);
+            let strArr=data.split(",")
+            if(strArr[0]>0){
+              alert("取消收藏！")
+            }else{
+              alert("取消收藏失败！")
+              return;
+            }
+
+            //更新收藏量
+            list.likesCount=strArr[1];
+          })
+          .catch(res => {
+            console.log(res);
+          });
+      }
+    },
+    itemChildrenArrLen(item) {
+      let p = item.name.parentModule;
+
+      if (item.lists.length == 1) {
         // this.one=false;
-        return "itemTrWrapOne "+p;
+        return "itemTrWrapOne " + p;
       } else {
         // this.one=true;
-        return "itemTrWrap "+p;
+        return "itemTrWrap " + p;
       }
     },
-    listsLength(listsArr){
-      if(listsArr.length==1){
-        return {listWrapOne:true,p:true};
-      }else{
-        return {listWrap:true,p:true};
+    listsLength(listsArr) {
+      if (listsArr.length == 1) {
+        return { listWrapOne: true, p: true };
+      } else {
+        return { listWrap: true, p: true };
       }
     },
-    stop(){
+    stop() {
       clearInterval(this.anchorTimer);
     },
     goAnchor(val) {
@@ -157,12 +219,14 @@ export default {
       //获取当前路由的父名称
       let pName = self.$route.meta.parentEntityName; //当点击左侧子路由时，获取父路由名称给后台
       // console.log(list);
-      let roldId=this.UserToken.RoleID;
+      let roldId = this.UserToken.RoleID;
+      let account = this.UserToken.Account;
       this.axios
         .get("DataService.svc/GetModuleByParentModule", {
           params: {
             parentModule: "dataDownLoad",
-            roldId: roldId//默认传2，即，以游客的方式进入
+            roldId: roldId,//默认传2，即，以游客的方式进入
+            account:account
           }
         })
         .then(response => {
@@ -190,7 +254,8 @@ export default {
                 viewCount: "",
                 commentCount: "",
                 likesCount: "",
-                imgInfo: ""
+                imgInfo: "",
+                likeActive: ""
               };
               listsArr[j].moduleEnName = listData[j].moduleEnName;
               listsArr[j].moduleCnName = listData[j].moduleCnName;
@@ -204,6 +269,8 @@ export default {
               listsArr[j].commentCount = listData[j].commentCount;
               listsArr[j].likesCount = listData[j].likesCount;
               listsArr[j].imgInfo = listData[j].content;
+              //后台的likeActive非true项处理成false
+              listsArr[j].likeActive = listData[j].likeActive=='true'?true:false;
             }
             itemsArr[i].lists = listsArr; //将解析过的数据赋值给items
           }
@@ -226,14 +293,59 @@ export default {
 
       this.moduleEnName = list.moduleEnName;
       this.moduleCnName = list.moduleCnName; //作为标题名
+      //将当前点击的list数据传给子组件
+      this.clickListData=list;
       self.isShow = true; //显示弹出框
-      document.querySelector("html").style.overflow="hidden";
+      document.querySelector("html").style.overflow = "hidden";
     },
     hiddenShow() {
       //更改modal弹出框隐藏（传给子组件一个点击事件）
       let that = this; //为了避免this指向出现歧义，把vue实例的this赋值给另一个变量再使用
       that.isShow = false;
       that.moduleEnName = ""; //将moduleEnName恢复至初始状态  防止重复点击时，watch监听不到moduleEnName变化
+    },
+    getNowFormatDate() {
+      var date = new Date();
+      var seperator1 = "-";
+      var seperator2 = ":";
+      var month = date.getMonth() + 1;
+
+      var strDate = date.getDate();
+      if (month >= 1 && month <= 9) {
+        month = "0" + month;
+      }
+      if (strDate >= 0 && strDate <= 9) {
+        strDate = "0" + strDate;
+      }
+
+      var strHour = date.getHours();
+      if (strHour >= 0 && strHour <= 9) {
+        strHour = "0" + strHour;
+      }
+
+      var strMin = date.getMinutes();
+      if (strMin >= 0 && strMin <= 9) {
+        strMin = "0" + strMin;
+      }
+
+      var strSec = date.getSeconds();
+      if (strSec >= 0 && strSec <= 9) {
+        strSec = "0" + strSec;
+      }
+
+      var currentdate =
+        date.getFullYear() +
+        seperator1 +
+        month +
+        seperator1 +
+        strDate +
+        " " +
+        strHour +
+        seperator2 +
+        strMin +
+        seperator2 +
+        strSec;
+      return currentdate;
     }
   }
 };
@@ -261,7 +373,7 @@ export default {
   width: auto;
   float: left;
   clear: none;
-  padding-bottom: 2%
+  padding-bottom: 2%;
 }
 .item-wrap {
   /* height: 40vh; */
@@ -272,17 +384,17 @@ export default {
   margin-bottom: 3vh;
 }
 .nav-marker {
-    float: left;
-    width: .5vw;
-    height: 2.6vh;
-    background-color: #1bbf9d;
+  float: left;
+  width: 0.5vw;
+  height: 2.6vh;
+  background-color: #1bbf9d;
 }
 .sub-title {
-float: left;
-    margin-left: .8vw;
-    font-size: 1.2vw;
-    font-weight: 700;
-    line-height: 1.1;
+  float: left;
+  margin-left: 0.8vw;
+  font-size: 1.2vw;
+  font-weight: 700;
+  line-height: 1.1;
 }
 .lists-wrap {
   clear: both;
@@ -354,11 +466,11 @@ float: left;
   text-indent: 2em;
 }
 .list-title {
-    margin-left: 6%;
-    text-align: left;
-    /* font-weight: 700; */
-    margin-bottom: 1vh;
-    font-size: 1.08vw;
+  margin-left: 6%;
+  text-align: left;
+  /* font-weight: 700; */
+  margin-bottom: 1vh;
+  font-size: 1.08vw;
 }
 .list-marker-wrap {
   height: 11%;
@@ -375,6 +487,7 @@ float: left;
 }
 .icon-wrap-com {
   width: 54%;
+  cursor: pointer;
 }
 .text-wrap-com {
   width: 92%;
@@ -384,8 +497,7 @@ float: left;
   float: left;
 }
 .view-icon {
-  background: url("../../../assets/img/dataDownLoad/view.png") no-repeat 20%
-    20%;
+  background: url("../../../assets/img/dataDownLoad/view.png") no-repeat 20% 20%;
 
   height: 2vh;
   float: left;
@@ -405,9 +517,16 @@ float: left;
 }
 .likes-wrap {
 }
-.likes-icon {
+.likesIcon {
   background: url("../../../assets/img/dataDownLoad/likes.png") no-repeat center
     center;
+
+  height: 2vh;
+  float: left;
+}
+.likesIconActive {
+  background: url("../../../assets/img/dataDownLoad/likes-d.png") no-repeat
+    center center;
 
   height: 2vh;
   float: left;

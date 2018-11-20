@@ -1,11 +1,26 @@
 import Router from 'vue-router'
-import router, {DynamicRoutes} from '@/router/index'
-import { recursionRouter,setDefaultRoute,getContainer,joinRouter,siderBarRouters,cloneObj} from '@/utils/recursion-router'
+import router, {
+  DynamicRoutes
+} from '@/router/index'
+import {
+  recursionRouter,
+  setDefaultRoute,
+  getContainer,
+  joinRouter,
+  siderBarRouters,
+  cloneObj
+} from '@/utils/recursion-router'
 // import dynamicRouter, { siderBarRouters} from '@/router/dynamic-router'
 import dynamicRouter from '@/router/dynamic-router'
 import axios from 'axios'
+import {
+  promises
+} from 'fs';
 export default {
-  scrollAnchor({commit,state}, paramObj) {
+  scrollAnchor({
+    commit,
+    state
+  }, paramObj) {
     //Top 对象要从开始的位置移动到目标位置的距离
     //obj 哪个对象要移动
     //commit('SETFUNRETURN',true);
@@ -31,7 +46,10 @@ export default {
       });
     }, 15);
   },
-  FETCH_PERMISSION({commit, state}, paramObj) {
+  FETCH_PERMISSION({
+    commit,
+    state
+  }, paramObj) {
     let type = paramObj.type;
     let path = paramObj.path;
     path = ((path.charAt(path.length - 1) == "/") && path.length > 1) ? path.substring(0, path.length - 1) : path;
@@ -43,7 +61,7 @@ export default {
     let routeRed = routerTo.params.redirect;
     let children = null;
     if (!firstLoad) { //不是第一次点击则不需要重新从后台读取，直接获取第一次缓存的数据即可
-      if (path.split('/').length > 2 && routerTo.name!='admin') {
+      if (path.split('/').length > 2 && routerTo.name != 'admin') {
         return;
       } else {
         commit('SET_SIDERMENU', state.cacheSiderBar[path]);
@@ -60,12 +78,12 @@ export default {
     }
     if (type == 'top') { //第一次获取一级菜单
       //routers = recursionRouter(permissionList, dynamicRouter) //这里其实做了一步过滤
-      routers =dynamicRouter;
+      routers = dynamicRouter;
       children = joinRouter(DynamicR, routers, path);
-      let topMenu=cloneObj(children[0].children);
-      topMenu.forEach((element,i) => {
-        if(element.name=='admin'){
-          topMenu.splice(i,1);
+      let topMenu = cloneObj(children[0].children);
+      topMenu.forEach((element, i) => {
+        if (element.name == 'admin') {
+          topMenu.splice(i, 1);
         }
       });
       commit('SET_TOPMENU', topMenu);
@@ -89,10 +107,13 @@ export default {
             name: res
           });
         }).catch(res => console.log(res));
-      }).catch(res=>console.log(res));
+      }).catch(res => console.log(res));
     }
   },
-  LOGIN({commit,state}, paramObj) {
+  LOGIN({
+    commit,
+    state
+  }, paramObj) {
     return new Promise((resolve, reject) => {
       let userName = paramObj.userName;
       let password = paramObj.password;
@@ -123,10 +144,13 @@ export default {
       })
     })
   },
-  UpdateVisit({commit,state}) {
+  UpdateVisit({
+    commit,
+    state
+  }) {
     let ip = returnCitySN.cip;
-    let access="readearth";
-    if(state.UserToken!=null){
+    let access = "readearth";
+    if (state.UserToken != null) {
       access = state.UserToken.Account;
     }
     let location = returnCitySN.cname;
@@ -139,5 +163,41 @@ export default {
         location: location
       }
     }).then(res => console.log(res.data)).catch(res => console.log(res.log))
+  },
+
+  /**
+   * 跳转到调查问卷
+   */
+  toShowQuestionnaire({
+    commit,
+    state
+  }) {
+    return new Promise((resolve, reject) => {
+      let starLevel = state.UserToken.starLevel
+      let account = state.UserToken.Account;
+      axios({
+        method: "get",
+        url: "HomeDataService.svc/ShowQuestionnaire",
+        params: {
+          starLevel: starLevel,
+          account:account
+        }
+      }).then(res => {
+        console.log(res.data)
+        //根据返回的数据长度返回一个值
+        let data = JSON.parse(res.data)
+        let dataLen = data.length
+        if (dataLen > 0) {
+          //用户是不是多次登录   只填一次  通过查询数据库返回一个值来判断  taskNumber
+          resolve("no");
+        } else {
+          resolve("yes");
+        }
+      }).catch(res => {
+        console.log(res.log)
+        reject("yes");
+      })
+    })
+
   }
 }
