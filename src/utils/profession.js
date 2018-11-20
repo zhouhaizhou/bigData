@@ -26,7 +26,7 @@ export default {
     return type;
   },
   //用户管理table表格的搜索
-  search(originData, inputKey, excludeField) {
+  search(originData, inputKey, excludeField,activeTxt,inactiveTxt) {
     let tableData = [];
     if (!inputKey) {
       tableData = originData;
@@ -43,8 +43,8 @@ export default {
         }
         if (flag) {
           let val = ele[key];
-          if (key == 'userStatus') {
-            val = val == true ? "激活" : "停用";
+          if (key == 'status') {
+            val = val == true ? activeTxt : inactiveTxt;
           }
           if (val.toString().indexOf(inputKey) > -1) {
             tableData.push(ele);

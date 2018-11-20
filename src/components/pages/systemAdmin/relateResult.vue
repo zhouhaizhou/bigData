@@ -274,7 +274,9 @@ export default {
       this.tableData = profession.search(
         this.originData,
         this.inputKey,
-        excludeField
+        excludeField,
+        "已审核",
+        "未审核"
       );
     }
   }

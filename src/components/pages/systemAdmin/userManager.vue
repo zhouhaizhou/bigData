@@ -218,7 +218,7 @@ export default {
     },
     search(){
       let excludeField=['id','userStatus'];
-      this.tableData = profession.search(this.originData,this.inputKey,excludeField);
+      this.tableData = profession.search(this.originData,this.inputKey,excludeField,"激活","停用");
     }
   }
 }

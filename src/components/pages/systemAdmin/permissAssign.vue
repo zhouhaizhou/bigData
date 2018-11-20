@@ -185,7 +185,10 @@ export default {
       }
     },
     search(){
-      if(this.inputKey=='') return;
+      if(this.inputKey=='') {
+        this.clearSearch();
+        return;
+      };
       let data=this.$refs.tree.store._getAllNodes();
       let domObj=this.$refs.tree.$el.children;
       let self=this;
@@ -249,7 +252,7 @@ export default {
   padding-top: 20px;
 }
 .table{
-  padding-bottom:50px;
+  margin-bottom:50px;
 }
 
 .left,

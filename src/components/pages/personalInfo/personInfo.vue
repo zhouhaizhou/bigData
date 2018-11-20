@@ -26,11 +26,21 @@
         <div class="content-bottom-wrap">
           <div class="font1">详细信息</div>
           <div>
-            <div class="item2" v-for="(detail,index) in detailInfo">
-              <div class="key-wrap">
-                <div class="float-right">{{detail.label}} :</div>
+            <div v-for="(detail,index) in detailInfo">
+              <div v-if="detail.type!='file'" class="item">
+                <div class="key-wrap">
+                  <div class="float-right">{{detail.label}} :</div>
+                </div>
+                <div class="value-wrap">{{detail.value}}</div>
               </div>
-              <div class="value-wrap">{{detail.value}}</div>
+              <div v-else class="item">
+                <div class="key-wrap">
+                  <div class="float-right">{{detail.label}} :</div>
+                </div>
+                <div class="value-wrap">
+                  <a :href="detail.value">{{detail.label}}</a>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -38,7 +48,7 @@
       <div class="clearfloat" style="clear:both;height:0;font-size: 1px;line-height: 0px;"></div>
     </div>
     <div class="midify-info">
-      <router-view></router-view>
+        <router-view></router-view>
     </div>
   </div>
 </template>
@@ -87,13 +97,15 @@ export default {
             if (element.infoType === "0") {
               let baseInfoObj = {
                 label: element.label,
-                value: element.value
+                value: element.value,
+                type: element.type
               };
               baseInfoArr.push(baseInfoObj);
             } else if (element.infoType === "1") {
               let detailInfoObj = {
                 label: element.label,
-                value: element.value
+                value: element.value,
+                type: element.type
               };
               detailInfoArr.push(detailInfoObj);
             }
@@ -115,8 +127,8 @@ export default {
           name: "modifyMyInfo",
           meta: {
             parentEntityName: parentEntityName,
-            entityName:'modifyMyInfo',
-            name:'修改个人信息'
+            entityName: "modifyMyInfo",
+            name: "修改个人信息"
           },
           component: component
         }
@@ -126,17 +138,17 @@ export default {
       this.$router.addRoutes(route);
       let data = {};
       data.roleId = "5";
-      data.itemsObj=[];
+      data.itemsObj = [];
       //遍历数据，对类型为file的赋值为空，要不然绑定文件类型会出错
-      this.allData.forEach((element,i) => {
-        if(!(i==1||i==2||i==3)){
-           data.itemsObj.push(element);
+      this.allData.forEach((element, i) => {
+        if (!(i == 1 || i == 2 || i == 3)) {
+          data.itemsObj.push(element);
         }
-        if(element.type=='file'){
-          this.allData[i].value='';
+        if (element.type == "file") {
+          this.allData[i].value = "";
         }
       });
-      
+
       this.showInfo = false;
       this.$router.push({ name: "modifyMyInfo", params: data });
     }
@@ -192,6 +204,9 @@ export default {
   float: left;
   width: 9%;
 }
+.top-right-wrap >>> .el-button.is-round {
+  border-radius: 0px;
+}
 .content-bottom-wrap {
   float: left;
   padding-bottom: 2%;
@@ -202,7 +217,7 @@ export default {
   font-weight: bold;
 }
 .item {
-  padding-bottom: 1%;
+  height: 3vh;
 }
 .item2 {
   padding-bottom: 1%;
@@ -219,7 +234,7 @@ export default {
 .key-wrap {
   float: left;
   width: 20%;
-  padding-bottom: 1%;
+  /* padding-bottom: 1%; */
 }
 .float-right {
   float: right;
@@ -228,7 +243,6 @@ export default {
   float: left;
   width: 77%;
   padding-left: 1%;
-  padding-bottom: 1%;
+  /* padding-bottom: 1%; */
 }
 </style>
-

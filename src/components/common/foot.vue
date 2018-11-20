@@ -54,7 +54,7 @@ export default {
         {
           name: "大气超级观测站SCAN联盟",
           splitLine: "&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;",
-          url: "#"
+          url: ""
         },
         {
           name: "全国城市空气质量实时发布平台",

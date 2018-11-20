@@ -1,67 +1,74 @@
 <template>
-    <div>
-        <my-header></my-header>
-        <div class="middle-background">
-            <div class="center">
-                <div class="header-wrap">
-                    <div class="pic-wrap"></div>
-                    <div class="header-text-wrap">
-                        <h3>用户满意度问卷调查</h3>
-                        <p>您好！为了给您提供更好的服务，我们希望了解您对污染天气大数据平台的看法或建议。对您的配合和支持表示衷心的感谢！</p>
-                    </div>
-                </div>
-                <div class="body-wrap">
-                    <div class="one-part">
-                        <div class="one-title-wrap">
-                            <span class="pic2"></span>
-                            <span class="pic2-text">使用大数据平台的印象</span>
-                        </div>
-                        <div class="one-subtitle">
-                            <span class="red">*</span>&nbsp;&nbsp;&nbsp;<span>1、</span><span>请根据您在使用气象数据过程中的实际感受，对下列题项进行符合度打分（<span class="orange">1星</span>标志用户对平台使用不满意，<span class="orange">5星</span>表示用户对平台使用非常满意）</span>
-                        </div>
-                        <div class="one-table-wrap">
-                            <table class="bordered">
-                                <thead>
-                                    <tr>
-                                        <th>调查内容</th>
-                                        <th>满意度评分</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr v-for="(q,index) in questions">
-                                        <td class="width50 paddingleft6">({{index+1}})&nbsp;&nbsp;{{q.question}}</td>
-                                        <td class="text-align-center width50">
-                                            <el-rate v-model="q.value" show-text @change="getQuestionIndexAndVale(index,q.value)">
-                                            </el-rate>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="two-part">
-                        <div class="one-title-wrap">
-                            <span class="pic2"></span>
-                            <span class="pic2-text">主观题</span>
-                        </div>
-                        <div class="one-subtitle">
-                            <span class="red">*</span>&nbsp;&nbsp;&nbsp;<span>2、</span><span>您对大数据平台是否存在其他建议？</span>
-                        </div>
-                        <div class="advices">
-                            <el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="advices">
-                            </el-input>
-                        </div>
-                    </div>
+  <div>
+    <!-- <my-header></my-header> -->
+    <div class="middle-background">
 
-                    <div class="clearfloat" style="clear:both;height:0;font-size: 1px;line-height: 0px;"></div>
-                </div>
-                <div class="boot-wrap">
-                    <el-button type="primary" @click="onSubmitData()">提交</el-button>
-                </div>
+      <!-- <el-button type="text" @click="dialogVisible = true">点击打开 Dialog</el-button> -->
+      <el-dialog title="" :visible.sync="dialogVisible" width="65%" :before-close="handleClose">
+
+        <div class="center">
+          <div class="header-wrap">
+            <div class="pic-wrap"></div>
+            <div class="header-text-wrap">
+              <h3>用户满意度问卷调查</h3>
+              <p>您好！为了给您提供更好的服务，我们希望了解您对污染天气大数据平台的看法或建议。对您的配合和支持表示衷心的感谢！</p>
             </div>
+          </div>
+          <div class="body-wrap">
+            <div class="one-part">
+              <div class="one-title-wrap">
+                <span class="pic2"></span>
+                <span class="pic2-text">使用大数据平台的印象</span>
+              </div>
+              <div class="one-subtitle">
+                <span class="red">*</span>&nbsp;&nbsp;&nbsp;<span>1、</span><span>请根据您在使用气象数据过程中的实际感受，对下列题项进行符合度打分（<span class="orange">1星</span>标志用户对平台使用不满意，<span class="orange">5星</span>表示用户对平台使用非常满意）</span>
+              </div>
+              <div class="one-table-wrap">
+                <table class="bordered">
+                  <thead>
+                    <tr>
+                      <th>调查内容</th>
+                      <th>满意度评分</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="(q,index) in questions">
+                      <td class="width50 paddingleft6">({{index+1}})&nbsp;&nbsp;{{q.question}}</td>
+                      <td class="text-align-center width50">
+                        <el-rate v-model="q.value" show-text @change="getQuestionIndexAndVale(index,q.value)">
+                        </el-rate>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="two-part">
+              <div class="one-title-wrap">
+                <span class="pic2"></span>
+                <span class="pic2-text">主观题</span>
+              </div>
+              <div class="one-subtitle">
+                <span class="red">*</span>&nbsp;&nbsp;&nbsp;<span>2、</span><span>您对大数据平台是否存在其他建议？</span>
+              </div>
+              <div class="advices">
+                <el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="advices">
+                </el-input>
+              </div>
+            </div>
+
+            <div class="clearfloat" style="clear:both;height:0;font-size: 1px;line-height: 0px;"></div>
+          </div>
+          <div class="boot-wrap">
+            <el-button type="primary" @click="onSubmitData()">提交</el-button>
+          </div>
         </div>
-        <my-footer></my-footer>
+      </el-dialog>
+
     </div>
+
+    <!-- <my-footer></my-footer> -->
+  </div>
 </template>
 
 <script>
@@ -81,21 +88,39 @@ export default {
       isIndexNum: null //符合条件的数组索引
     };
   },
+  props:["dialogVisible"],
   mounted() {
     this.getQuestionData();
     this.dataArr = [];
   },
-  computed:{
-      ...mapState(["UserToken"]),
+  computed: {
+    ...mapState(["UserToken"])
   },
   methods: {
+    handleClose(done) {
+      if (this.dataArr.length < this.questions.length) {
+        alert("您有未打分的问题，请评分，提交");
+        return;
+      }
+      // this.$confirm("确认关闭？")
+      //   .then(_ => {
+      //     done();
+      //   })
+      //   .catch(_ => {});
+    },
+
     getQuestionData() {
       let self = this;
+      let starLevel = this.UserToken.starLevel;
       this.axios
-        .get("HomeDataService.svc/GetQuestionData")
+        .get("HomeDataService.svc/GetQuestionData",{
+          params:{
+            starLevel:starLevel
+          }
+        })
         .then(response => {
           let resData = eval("(" + response.data + ")");
-          console.log(resData);
+          // console.log(resData);
           self.questions = resData;
         })
         .catch(response => {
@@ -147,6 +172,8 @@ export default {
         alert("请登录后填写调查问卷！");
         return;
       }
+      let starLevel = this.UserToken.starLevel
+
       let obj = {
         dataArr: this.dataArr,
         advices: this.advices,
@@ -157,12 +184,14 @@ export default {
       this.axios
         .get("HomeDataService.svc/InsertQuestionData", {
           params: {
-            submitData: objToStr
+            submitData: objToStr,
+            starLevel:starLevel
           }
         })
         .then(response => {
           let resData = response.data;
           alert(resData);
+          self.dialogVisible=false//关闭对话框层
         })
         .catch(response => {
           console.log(response);
@@ -181,6 +210,9 @@ export default {
   padding-top: 2%;
   padding-bottom: 2%;
 }
+.middle-background >>> .el-dialog {
+  margin-top: 12vh !important;
+}
 .center {
   width: auto;
   height: auto;
@@ -197,7 +229,7 @@ export default {
 }
 .pic-wrap {
   width: 7%;
-  height: 100%;
+  height: 70%;
   background: url("../../assets/img/questionnaire/manyidu.png") center center;
   background-size: 92%;
   float: left;

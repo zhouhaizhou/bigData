@@ -41,9 +41,9 @@
                 <div class="comment-count">{{modalData[0].commentCount}}</div>
               </div>
               <div class="likes-wrap padding-bottom border-bottom">
-                <div class="likes-pic float-left icon-style1"></div>
+                <div class="likesIcon float-left icon-style1" :class="{'likesIcon':!clickListData.likeActive,'likesIconActive':clickListData.likeActive}" @click="toggleLike" ></div>
                 <div class="likes-name float-left icon-font-style">收藏</div>
-                <div class="likes-count ">{{modalData[0].likesCount}}</div>
+                <div class="likes-count ">{{clickListData.likesCount}}</div>
               </div>
               <div class="views-wrap padding-bottom border-bottom">
                 <div class="views-pic float-left icon-style1"></div>
@@ -159,7 +159,7 @@ export default {
   components: {
     myModalProvincesPan
   },
-  props: ["moduleEnName", "moduleCnName", "isShow"],
+  props: ["moduleEnName", "moduleCnName", "isShow","clickListData"],
   data() {
     return {
       dateFormat: "",
@@ -483,7 +483,7 @@ export default {
         this.timeValue = "年";
       } else if (year != -1) {
         this.getTime("year");
-        this.timeValue = "年"; //下载的时间间隔先默认为年   （待）
+        this.timeValue = "年"; //下载的时间间隔先默认为年   
       } else {
         this.getTime("day");
         this.timeValue = "天";
@@ -532,11 +532,12 @@ export default {
     },
     getFileContentData() {
       let self = this;
+      let account = this.UserToken.Account;
       this.axios
         .get("DataService.svc/getSubTitle", {
           params: {
-            moduleEnName: self.moduleEnName //待修改为moduleEnName，先用固定值代替
-            // moduleEnName: "hourData" //待修改为moduleEnName，先用固定值代替
+            moduleEnName: self.moduleEnName, //待修改为moduleEnName，先用固定值代替
+            account:account
           }
         })
         .then(response => {
@@ -683,10 +684,6 @@ export default {
         alert("请登录后再下载数据！");
         return;
       }
-      // //定义一个标识
-      // let stateType = "1"; //直接下载的标识
-      // //调用公共的部分
-      // let obj = this.commonFun(stateType);
 
       var data = this.getNowFormatDate();
       var nowTime = data.toString().replace(/[^0-9]/gi, "");
@@ -1004,6 +1001,13 @@ export default {
       this.checkAll = checkedCount === this.elements.length;
       // this.isIndeterminate =
       //   checkedCount > 0 && checkedCount < this.elements.length;
+    },
+    /**
+     * 点击收藏   执行父组件中的方法，并传值给父组件的方法
+     */
+    toggleLike(){
+      //执行父组件中的方法，并传参
+      this.$emit("toggleLike", this.clickListData);
     }
   }
 };
@@ -1180,35 +1184,25 @@ export default {
   position: relative;
   top: -21%;
 }
-.comments-wrap {
-}
 .comment-pic {
   background: url("../../../assets/img/dataDownLoad/comment.png") no-repeat
     center center;
 }
-.comment-name {
-}
-.comment-count {
-}
-.likes-wrap {
-}
-.likes-pic {
+
+.likesIcon {
+  cursor: pointer;
   background: url("../../../assets/img/dataDownLoad/likes.png") no-repeat center
     center;
 }
-.likes-name {
+.likesIconActive {
+  cursor: pointer;
+  background: url("../../../assets/img/dataDownLoad/likes-d.png") no-repeat center
+    center;
 }
-.likes-count {
-}
-.views-wrap {
-}
+
 .views-pic {
   background: url("../../../assets/img/dataDownLoad/view.png") no-repeat center
     center;
-}
-.views-name {
-}
-.views-count {
 }
 
 .share-pic {
@@ -1217,8 +1211,7 @@ export default {
   height: 2.1vh;
   background-size: 45%;
 }
-.share-name {
-}
+
 .share {
   padding-left: 28%;
 }
