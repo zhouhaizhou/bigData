@@ -154,6 +154,7 @@
 <script>
 import myModalProvincesPan from "./modalProvincesPan";
 import { mapState } from "vuex";
+
 export default {
   components: {
     myModalProvincesPan
