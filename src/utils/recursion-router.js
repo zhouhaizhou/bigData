@@ -93,11 +93,13 @@ export function cloneObj(obj){
   return new Promise((resolve, reject) => {
       axios({
         method: "get",
-        url: "./static/data/pageDefaultRouter.json",
-        baseURL: ''
+        url: "Register.svc/GetDefault",
+        params:{
+          rootName:parentName
+        }
       }).then(res => {
-        let data = res.data;
-        let router = data[parentName];
+        let data =JSON.parse(res.data);
+        let router = data[0].ModuleName;
         resolve(router)
       }).catch(res => {console.log(res);reject(res)})
     })
@@ -168,6 +170,7 @@ export function siderBarRouters(path) {
       }).then(function (response) {
         let data = response.data;
         if(data.indexOf("失败")>-1||data.indexOf("没有")>-1){
+          store.commit('SET_SIDERMENU', []);
           reject(data);
           return;
         }

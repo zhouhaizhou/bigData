@@ -8,11 +8,11 @@
       <div class="head-wrap">
         <!--工具条-->
         <div class="button-row-wrap">
-          <el-button type="primary" icon="el-icon-plus" @click="handleAdd">添加</el-button>
-          <el-button type="danger" icon="el-icon-delete" @click="batchRemove" :disabled="this.sels.length===0">删除</el-button>
+          <el-button type="primary" icon="el-icon-plus" size="mini" @click="handleAdd">添加</el-button>
+          <el-button type="danger" icon="el-icon-delete" size="mini" @click="batchRemove" :disabled="this.sels.length===0">删除</el-button>
         </div>
         <div class="search-wrap">
-          <el-input v-model="select_word" size="mini" placeholder="筛选关键词" />
+          <el-input v-model="select_word" size="mini" placeholder="请输入查询内容" suffix-icon="el-icon-search" />
         </div>
       </div>
       <div class="table-wrap">
@@ -23,7 +23,7 @@
           </el-table-column>
           <el-table-column type="index" label="序号" width="50" prop="taskNumber">
           </el-table-column>
-          <el-table-column label="问卷内容" prop="question">
+          <el-table-column label="问卷内容" width="450" prop="question">
             <template slot-scope="scope">
               <el-popover trigger="hover" placement="top" width="300">
                 <p> {{ scope.row.question }}</p>
@@ -41,14 +41,14 @@
           </el-table-column>
           <el-table-column label="条件" prop="condition">
           </el-table-column>
-          <el-table-column label="编辑">
+          <el-table-column label="编辑" width="100">
             <template slot-scope="scope">
               <el-button size="mini" type="primary" icon="el-icon-edit" @click="handleEdit(scope.$index, scope.row)"></el-button>
             </template>
           </el-table-column>
         </el-table>
         <!--工具条-->
-        <el-pagination align="right" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="pageSizes" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
+        <el-pagination align="left" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="pageSizes" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
         </el-pagination>
       </div>
 
@@ -71,7 +71,7 @@
         </el-form-item>
         <el-form-item label="条件">
           <el-select v-model="editForm.condition" placeholder="请选调查对象" @change="handleSelect">
-            <el-option v-for="item in menuOptions" :key="item.value" :label="item.label" :value="item.label">
+            <el-option v-for="item in menuOptions" :key="item.value" :label="item.label" :value="item.value">
             </el-option>
           </el-select>
         </el-form-item>
@@ -93,6 +93,7 @@
 </template>
 
 <script>
+import {mapMutations} from 'vuex'
 export default {
   data() {
     return {
@@ -190,8 +191,12 @@ export default {
   },
   mounted() {
     this.getUsers();
+    setTimeout(() => {
+      this.setContainerHeight();
+    }, 100);
   },
   methods: {
+    ...mapMutations(['setContainerHeight']),//调用vuex中的公共方法
     // 获取用户列表
     getUsers() {
       let self = this;
@@ -242,7 +247,10 @@ export default {
               .then(() => {
                 const para = Object.assign({}, this.editForm);
 
-                var objToStr = JSON.stringify(para); //将json对象转化为json字符串
+                var objToStr1 = JSON.stringify(para); //将json对象转化为json字符串
+                //将时间后的0去掉   00:00:00
+                var objToStr = objToStr1.replace(/ 00:00:00/g, "");
+
                 this.axios
                   .get("UserManager.svc/InsertQuestionData", {
                     params: {
@@ -323,6 +331,7 @@ export default {
       this.dialogStatus = "update";
       this.dialogFormVisible = true;
       this.editForm = Object.assign({}, row);
+      //将星级中的数字改为对应的汉语
       this.getMenu();
     },
     // 编辑
@@ -364,14 +373,14 @@ export default {
     getMenu() {
       this.menuOptions = [];
       const menu = [
-        { name: "一星级用户", value: "1" },
-        { name: "一星级以上用户", value: ">=1" },
-        { name: "二星级用户", value: "2" },
-        { name: "二星级以上用户", value: ">=2" },
-        { name: "三星级用户", value: "3" },
-        { name: "三星级以上用户", value: ">=3" },
-        { name: "四星级用户", value: "4" },
-        { name: "四星级以上用户", value: ">=4" },
+        { name: "一星级以上用户", value: "1" },
+        // { name: "一星级以上用户", value: ">=1" },
+        { name: "二星级以上用户", value: "2" },
+        // { name: "二星级以上用户", value: ">=2" },
+        { name: "三星级以上用户", value: "3" },
+        // { name: "三星级以上用户", value: ">=3" },
+        { name: "四星级以上用户", value: "4" },
+        // { name: "四星级以上用户", value: ">=4" },
         { name: "五星级用户", value: "5" }
       ];
       menu.forEach((item, index) => {
@@ -395,6 +404,27 @@ export default {
       this.currentPage = val;
       this.getUsers(); //从数据库中获取每条记录
     }
+    // ,
+    // /**
+    //  * 控制中间部分的高度
+    //  */
+    // setContainerHeight() {
+    //   //       window.innerHeight  页面可视区域的高度（包含横向滚动条）
+    //   //document.body.clientHeight等价于document.documentElement.clientHeight 页面可视区域的高度（不包含横向滚动条）
+    //   // document.querySelector(".header").clientHeight   头部高
+    //   // document.querySelector(".el-main").clientHeight   中间高
+    //   // document.querySelector(".foot-wrap").clientHeight  尾部高
+    //   let pageHeight = document.documentElement.clientHeight;
+    //   let headerHeight = document.querySelector(".header").clientHeight;
+    //   let midHeight = document.querySelector(".el-main").clientHeight;
+    //   let footHeight = document.querySelector(".foot-wrap").clientHeight;
+
+    //   let dHeight = headerHeight + midHeight + footHeight - pageHeight;
+    //   if (dHeight <= 0) {
+    //     midHeight = pageHeight - headerHeight - footHeight;
+    //     document.querySelector(".el-main").style.height = midHeight + "px";
+    //   }
+    // }
   }
 };
 </script>
@@ -403,7 +433,7 @@ export default {
 .body-style {
   background-color: white;
   width: 90%;
-  margin-top: 2%;
+  margin-top: 1%;
   margin-bottom: 2%;
 }
 .title-wrap {
@@ -434,18 +464,15 @@ export default {
   padding-right: 2%;
 }
 .head-wrap {
-  width: 100%;
   height: 5vh;
+  margin-left: 2%;
 }
 .button-row-wrap {
-  float: left;
-  width: 16%;
-  margin-left: 2%;
+  float: right;
 }
 .search-wrap {
   float: left;
   width: 15%;
-  line-height: 2.5;
 }
 .table-wrap {
   margin-left: 2%;
@@ -455,6 +482,12 @@ export default {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+.table-wrap >>> .el-pagination {
+  margin-top: 20px;
+}
+/* .table-wrap >>> .el-pagination .el-pagination__total,.table-wrap >>> .el-pagination .el-pagination__sizes,.table-wrap >>> .el-pagination .btn-prev,.table-wrap >>> .el-pagination .el-pager,.table-wrap >>> .el-pagination .btn-next{
+  float: left;
+} */
 .cellTable {
   text-align: center;
 }
